@@ -4,6 +4,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useAuthContext } from "../../features/auth/AuthContext";
 import { motion } from "framer-motion";
 import { getPackageById } from "../../services/packageService";
+import { createBooking } from "../../services/bookingService";
 import "./AndhraPradeshPackageDetails.css";
 
 // Import all destination images dynamically
@@ -102,18 +103,16 @@ const AndhraPradeshPackageDetails = () => {
     );
   }
 
-  const galleryImages = destinationImages[pkg.imageFolder] || [];
+  const galleryImages = (destinationImages[pkg.imageFolder] && destinationImages[pkg.imageFolder].length)
+    ? destinationImages[pkg.imageFolder]
+    : Object.values(destinationImages).flat().slice(0, 6);
 
   return (
     <div className="aapd-page">
       {/* Hero Gallery */}
       <section className="aapd-hero-gallery">
         <div className="main-image">
-          {galleryImages.length > 0 ? (
-            <img src={galleryImages[selectedGalleryImage]} alt={pkg.title} />
-          ) : (
-            <div className="no-image-placeholder">No images available</div>
-          )}
+          <img src={galleryImages[selectedGalleryImage % galleryImages.length]} alt={pkg.title} />
         </div>
 
         {galleryImages.length > 1 && (
@@ -302,7 +301,51 @@ const AndhraPradeshPackageDetails = () => {
                 </div>
               </div>
 
-              <button className="book-btn" onClick={handleProceedToBooking}>Proceed to Booking</button>
+              <button
+                className="book-btn"
+                onClick={async () => {
+                  const selected = {
+                    id: `BK-${Date.now()}`,
+                    packageId: pkg.id,
+                    packageName: pkg.title,
+                    state: pkg.destination,
+                    price: `₹${pkg.price}`,
+                    packageImage: galleryImages[0] || "",
+                    travelDate: travelDate || "",
+                    travelers: Number(travelers) || 1,
+                    status: "Pending",
+                  };
+
+                  if (!isAuthenticated) {
+                    navigate("/signup", {
+                      state: {
+                        message: "Please create an account or login to continue booking.",
+                        selectedPackage: selected,
+                      },
+                    });
+                    return;
+                  }
+
+                  try {
+                    const res = await createBooking({
+                      package_id: selected.packageId,
+                      package_snapshot: { id: selected.packageId, title: selected.packageName },
+                      travel_date: selected.travelDate || null,
+                      travelers: selected.travelers,
+                      status: selected.status,
+                      total_amount: pkg.price * selected.travelers,
+                    });
+                    if (res?.error) throw res.error;
+                    navigate("/profile");
+                  } catch (err) {
+                    const stored = JSON.parse(window.localStorage.getItem("southTrailsBookings") || "[]");
+                    window.localStorage.setItem("southTrailsBookings", JSON.stringify([...stored, selected]));
+                    navigate("/profile");
+                  }
+                }}
+              >
+                Proceed to Booking
+              </button>
               <button className="back-btn" onClick={() => navigate("/andhra-packages")}>
                 Back to Packages
               </button>

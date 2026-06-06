@@ -221,12 +221,12 @@ const TamilNaduPackages = () => {
 // Package Card Component
 const PackageCard = ({ pkg, images, index }) => {
   const [currentImageIdx, setCurrentImageIdx] = useState(0);
-  const displayImages = images.slice(0, 3);
+  const fallbackImages = Object.values(destinationImages).flat().slice(0, 3);
+  const displayImages = images && images.length ? images.slice(0, 3) : fallbackImages;
 
   useEffect(() => {
-    if (displayImages.length === 0) return;
     const timer = setInterval(() => {
-      setCurrentImageIdx((prev) => (prev + 1) % displayImages.length);
+      setCurrentImageIdx((prev) => (prev + 1) % Math.max(1, displayImages.length));
     }, 3000);
     return () => clearInterval(timer);
   }, [displayImages.length]);
@@ -242,7 +242,6 @@ const PackageCard = ({ pkg, images, index }) => {
       {/* Image Gallery - Left Side (40%) */}
       <div className="card-image-section">
         <div className="image-gallery">
-          {displayImages.length > 0 ? (
             <div className="gallery-container">
               {displayImages.map((img, idx) => (
                 <img
@@ -253,9 +252,6 @@ const PackageCard = ({ pkg, images, index }) => {
                 />
               ))}
             </div>
-          ) : (
-            <div className="no-image">No images available</div>
-          )}
 
           {displayImages.length > 1 && (
             <div className="gallery-indicators">

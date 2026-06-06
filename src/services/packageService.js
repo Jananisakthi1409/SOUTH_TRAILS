@@ -12,18 +12,21 @@ const fallbackPackages = {
   "Andhra Pradesh": andhraPradeshPackages.map((pkg) => ({ ...pkg, state: "Andhra Pradesh" })),
 };
 
-const normalizePackage = (pkg) => ({
-  ...pkg,
-  id: pkg.id || String(pkg.id),
-  price: typeof pkg.price === "string" ? Number(pkg.price.replace(/[^0-9.]/g, "")) : pkg.price,
-  days: Number(pkg.days || 0),
-  nights: Number(pkg.nights || 0),
-  rating: pkg.rating || null,
-  imageFolder: pkg.imageFolder || "",
-  places: Array.isArray(pkg.places) ? pkg.places : pkg.places ? JSON.parse(pkg.places) : [],
-  included: Array.isArray(pkg.included) ? pkg.included : pkg.included ? JSON.parse(pkg.included) : [],
-  highlights: Array.isArray(pkg.highlights) ? pkg.highlights : pkg.highlights ? JSON.parse(pkg.highlights) : [],
-});
+const normalizePackage = (pkg) => {
+  const imageFolder = pkg.imageFolder || pkg.image_folder || pkg.imagefolder || (typeof pkg.id === "string" ? pkg.id.split("-")[0] : "") || "";
+  return {
+    ...pkg,
+    id: pkg.id || String(pkg.id),
+    price: typeof pkg.price === "string" ? Number(pkg.price.replace(/[^0-9.]/g, "")) : pkg.price,
+    days: Number(pkg.days || 0),
+    nights: Number(pkg.nights || 0),
+    rating: pkg.rating || null,
+    imageFolder,
+    places: Array.isArray(pkg.places) ? pkg.places : pkg.places ? JSON.parse(pkg.places) : [],
+    included: Array.isArray(pkg.included) ? pkg.included : pkg.included ? JSON.parse(pkg.included) : [],
+    highlights: Array.isArray(pkg.highlights) ? pkg.highlights : pkg.highlights ? JSON.parse(pkg.highlights) : [],
+  };
+};
 
 export const getPackages = async ({ state, category, search } = {}) => {
   if (!supabase) {

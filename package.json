@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "seed:packages": "node scripts/seed-packages.js",
     "lint": "eslint .",
     "preview": "vite preview"
   },

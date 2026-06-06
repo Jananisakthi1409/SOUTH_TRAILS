@@ -4,6 +4,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useAuthContext } from "../../features/auth/AuthContext";
 import { motion } from "framer-motion";
 import { getPackageById } from "../../services/packageService";
+import { createBooking } from "../../services/bookingService";
 import "./TamilNaduPackageDetails.css";
 
 // Import all destination images dynamically
@@ -58,18 +59,16 @@ const TamilNaduPackageDetails = () => {
     );
   }
 
-  const galleryImages = destinationImages[pkg.imageFolder] || [];
+  const galleryImages = (destinationImages[pkg.imageFolder] && destinationImages[pkg.imageFolder].length)
+    ? destinationImages[pkg.imageFolder]
+    : Object.values(destinationImages).flat().slice(0, 6);
 
   return (
     <div className="tnpd-page">
       {/* Hero Gallery */}
       <section className="tnpd-hero-gallery">
         <div className="main-image">
-          {galleryImages.length > 0 ? (
-            <img src={galleryImages[selectedGalleryImage]} alt={pkg.title} />
-          ) : (
-            <div className="no-image-placeholder">No images available</div>
-          )}
+          <img src={galleryImages[selectedGalleryImage % galleryImages.length]} alt={pkg.title} />
         </div>
 
         {galleryImages.length > 1 && (
@@ -266,7 +265,7 @@ const TamilNaduPackageDetails = () => {
 
               <button
                 className="book-btn"
-                onClick={() => {
+                onClick={async () => {
                   const selected = {
                     id: `BK-${Date.now()}`,
                     packageId: pkg.id,
@@ -283,9 +282,23 @@ const TamilNaduPackageDetails = () => {
                     navigate("/signup", { state: { message: "Please create an account or login to continue booking.", selectedPackage: selected } });
                     return;
                   }
-                  const stored = JSON.parse(window.localStorage.getItem("southTrailsBookings") || "[]");
-                  window.localStorage.setItem("southTrailsBookings", JSON.stringify([...stored, selected]));
-                  navigate("/profile");
+
+                  try {
+                    const res = await createBooking({
+                      package_id: selected.packageId,
+                      package_snapshot: { id: selected.packageId, title: selected.packageName },
+                      travel_date: selected.travelDate || null,
+                      travelers: selected.travelers,
+                      status: selected.status,
+                      total_amount: pkg.price * selected.travelers,
+                    });
+                    if (res?.error) throw res.error;
+                    navigate("/profile");
+                  } catch (err) {
+                    const stored = JSON.parse(window.localStorage.getItem("southTrailsBookings") || "[]");
+                    window.localStorage.setItem("southTrailsBookings", JSON.stringify([...stored, selected]));
+                    navigate("/profile");
+                  }
                 }}
               >
                 Proceed to Booking
