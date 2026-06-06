@@ -1,9 +1,9 @@
 // src/pages/Packages/KeraPackageDetails.jsx
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useAuthContext } from "../../features/auth/AuthContext";
 import { motion } from "framer-motion";
-import keraPackages from "./keraPackageData";
+import { getPackageById } from "../../services/packageService";
 import "./KeraPackageDetails.css";
 
 // Import all destination images dynamically
@@ -26,13 +26,28 @@ const destinationImages = Object.entries(imageModules)
 const KeraPackageDetails = () => {
   const { packageId } = useParams();
   const navigate = useNavigate();
-  const pkg = keraPackages.find((p) => p.id === packageId);
+  const [pkg, setPkg] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const loadPackage = async () => {
+      setLoading(true);
+      const loadedPkg = await getPackageById(packageId);
+      setPkg(loadedPkg);
+      setLoading(false);
+    };
+    loadPackage();
+  }, [packageId]);
 
   const [selectedGalleryImage, setSelectedGalleryImage] = useState(0);
   const [paymentMethod, setPaymentMethod] = useState("online");
   const { isAuthenticated } = useAuthContext();
   const [travelDate, setTravelDate] = useState("");
   const [travelers, setTravelers] = useState(2);
+
+  if (loading) {
+    return <div className="package-loading">Loading package...</div>;
+  }
 
   if (!pkg) {
     return (

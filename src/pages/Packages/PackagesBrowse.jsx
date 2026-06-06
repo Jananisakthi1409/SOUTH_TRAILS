@@ -1,12 +1,12 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { getPackages } from "../../services/packageService";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import packagesData, { categories, budgetFilters, durationFilters } from "./packages";
+import { categories, budgetFilters, durationFilters } from "./packages";
 import tamilnaduImg from "../../assets/images/tamilnadu.png";
 import "./PackagesBrowse.css";
-
+//import { seedPackagesToSupabase } from "../../services/packageService";
 const imageModules = import.meta.glob("../state/tamilnadu/**/*.{png,jpg,jpeg}", { eager: true });
-
 const stateImageMap = Object.entries(imageModules)
   .sort(([a], [b]) => a.localeCompare(b))
   .reduce((map, [path, moduleValue]) => {
@@ -22,12 +22,41 @@ const stateImageMap = Object.entries(imageModules)
 
 const PackagesBrowse = () => {
   const navigate = useNavigate();
+  const [packagesData, setPackagesData] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [selectedBudget, setSelectedBudget] = useState("All");
   const [selectedDuration, setSelectedDuration] = useState("All");
   const [selectedPackages, setSelectedPackages] = useState([]);
   const [minRating, setMinRating] = useState(0);
   const [sortBy, setSortBy] = useState("rating");
+
+  useEffect(() => {
+    loadPackages();
+  }, []);
+
+  const loadPackages = async () => {
+    setLoading(true);
+    const data = await getPackages();
+
+    if (data && data.length > 0) {
+      // Mapping layer to ensure Supabase property names align safely with UI expectations
+      const mappedPackages = data.map((pkg) => ({
+        id: pkg.id,
+        title: pkg.title,
+        destination: pkg.destination,
+        category: pkg.category,
+        days: pkg.days,
+        nights: pkg.nights,
+        rating: Number(pkg.rating) || 0,
+        price: Number(pkg.price) || 0,
+        places: Array.isArray(pkg.places) ? pkg.places : typeof pkg.places === "string" ? pkg.places.split(",").map(p => p.trim()) : [],
+        imageFolder: pkg.imageFolder || pkg.image_folder || ""
+      }));
+      setPackagesData(mappedPackages);
+    }
+    setLoading(false);
+  };
 
   // Get first 10 packages
   const firstTenPackages = packagesData.slice(0, 10);
@@ -79,6 +108,7 @@ const PackagesBrowse = () => {
   };
 
   return (
+    
     <main className="packages-browse-page">
       <section className="packages-hero">
         <h1>Explore Curated Packages</h1>
@@ -207,37 +237,41 @@ const PackagesBrowse = () => {
             </p>
           </div>
 
-          <AnimatePresence mode="wait">
-            {sortedPackages.length > 0 ? (
-              <motion.div
-                className="packages-grid"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.3 }}
-              >
-                {sortedPackages.map((pkg) => (
-                  <PackageCard
-                    key={pkg.id}
-                    pkg={pkg}
-                    isSelected={selectedPackages.includes(pkg.id)}
-                    onToggle={() => togglePackageSelection(pkg.id)}
-                    images={stateImageMap[pkg.imageFolder] || []}
-                  />
-                ))}
-              </motion.div>
-            ) : (
-              <motion.div
-                className="no-results glass-card"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-              >
-                <h2>No packages found</h2>
-                <p>Try adjusting your filters to find your perfect escape.</p>
-              </motion.div>
-            )}
-          </AnimatePresence>
+          {loading ? (
+            <div className="loading">Loading packages...</div>
+          ) : (
+            <AnimatePresence mode="wait">
+              {sortedPackages.length > 0 ? (
+                <motion.div
+                  className="packages-grid"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  {sortedPackages.map((pkg) => (
+                    <PackageCard
+                      key={pkg.id}
+                      pkg={pkg}
+                      isSelected={selectedPackages.includes(pkg.id)}
+                      onToggle={() => togglePackageSelection(pkg.id)}
+                      images={stateImageMap[pkg.imageFolder] || []}
+                    />
+                  ))}
+                </motion.div>
+              ) : (
+                <motion.div
+                  className="no-results glass-card"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                >
+                  <h2>No packages found</h2>
+                  <p>Try adjusting your filters to find your perfect escape.</p>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          )}
         </section>
       </div>
     </main>

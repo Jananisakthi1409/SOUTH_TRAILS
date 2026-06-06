@@ -11,7 +11,7 @@ create table admins (
 );
 
 create table packages (
-  id uuid primary key default gen_random_uuid(),
+  id text primary key,
   state text not null,
   title text not null,
   description text not null,
@@ -20,6 +20,11 @@ create table packages (
   price numeric not null,
   days int not null,
   nights int not null,
+  rating numeric,
+  imageFolder text,
+  places jsonb,
+  included jsonb,
+  highlights jsonb,
   image1 text,
   image2 text,
   image3 text,

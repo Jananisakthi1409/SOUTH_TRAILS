@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import packagesData from "./packages";
+import { getPackages } from "../../services/packageService";
 import tamilnaduImg from "../../assets/images/tamilnadu.png";
 
 const imageModules = import.meta.glob("../state/tamilnadu/**/*.{png,jpg,jpeg}", { eager: true });
@@ -42,12 +42,22 @@ const PackageCategory = () => {
   const { state, category } = useParams();
   const title = categorySlugMap[category] || "Packages";
   const isTamilNadu = state === "tamil-nadu";
+  
+  const [packages, setPackages] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const packages = packagesData.filter((item) => {
-    const matchesCategory = item.category.toLowerCase() === title.toLowerCase();
-    const matchesRegion = isTamilNadu ? Boolean(stateImageMap[item.imageFolder]) : true;
-    return matchesCategory && matchesRegion;
-  });
+  useEffect(() => {
+    const loadPackages = async () => {
+      setLoading(true);
+      // Get packages for the category
+      const allPackages = await getPackages({ category: title });
+      // Filter by state if needed
+      const filtered = isTamilNadu ? allPackages.filter(item => Boolean(stateImageMap[item.imageFolder])) : allPackages;
+      setPackages(filtered);
+      setLoading(false);
+    };
+    loadPackages();
+  }, [title, isTamilNadu]);
 
   const stateLabel = state ? state.replace(/-/g, " ") : "Packages";
 
@@ -60,7 +70,9 @@ const PackageCategory = () => {
       </section>
 
       <section className="section package-grid">
-        {packages.length > 0 ? (
+        {loading ? (
+          <div className="loading">Loading packages...</div>
+        ) : packages.length > 0 ? (
           packages.map((item) => (
             <PackageCard key={item.id} item={item} images={stateImageMap[item.imageFolder] || []} />
           ))

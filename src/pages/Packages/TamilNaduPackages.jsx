@@ -2,7 +2,8 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import tamilNaduPackages, { tamilNaduCategories, tamilNaduBudgetFilters, tamilNaduDurationFilters } from "./tamilNaduPackageData";
+import { tamilNaduCategories, tamilNaduBudgetFilters, tamilNaduDurationFilters } from "./tamilNaduPackageData";
+import { getPackages } from "../../services/packageService";
 import "./TamilNaduPackages.css";
 
 // Import all destination images dynamically
@@ -23,10 +24,23 @@ const destinationImages = Object.entries(imageModules)
   }, {});
 
 const TamilNaduPackages = () => {
+  const [tamilNaduPackages, setTamilNaduPackages] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [selectedBudget, setSelectedBudget] = useState("All");
   const [selectedDuration, setSelectedDuration] = useState("All");
   const [heroImageIndex, setHeroImageIndex] = useState(0);
+
+  // Load packages from service
+  useEffect(() => {
+    const loadPackages = async () => {
+      setLoading(true);
+      const packages = await getPackages({ state: "Tamil Nadu" });
+      setTamilNaduPackages(packages);
+      setLoading(false);
+    };
+    loadPackages();
+  }, []);
 
   // Hero image slideshow
   const heroImages = Object.values(destinationImages).flat().slice(0, 5);
@@ -170,30 +184,34 @@ const TamilNaduPackages = () => {
       {/* Packages Section */}
       <section className="tnp-packages-section">
         <div className="tnp-container">
-          <AnimatePresence mode="wait">
-            {filteredPackages.length > 0 ? (
-              <div className="packages-list">
-                {filteredPackages.map((pkg, idx) => (
-                  <PackageCard
-                    key={pkg.id}
-                    pkg={pkg}
-                    images={destinationImages[pkg.imageFolder] || []}
-                    index={idx}
-                  />
-                ))}
-              </div>
-            ) : (
-              <motion.div
-                className="no-results"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-              >
-                <h2>No packages found</h2>
-                <p>Try adjusting your filters to find your perfect Tamil Nadu escape.</p>
-              </motion.div>
-            )}
-          </AnimatePresence>
+          {loading ? (
+            <div className="loading">Loading packages...</div>
+          ) : (
+            <AnimatePresence mode="wait">
+              {filteredPackages.length > 0 ? (
+                <div className="packages-list">
+                  {filteredPackages.map((pkg, idx) => (
+                    <PackageCard
+                      key={pkg.id}
+                      pkg={pkg}
+                      images={destinationImages[pkg.imageFolder] || []}
+                      index={idx}
+                    />
+                  ))}
+                </div>
+              ) : (
+                <motion.div
+                  className="no-results"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                >
+                  <h2>No packages found</h2>
+                  <p>Try adjusting your filters to find your perfect Tamil Nadu escape.</p>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          )}
         </div>
       </section>
     </div>
