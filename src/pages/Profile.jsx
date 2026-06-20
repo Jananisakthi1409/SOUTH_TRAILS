@@ -1,14 +1,24 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import BookingTimeline from "../components/advanced/BookingTimeline";
+import { useToast } from "../components/ui/Toast";
 import { useAuthContext } from "../features/auth/AuthContext";
+import { getBookingsByCustomer } from "../services/bookingService";
+import { getReviews, createReview } from "../services/reviewService";
+import { getWishlist, removeWishlistPackage } from "../services/wishlistService";
+
+const createReviewId = () => `RV-${Date.now()}`;
 
 const Profile = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { showToast } = useToast();
   const { user, isAuthenticated, logout, updateProfile } = useAuthContext();
   const [editing, setEditing] = useState(false);
   const [form, setForm] = useState({ fullName: "", email: "", phone: "" });
   const [bookings, setBookings] = useState([]);
   const [reviews, setReviews] = useState([]);
+  const [wishlist, setWishlist] = useState([]);
   const [message, setMessage] = useState("");
   //const [reviews, setReviews] = useState([]);
 const [reviewText, setReviewText] = useState({});
@@ -20,30 +30,56 @@ const [reviewRating, setReviewRating] = useState({});
       return;
     }
 
-    if (user) {
-      setForm({ fullName: user.fullName || "", email: user.email || "", phone: user.phone || "" });
-    }
-
-    const storedBookings = window.localStorage.getItem("southTrailsBookings");
-    if (storedBookings) {
-      try {
-        setBookings(JSON.parse(storedBookings));
-      } catch (error) {
-        setBookings([]);
+    const loadProfileData = async () => {
+      if (user) {
+        setForm({ fullName: user.fullName || "", email: user.email || "", phone: user.phone || "" });
       }
-    }
-    const storedReviews =
-  window.localStorage.getItem(
-    "southTrailsReviews"
-  );
 
-if (storedReviews) {
-  try {
-    setReviews(JSON.parse(storedReviews));
-  } catch {
-    setReviews([]);
-  }
-}
+      if (user?.id) {
+        try {
+          const bookingsData = await getBookingsByCustomer(user.id);
+          setBookings(bookingsData || []);
+
+          const reviewsData = await getReviews({ customerId: user.id });
+          setReviews(reviewsData || []);
+
+          const wishlistData = await getWishlist(user.id);
+          setWishlist(wishlistData.data || []);
+          return;
+        } catch (error) {
+          console.error("Error loading profile data:", error);
+        }
+      }
+
+      const storedBookings = window.localStorage.getItem("southTrailsBookings");
+      if (storedBookings) {
+        try {
+          setBookings(JSON.parse(storedBookings));
+        } catch {
+          setBookings([]);
+        }
+      }
+
+      const storedReviews = window.localStorage.getItem("southTrailsReviews");
+      if (storedReviews) {
+        try {
+          setReviews(JSON.parse(storedReviews));
+        } catch {
+          setReviews([]);
+        }
+      }
+
+      const storedWishlist = window.localStorage.getItem("southTrailsWishlist");
+      if (storedWishlist) {
+        try {
+          setWishlist(JSON.parse(storedWishlist));
+        } catch {
+          setWishlist([]);
+        }
+      }
+    };
+
+    loadProfileData();
   }, [isAuthenticated, navigate, user]);
 
   const handleChange = (field) => (event) => {
@@ -82,52 +118,90 @@ if (storedReviews) {
     navigate("/");
   };
   const handleDeleteReview = (id) => {
-  const updatedReviews =
-    reviews.filter(
-      (review) => review.id !== id
-    );
-
-  setReviews(updatedReviews);
-
-  window.localStorage.setItem(
-    "southTrailsReviews",
-    JSON.stringify(updatedReviews)
-  );
-};
-
-  const profileBookings = bookings.length ? bookings : [];
-  const handleReviewSubmit = (booking) => {
-  if (!reviewText[booking.id]?.trim()) {
-    alert("Please write a review");
-    return;
-  }
-
-  const review = {
-    id: Date.now(),
-    userName: user?.fullName,
-    packageName: booking.packageName,
-    packageImage: booking.packageImage,
-    rating: reviewRating[booking.id] || 5,
-    comment: reviewText[booking.id],
-    createdAt: new Date().toLocaleDateString(),
+    const updatedReviews = reviews.filter((review) => review.id !== id);
+    setReviews(updatedReviews);
   };
 
-  const updatedReviews = [review, ...reviews];
+  const profileBookings = bookings.length ? bookings : [];
 
-  setReviews(updatedReviews);
+  const handleRemoveWishlist = async (packageId) => {
+    const result = await removeWishlistPackage({ customerId: user?.id, packageId });
+    if (result.error) {
+      showToast(result.error.message || "Unable to remove saved package.", "error");
+      return;
+    }
+    setWishlist((current) => current.filter((item) => item.id !== packageId));
+    showToast("Removed from wishlist.", "success");
+  };
 
-  localStorage.setItem(
-    "southTrailsReviews",
-    JSON.stringify(updatedReviews)
-  );
+  useEffect(() => {
+    if (location.pathname === "/profile/bookings") {
+      window.setTimeout(() => {
+        document.getElementById("my-bookings")?.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 120);
+    }
+  }, [location.pathname, profileBookings.length]);
 
-  setReviewText((prev) => ({
-    ...prev,
-    [booking.id]: "",
-  }));
+  const getBookingSnapshot = (booking) => booking.package_snapshot || booking.packageSnapshot || {};
+  const getBookingPackageName = (booking) =>
+    booking.packageName || getBookingSnapshot(booking).title || booking.package?.title || "South India Package";
+  const getBookingPrice = (booking) => {
+    const amount = booking.totalAmount || booking.total_amount || booking.price;
+    const numeric = Number(String(amount || "").replace(/[^0-9.]/g, ""));
+    return numeric ? `Rs. ${numeric.toLocaleString("en-IN")}` : "Pending";
+  };
+  const wishlistBoard = {
+    Maybe: wishlist.filter((_, index) => index % 3 === 0),
+    Shortlisted: wishlist.filter((_, index) => index % 3 === 1),
+    "Ready to Book": wishlist.filter((_, index) => index % 3 === 2),
+  };
 
-  alert("Review submitted successfully!");
-};
+  const handleReviewSubmit = async (booking) => {
+    if (!reviewText[booking.id]?.trim()) {
+      showToast("Please write a review before submitting.", "error");
+      return;
+    }
+
+    const reviewPayload = {
+      customer_id: user?.id || null,
+      package_id: booking.package_id || booking.packageId || booking.package?.id || null,
+      rating: reviewRating[booking.id] || 5,
+      text: reviewText[booking.id],
+    };
+
+    let newReview = {
+      id: createReviewId(),
+      userName: user?.fullName,
+      packageName: getBookingPackageName(booking),
+      rating: reviewPayload.rating,
+      comment: reviewPayload.text,
+      createdAt: new Date().toLocaleDateString(),
+    };
+
+    if (user?.id) {
+      const result = await createReview(reviewPayload);
+      if (result.error) {
+        showToast(result.error.message || "Reviews are available after booking this package.", "error");
+        return;
+      }
+      const data = Array.isArray(result.data) ? result.data[0] : result.data;
+      newReview = {
+        ...newReview,
+        id: data?.id || newReview.id,
+        createdAt: data?.created_at ? new Date(data.created_at).toLocaleDateString() : newReview.createdAt,
+      };
+    }
+
+    const updatedReviews = [newReview, ...reviews];
+    setReviews(updatedReviews);
+
+    setReviewText((prev) => ({
+      ...prev,
+      [booking.id]: "",
+    }));
+
+    showToast("Review submitted successfully.", "success");
+  };
 
   return (
     <main className="app-shell profile-page">
@@ -219,6 +293,59 @@ if (storedReviews) {
   style={{ marginTop: "24px" }}
 >
   <div className="section-heading">
+    <p className="eyebrow accent-light">Saved Packages</p>
+    <h2>My Wishlist</h2>
+  </div>
+
+  {wishlist.length > 0 ? (
+    <>
+      <div className="advanced-grid" style={{ marginBottom: "16px" }}>
+        {Object.entries(wishlistBoard).map(([column, items]) => (
+          <div key={column} className="itinerary-day">
+            <p className="eyebrow" style={{ margin: 0 }}>{column}</p>
+            <strong>{items.length} package{items.length === 1 ? "" : "s"}</strong>
+            {items.slice(0, 3).map((item) => (
+              <p key={item.id} style={{ margin: "8px 0 0", color: "#64748b" }}>{item.title}</p>
+            ))}
+          </div>
+        ))}
+      </div>
+      <div className="booking-history">
+        {wishlist.map((item) => (
+          <div key={item.id} className="booking-history-item">
+          <div>
+            <p className="booking-label">{item.state || "South India"}</p>
+            <strong>{item.title}</strong>
+            <p style={{ margin: "6px 0 0", color: "#64748b" }}>{item.destination}</p>
+          </div>
+          <div>
+            <p className="booking-label">Price</p>
+            <strong>Rs. {Number(item.price || 0).toLocaleString("en-IN")}</strong>
+          </div>
+          <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+            <button className="button button-primary" type="button" onClick={() => navigate(`/package/${item.id}`)}>
+              View
+            </button>
+            <button className="button button-secondary" type="button" onClick={() => handleRemoveWishlist(item.id)}>
+              Remove
+            </button>
+          </div>
+        </div>
+        ))}
+      </div>
+    </>
+  ) : (
+    <div className="booking-empty">
+      <p>No saved packages yet.</p>
+      <p>Save packages from the browse page to plan your next trip.</p>
+    </div>
+  )}
+</div>
+         <div
+  className="profile-card glass-card"
+  style={{ marginTop: "24px" }}
+>
+  <div className="section-heading">
     <p className="eyebrow accent-light">
       Traveler Reviews
     </p>
@@ -294,7 +421,7 @@ if (storedReviews) {
 </div>
         </div>
 
-        <div className="profile-card glass-card">
+        <div id="my-bookings" className="profile-card glass-card">
           <div className="section-heading">
             <p className="eyebrow accent-light">Travel History</p>
             <h2>My Bookings</h2>
@@ -305,10 +432,10 @@ if (storedReviews) {
                 <div key={booking.id} className="booking-history-item">
                   <div>
                     <p className="booking-label">Package</p>
-                    <strong>{booking.packageName}</strong>
-                    {booking.packageImage && (
+                    <strong>{getBookingPackageName(booking)}</strong>
+                    {(booking.packageImage || getBookingSnapshot(booking).image) && (
                       <div style={{ marginTop: 8 }}>
-                        <img src={booking.packageImage} alt={booking.packageName} style={{ width: 160, borderRadius: 12 }} />
+                        <img src={booking.packageImage || getBookingSnapshot(booking).image} alt={getBookingPackageName(booking)} style={{ width: 160, borderRadius: 12 }} />
                       </div>
                     )}
                   </div>
@@ -370,7 +497,7 @@ if (storedReviews) {
 </div>
                   <div>
                     <p className="booking-label">Travel Date</p>
-                    <strong>{booking.travelDate || "—"}</strong>
+                    <strong>{booking.travelDate || booking.travel_date || "Flexible"}</strong>
                   </div>
                   <div>
                     <p className="booking-label">Travelers</p>
@@ -378,11 +505,14 @@ if (storedReviews) {
                   </div>
                   <div>
                     <p className="booking-label">Price</p>
-                    <strong>{booking.price || "—"}</strong>
+                    <strong>{getBookingPrice(booking)}</strong>
                   </div>
                   <div>
                     <p className="booking-label">Status</p>
                     <strong>{booking.status}</strong>
+                  </div>
+                  <div style={{ width: "100%", marginTop: "12px" }}>
+                    <BookingTimeline status={booking.status} />
                   </div>
                 </div>
               ))}

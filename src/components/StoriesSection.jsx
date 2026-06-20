@@ -1,19 +1,17 @@
 import { motion } from "framer-motion";
 import StoryPreview from "./StoryPreview";
 // image sets for each story card
-import peace1 from "../assets/images/peace/p1.jpg";
-import peace2 from "../assets/images/peace/p2.jpg";
-import peace3 from "../assets/images/peace/p3.jpg";
-import adv1 from "../assets/images/adventure/pexels-avneet-kaur-669191817-31928086.jpg";
-import adv2 from "../assets/images/adventure/pexels-cottonbro-5803403.jpg";
-import adv3 from "../assets/images/adventure/pexels-jaroslav-maler-917944782-19956640.jpg";
-import food1 from "../assets/images/Food Trails/pexels-ryshy-s-2149956588-35539324.jpg";
-import food2 from "../assets/images/Food Trails/pexels-ryshy-s-2149956588-35539329.jpg";
-import food3 from "../assets/images/Food Trails/pexels-saveurssecretes-10050740.jpg";
-import road1 from "../assets/images/roadtrips/pexels-cottonbro-5329529.jpg";
-import road2 from "../assets/images/roadtrips/pexels-gocebey-10892819.jpg";
-import romantic1 from "../assets/images/romatinc_escapes/pexels-asadphoto-5785086.jpg";
-import hidden1 from "../assets/images/hidden/pexels-abel-vj-1747977700-28072038.jpg";
+import peace1 from "../pages/state/kerala/backwater/pexels-optically-challenged-21717677.webp";
+import peace2 from "../pages/state/kerala/munnar/pexels-harsh-14730465.webp";
+import peace3 from "../pages/state/kerala/wayanad/pexels-george-thomas-2159810613-36982207.webp";
+import adv1 from "../pages/state/karnataka/coorg/j.webp";
+import adv2 from "../pages/state/karnataka/hampi/image.webp";
+import adv3 from "../pages/state/andhra/araku/h.webp";
+import food1 from "../pages/state/kerala/kochi/pexels-jeyzen-24200331.webp";
+import road1 from "../pages/state/andhra/rkbeach/image.webp";
+import road2 from "../pages/state/tamilnadu/puducherry/pexels-gautham-reghu-1029880-30238510.webp";
+import romantic1 from "../pages/state/tamilnadu/ooty/pexels-alexander-savchuk-108847177-9659261.webp";
+import hidden1 from "../pages/state/karnataka/gokarna/image.webp";
 
 const imageSets = [
   [adv1, adv2, adv3],
@@ -61,7 +59,7 @@ const StoriesSection = () => {
         <h2>Your next South India chapter</h2>
       </div>
       <div className="stories-grid">
-        {stories.map((story, idx) => (
+        {stories.map((story) => (
           <motion.article
             key={story.title}
             className="story-card"

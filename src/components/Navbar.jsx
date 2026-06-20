@@ -1,13 +1,24 @@
-// src/components/Navbar.jsx
-import React, { useEffect, useRef, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuthContext } from "../features/auth/AuthContext";
 
 const Navbar = () => {
-  const { user, isAuthenticated, logout } = useAuthContext();
+  const { isAuthenticated, logout } = useAuthContext();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
   const menuRef = useRef(null);
   const navigate = useNavigate();
+  const location = useLocation();
+  const isHome = location.pathname === "/";
+
+  const navItems = [
+    { label: "Destinations", to: "/explore" },
+    { label: "Experiences", to: "/trip-builder" },
+    { label: "Packages", to: "/packages" },
+    { label: "Gallery", to: "/map" },
+    { label: "Oracle AI", to: "/oracle" },
+  ];
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -19,24 +30,39 @@ const Navbar = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const handleLogout = () => {
-    logout();
-    navigate("/");
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 24);
+    };
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const closeMenus = () => {
+    setMobileOpen(false);
     setMenuOpen(false);
   };
 
+  const handleLogout = () => {
+    logout();
+    navigate("/");
+    closeMenus();
+  };
+
   return (
-    <header className="site-header">
+    <header className={`site-header site-header--luxury${isHome ? " site-header--home" : ""}${isScrolled ? " site-header--scrolled" : ""}`}>
       <div className="nav-container">
         <Link to="/" className="brand">
           South Trails
         </Link>
-        <nav className="nav-links">
-          <Link to="/">Home</Link>
-          {/* <Link to="/explore">Explore</Link> */}
-          <Link to="/packages">Packages</Link>
-          <Link to="/contact">Contact</Link>
+
+        <nav className="nav-links" aria-label="Main navigation">
+          {navItems.map((item) => (
+            <Link key={item.to} to={item.to}>{item.label}</Link>
+          ))}
         </nav>
+
         <div className="nav-actions" ref={menuRef}>
           {!isAuthenticated ? (
             <>
@@ -54,14 +80,14 @@ const Navbar = () => {
                 className="button button-secondary profile-badge"
                 onClick={() => setMenuOpen((open) => !open)}
               >
-                👤
+                Account
               </button>
               {menuOpen && (
                 <div className="profile-menu">
                   <Link to="/profile" onClick={() => setMenuOpen(false)}>
                     My Profile
                   </Link>
-                  <Link to="/profile" onClick={() => setMenuOpen(false)}>
+                  <Link to="/profile/bookings" onClick={() => setMenuOpen(false)}>
                     My Bookings
                   </Link>
                   <button type="button" className="menu-logout" onClick={handleLogout}>
@@ -71,7 +97,36 @@ const Navbar = () => {
               )}
             </div>
           )}
+          <button
+            type="button"
+            className="nav-menu-toggle"
+            aria-label="Open navigation menu"
+            aria-expanded={mobileOpen}
+            onClick={() => setMobileOpen((open) => !open)}
+          >
+            <span />
+            <span />
+          </button>
         </div>
+      </div>
+      <div className={`mobile-nav-drawer${mobileOpen ? " mobile-nav-drawer--open" : ""}`}>
+        <nav aria-label="Mobile navigation">
+          {navItems.map((item) => (
+            <Link key={item.to} to={item.to} onClick={closeMenus}>{item.label}</Link>
+          ))}
+          {!isAuthenticated ? (
+            <>
+              <Link to="/login" onClick={closeMenus}>Login</Link>
+              <Link to="/signup" onClick={closeMenus}>Signup</Link>
+            </>
+          ) : (
+            <>
+              <Link to="/profile" onClick={closeMenus}>My Profile</Link>
+              <Link to="/profile/bookings" onClick={closeMenus}>My Bookings</Link>
+              <button type="button" onClick={handleLogout}>Logout</button>
+            </>
+          )}
+        </nav>
       </div>
     </header>
   );

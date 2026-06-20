@@ -1,14 +1,17 @@
 
 import { useState, useEffect, useContext } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useLocation, useNavigate, Link } from "react-router-dom";
 import { AdminContext } from "./AdminContext";
-import { getPackages, createPackage, updatePackage, deletePackage } from "../../services/packageService";
+import { useToast } from "../../components/ui/Toast";
+import { getPackages, createPackage, updatePackage, deletePackage, uploadPackageImages } from "../../services/packageService";
+import { validatePackageForm } from "../../utils/validation";
 
 const AdminPackages = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { isAuthenticated, logout } = useContext(AdminContext);
-  const [showForm, setShowForm] = useState(false);
-  const [shouldRedirect, setShouldRedirect] = useState(false);
+  const { showToast } = useToast();
+  const [showForm, setShowForm] = useState(() => location.pathname.endsWith("/new"));
   const [editingId, setEditingId] = useState(null);
   
   const [formData, setFormData] = useState({
@@ -29,6 +32,7 @@ const AdminPackages = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [pendingDeleteId, setPendingDeleteId] = useState(null);
   
   // UI Hover States
   const [hoveredCard, setHoveredCard] = useState(null);
@@ -36,15 +40,9 @@ const AdminPackages = () => {
 
   useEffect(() => {
     if (!isAuthenticated) {
-      setShouldRedirect(true);
-    }
-  }, [isAuthenticated]);
-
-  useEffect(() => {
-    if (shouldRedirect) {
       navigate("/admin/login");
     }
-  }, [shouldRedirect, navigate]);
+  }, [isAuthenticated, navigate]);
 
   useEffect(() => {
     if (!isAuthenticated) return;
@@ -64,26 +62,20 @@ const AdminPackages = () => {
     return null;
   }
 
-  const readFilesAsDataUrls = (files) => {
-    const readers = Array.from(files).slice(0, 3).map((file) => {
-      return new Promise((res, rej) => {
-        const reader = new FileReader();
-        reader.onload = () => res(reader.result);
-        reader.onerror = rej;
-        reader.readAsDataURL(file);
-      });
-    });
-    return Promise.all(readers);
-  };
-
   const handleFileChange = async (e) => {
     const files = e.target.files;
     if (!files || files.length === 0) return;
+    setLoading(true);
     try {
-      const dataUrls = await readFilesAsDataUrls(files);
-      setFormData({ ...formData, images: dataUrls });
+      const { data, error } = await uploadPackageImages(files);
+      if (error) throw error;
+      setFormData({ ...formData, images: data?.urls || [] });
+      showToast("Images uploaded successfully.", "success");
     } catch (err) {
       console.error("Failed to read files", err);
+      showToast(err?.message || "Image upload failed.", "error");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -111,6 +103,13 @@ const AdminPackages = () => {
 
   const handleAddPackage = async () => {
     setErrorMessage("");
+    const validationError = validatePackageForm(formData);
+    if (validationError) {
+      setErrorMessage(validationError);
+      showToast(validationError, "error");
+      return;
+    }
+
     const payload = {
       title: formData.title,
       destination: formData.destination,
@@ -137,6 +136,7 @@ const AdminPackages = () => {
       } else if (result?.data) {
         clearForm();
         setShowForm(false);
+        showToast(editingId ? "Package updated successfully." : "Package created successfully.", "success");
         await refreshPackages();
       } else {
         setErrorMessage("Unable to save package. Please try again.");
@@ -168,13 +168,20 @@ const AdminPackages = () => {
   };
 
   const handleDelete = async (id) => {
-    if (!confirm("Are you sure you want to delete this package?")) return;
+    setPendingDeleteId(id);
+  };
+
+  const confirmDelete = async () => {
+    const id = pendingDeleteId;
+    if (!id) return;
+    setPendingDeleteId(null);
     const { error } = await deletePackage(id);
     if (error) {
-      alert(error.message || "Unable to delete package");
+      showToast(error.message || "Unable to delete package", "error");
       return;
     }
     setPackages(packages.filter(p => p.id !== id));
+    showToast("Package deleted successfully.", "success");
   };
 
   const statesList = ["All", "Tamil Nadu", "Kerala", "Karnataka", "Andhra Pradesh"];
@@ -232,6 +239,23 @@ const AdminPackages = () => {
         {errorMessage && (
           <div style={{ padding: "16px", backgroundColor: "#fef2f2", borderLeft: "4px solid #ef4444", borderRadius: "6px", color: "#991b1b", fontSize: "14px", fontWeight: "500", marginBottom: "24px" }}>
             {errorMessage}
+          </div>
+        )}
+
+        {pendingDeleteId && (
+          <div style={{ position: "fixed", inset: 0, zIndex: 1000, display: "grid", placeItems: "center", backgroundColor: "rgba(15, 23, 42, 0.36)", padding: "1rem" }}>
+            <div style={{ width: "min(420px, 100%)", backgroundColor: "#ffffff", borderRadius: "12px", padding: "24px", boxShadow: "0 24px 80px rgba(15,23,42,0.24)" }}>
+              <h3 style={{ margin: "0 0 8px 0", fontSize: "18px", color: "#0f172a" }}>Delete package?</h3>
+              <p style={{ margin: "0 0 20px 0", color: "#64748b", lineHeight: 1.5 }}>This removes the package from the Spring Boot catalog.</p>
+              <div style={{ display: "flex", justifyContent: "flex-end", gap: "10px" }}>
+                <button type="button" onClick={() => setPendingDeleteId(null)} style={{ padding: "10px 16px", borderRadius: "8px", border: "1px solid #cbd5e1", background: "#ffffff", color: "#334155", fontWeight: 600 }}>
+                  Cancel
+                </button>
+                <button type="button" onClick={confirmDelete} style={{ padding: "10px 16px", borderRadius: "8px", border: "none", background: "#dc2626", color: "#ffffff", fontWeight: 700 }}>
+                  Delete
+                </button>
+              </div>
+            </div>
           </div>
         )}
 

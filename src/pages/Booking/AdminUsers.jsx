@@ -6,20 +6,13 @@ import "./AdminAuth.css";
 const AdminUsers = () => {
   const navigate = useNavigate();
   const { isAuthenticated, logout } = useContext(AdminContext);
-  const [shouldRedirect, setShouldRedirect] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     if (!isAuthenticated) {
-      setShouldRedirect(true);
-    }
-  }, [isAuthenticated]);
-
-  useEffect(() => {
-    if (shouldRedirect) {
       navigate("/admin/login");
     }
-  }, [shouldRedirect, navigate]);
+  }, [isAuthenticated, navigate]);
 
   if (!isAuthenticated) {
     return null;

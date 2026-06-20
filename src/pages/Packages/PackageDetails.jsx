@@ -1,9 +1,12 @@
+import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useAuthContext } from "../../features/auth/AuthContext";
-import tamilnaduImg from "../../assets/images/tamilnadu.png";
-import keralaImg from "../../assets/images/kerala.png";
-import karnatakaImg from "../../assets/images/karnataka.png";
-import andhraImg from "../../assets/images/andhra.png";
+import { getPackageById } from "../../services/packageService";
+import { createBooking } from "../../services/bookingService";
+import tamilnaduImg from "../../assets/images/tamilnadu.webp";
+import keralaImg from "../../assets/images/kerala.webp";
+import karnatakaImg from "../../assets/images/karnataka.webp";
+import andhraImg from "../../assets/images/andhra.webp";
 
 const packageImages = {
   "ooty-family-escape": tamilnaduImg,
@@ -50,7 +53,34 @@ const packageData = {
 
 const PackageDetails = () => {
   const { packageId } = useParams();
-  const item = packageData[packageId] || {
+  const navigate = useNavigate();
+  const { user, isAuthenticated } = useAuthContext();
+  const [packageItem, setPackageItem] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const loadPackage = async () => {
+      setLoading(true);
+      const fetched = await getPackageById(packageId);
+      if (fetched) {
+        setPackageItem(fetched);
+      } else {
+        setPackageItem(packageData[packageId] || {
+          title: "Premium Package",
+          price: "₹12,999 per person",
+          duration: "4 Days / 3 Nights",
+          included: ["Hotel", "Breakfast", "Transport", "Sightseeing"],
+          itinerary: ["Day 1 - Arrival", "Day 2 - Explore", "Day 3 - Relax", "Day 4 - Return"],
+          review: "★★★★★ A premium tour with unforgettable memories.",
+          stats: ["1000+ Travelers", "4.8 Rating", "96% Satisfaction"],
+        });
+      }
+      setLoading(false);
+    };
+    loadPackage();
+  }, [packageId]);
+
+  const item = packageItem || packageData[packageId] || {
     title: "Premium Package",
     price: "₹12,999 per person",
     duration: "4 Days / 3 Nights",
@@ -60,25 +90,51 @@ const PackageDetails = () => {
     stats: ["1000+ Travelers", "4.8 Rating", "96% Satisfaction"],
   };
 
-  const navigate = useNavigate();
-  const { isAuthenticated } = useAuthContext();
+  const formattedPrice = typeof item.price === "number" ? `₹${item.price.toLocaleString()}` : item.price;
+  const packageImage = packageImages[packageId] || keralaImg;
 
-  const handleBook = () => {
+  const handleBook = async () => {
     const selected = {
       id: `BK-${Date.now()}`,
       packageId: packageId,
       packageName: item.title,
-      state: "",
-      price: item.price,
-      packageImage: packageImages[packageId] || "",
+      state: item.state || "",
+      price: formattedPrice,
+      packageImage,
       travelDate: "",
       travelers: 2,
       status: "Pending",
     };
 
     if (!isAuthenticated) {
-      navigate("/signup", { state: { message: "Please create an account or login to continue booking.", selectedPackage: selected } });
+      navigate("/signup", {
+        state: {
+          message: "Please create an account or login to continue booking.",
+          selectedPackage: selected,
+        },
+      });
       return;
+    }
+
+    if (user?.id) {
+      try {
+        const { error } = await createBooking({
+          customer_id: user.id,
+          package_id: selected.packageId,
+          package_snapshot: { id: selected.packageId, title: selected.packageName },
+          travel_date: null,
+          travelers: selected.travelers,
+          status: selected.status,
+          total_amount: Number(String(item.price || "").replace(/[^0-9.]/g, "")) || null,
+        });
+        if (error) {
+          throw error;
+        }
+        navigate("/profile");
+        return;
+      } catch (error) {
+        console.error("Booking save failed", error);
+      }
     }
 
     const stored = JSON.parse(window.localStorage.getItem("southTrailsBookings") || "[]");
@@ -86,18 +142,22 @@ const PackageDetails = () => {
     navigate("/profile");
   };
 
+  if (loading) {
+    return <main className="app-shell package-detail-page"><p>Loading package...</p></main>;
+  }
+
   return (
     <main className="app-shell package-detail-page">
       <section className="section package-hero glass-card">
         <div
           className="package-hero-media"
-          style={{ backgroundImage: `url(${packageImages[packageId] || keralaImg})` }}
+          style={{ backgroundImage: `url(${packageImage})` }}
         />
         <div className="package-hero-copy">
           <p className="eyebrow accent-light">Package Details</p>
           <h1>{item.title}</h1>
           <div className="package-meta">
-            <span>{item.price}</span>
+            <span>{formattedPrice}</span>
             <span>{item.duration}</span>
           </div>
           <button className="button button-primary" onClick={handleBook}>
@@ -138,9 +198,9 @@ const PackageDetails = () => {
           <div className="gallery-card glass-card">
             <h3>Shared Photos</h3>
             <div className="gallery-grid">
-              <div className="gallery-thumb" style={{ backgroundImage: `url(${packageImages[packageId] || keralaImg})` }} />
-              <div className="gallery-thumb" style={{ backgroundImage: `url(${packageImages[packageId] || keralaImg})` }} />
-              <div className="gallery-thumb" style={{ backgroundImage: `url(${packageImages[packageId] || keralaImg})` }} />
+              <div className="gallery-thumb" style={{ backgroundImage: `url(${packageImage})` }} />
+              <div className="gallery-thumb" style={{ backgroundImage: `url(${packageImage})` }} />
+              <div className="gallery-thumb" style={{ backgroundImage: `url(${packageImage})` }} />
             </div>
           </div>
           <div className="stats-card glass-card">

@@ -1,17 +1,26 @@
 import { useEffect, useState } from "react";
 import { getPackages } from "../../services/packageService";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { categories, budgetFilters, durationFilters } from "./packages";
-import tamilnaduImg from "../../assets/images/tamilnadu.png";
+import PackageCompareTray from "../../components/advanced/PackageCompareTray";
+import PackageSkeletonGrid from "../../components/advanced/PackageSkeletonGrid";
+import SmartFilterDrawer from "../../components/advanced/SmartFilterDrawer";
+import { useAuthContext } from "../../features/auth/AuthContext";
+import { useToast } from "../../components/ui/Toast";
+import { getWishlist, removeWishlistPackage, saveWishlistPackage } from "../../services/wishlistService";
+import tamilnaduImg from "../../assets/images/tamilnadu.webp";
+import keralaImg from "../../assets/images/kerala.webp";
+import karnatakaImg from "../../assets/images/karnataka.webp";
+import andhraImg from "../../assets/images/andhra.webp";
 import "./PackagesBrowse.css";
 //import { seedPackagesToSupabase } from "../../services/packageService";
-const imageModules = import.meta.glob("../state/tamilnadu/**/*.{png,jpg,jpeg}", { eager: true });
+const imageModules = import.meta.glob("../state/**/*.{webp,avif}", { eager: true });
 const stateImageMap = Object.entries(imageModules)
   .sort(([a], [b]) => a.localeCompare(b))
   .reduce((map, [path, moduleValue]) => {
     const normalized = path.replace(/\\/g, "/");
-    const match = normalized.match(/tamilnadu\/([^/]+)\/[^/]+\.(png|jpe?g)$/i);
+    const match = normalized.match(/state\/[^/]+\/([^/]+)\/[^/]+\.(webp|avif)$/i);
     if (!match) return map;
 
     const folder = match[1];
@@ -20,23 +29,34 @@ const stateImageMap = Object.entries(imageModules)
     return map;
   }, {});
 
+const stateFallbackImages = {
+  "Tamil Nadu": tamilnaduImg,
+  Kerala: keralaImg,
+  Karnataka: karnatakaImg,
+  "Andhra Pradesh": andhraImg,
+};
+
 const PackagesBrowse = () => {
   const navigate = useNavigate();
+  const { user, isAuthenticated } = useAuthContext();
+  const { showToast } = useToast();
   const [packagesData, setPackagesData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [selectedBudget, setSelectedBudget] = useState("All");
   const [selectedDuration, setSelectedDuration] = useState("All");
+  const [selectedState, setSelectedState] = useState("All");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [isFilterDrawerOpen, setIsFilterDrawerOpen] = useState(false);
   const [selectedPackages, setSelectedPackages] = useState([]);
+  const [savedPackageIds, setSavedPackageIds] = useState([]);
   const [minRating, setMinRating] = useState(0);
   const [sortBy, setSortBy] = useState("rating");
 
   useEffect(() => {
-    loadPackages();
-  }, []);
+    let active = true;
 
-  const loadPackages = async () => {
-    setLoading(true);
+    const loadPackages = async () => {
     const data = await getPackages();
 
     if (data && data.length > 0) {
@@ -50,21 +70,53 @@ const PackagesBrowse = () => {
         nights: pkg.nights,
         rating: Number(pkg.rating) || 0,
         price: Number(pkg.price) || 0,
+        state: pkg.state,
+        image1: pkg.image1,
+        image2: pkg.image2,
+        image3: pkg.image3,
         places: Array.isArray(pkg.places) ? pkg.places : typeof pkg.places === "string" ? pkg.places.split(",").map(p => p.trim()) : [],
         imageFolder: pkg.imageFolder || pkg.image_folder || ""
       }));
-      setPackagesData(mappedPackages);
+      if (active) {
+        setPackagesData(mappedPackages);
+      }
     }
-    setLoading(false);
-  };
+      if (active) {
+        setLoading(false);
+      }
+    };
 
-  // Get first 10 packages
-  const firstTenPackages = packagesData.slice(0, 10);
+    loadPackages();
+
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  useEffect(() => {
+    const loadWishlist = async () => {
+      if (!isAuthenticated) {
+        setSavedPackageIds([]);
+        return;
+      }
+      const { data } = await getWishlist(user?.id);
+      setSavedPackageIds((data || []).map((item) => item.id));
+    };
+
+    loadWishlist();
+  }, [isAuthenticated, user?.id]);
 
   // Filter logic
-  const filteredPackages = firstTenPackages.filter((pkg) => {
+  const filteredPackages = packagesData.filter((pkg) => {
     const categoryMatch = selectedCategory === "All" || pkg.category === selectedCategory;
+    const stateMatch = selectedState === "All" || pkg.state === selectedState;
     const ratingMatch = pkg.rating >= minRating;
+    const query = searchTerm.trim().toLowerCase();
+    const searchMatch =
+      !query ||
+      `${pkg.title} ${pkg.destination} ${pkg.category} ${pkg.state} ${pkg.places.join(" ")}`
+        .toLowerCase()
+        .includes(query);
 
     let budgetMatch = true;
     if (selectedBudget === "Under 8000") budgetMatch = pkg.price < 8000;
@@ -76,7 +128,7 @@ const PackagesBrowse = () => {
     else if (selectedDuration === "3-4 Days") durationMatch = pkg.days >= 3 && pkg.days <= 4;
     else if (selectedDuration === "5+ Days") durationMatch = pkg.days >= 5;
 
-    return categoryMatch && ratingMatch && budgetMatch && durationMatch;
+    return categoryMatch && stateMatch && searchMatch && ratingMatch && budgetMatch && durationMatch;
   });
 
   // Sort logic
@@ -87,10 +139,36 @@ const PackagesBrowse = () => {
     return 0;
   });
 
+  const selectedComparePackages = packagesData
+    .filter((pkg) => selectedPackages.includes(pkg.id))
+    .slice(0, 3);
+
   const togglePackageSelection = (packageId) => {
     setSelectedPackages((prev) =>
       prev.includes(packageId) ? prev.filter((id) => id !== packageId) : [...prev, packageId]
     );
+  };
+
+  const toggleWishlist = async (pkg) => {
+    if (!isAuthenticated) {
+      navigate("/login", { state: { message: "Please login to save packages to your wishlist." } });
+      return;
+    }
+
+    const isSaved = savedPackageIds.includes(pkg.id);
+    const result = isSaved
+      ? await removeWishlistPackage({ customerId: user?.id, packageId: pkg.id })
+      : await saveWishlistPackage({ customerId: user?.id, packageId: pkg.id, packageItem: pkg });
+
+    if (result.error) {
+      showToast(result.error.message || "Unable to update wishlist.", "error");
+      return;
+    }
+
+    setSavedPackageIds((current) =>
+      isSaved ? current.filter((id) => id !== pkg.id) : [pkg.id, ...current]
+    );
+    showToast(isSaved ? "Removed from wishlist." : "Saved to wishlist.", "success");
   };
 
   const handleConfirm = () => {
@@ -103,8 +181,11 @@ const PackagesBrowse = () => {
     setSelectedCategory("All");
     setSelectedBudget("All");
     setSelectedDuration("All");
+    setSelectedState("All");
+    setSearchTerm("");
     setMinRating(0);
     setSortBy("rating");
+    setIsFilterDrawerOpen(false);
   };
 
   return (
@@ -114,6 +195,23 @@ const PackagesBrowse = () => {
         <h1>Explore Curated Packages</h1>
         <p>Find your perfect South India escape with our Airbnb-style filters</p>
       </section>
+
+      <SmartFilterDrawer
+        open={isFilterDrawerOpen}
+        filters={{ searchTerm, selectedState, selectedBudget, selectedDuration, minRating }}
+        onChange={(field, value) => {
+          const setters = {
+            searchTerm: setSearchTerm,
+            selectedState: setSelectedState,
+            selectedBudget: setSelectedBudget,
+            selectedDuration: setSelectedDuration,
+            minRating: setMinRating,
+          };
+          setters[field]?.(value);
+        }}
+        onClose={() => setIsFilterDrawerOpen(false)}
+        onReset={resetFilters}
+      />
 
       <div className="packages-container">
         {/* Sidebar Filters */}
@@ -233,12 +331,39 @@ const PackagesBrowse = () => {
           <div className="packages-header">
             <p className="results-count">
               Showing <strong>{sortedPackages.length}</strong> of{" "}
-              <strong>{firstTenPackages.length}</strong> packages
+              <strong>{packagesData.length}</strong> packages
             </p>
+            <div style={{ display: "flex", gap: "0.75rem", flexWrap: "wrap", alignItems: "center" }}>
+              <input
+                type="search"
+                value={searchTerm}
+                onChange={(event) => setSearchTerm(event.target.value)}
+                placeholder="Search packages, places, moods..."
+                style={{
+                  minWidth: 260,
+                  padding: "0.75rem 1rem",
+                  border: "1px solid #cbd5e1",
+                  borderRadius: 10,
+                }}
+              />
+              <select
+                value={selectedState}
+                onChange={(event) => setSelectedState(event.target.value)}
+                className="sort-select"
+                aria-label="Filter by state"
+              >
+                {["All", "Tamil Nadu", "Kerala", "Karnataka", "Andhra Pradesh"].map((state) => (
+                  <option key={state}>{state}</option>
+                ))}
+              </select>
+              <button className="smart-filter-toggle" type="button" onClick={() => setIsFilterDrawerOpen(true)}>
+                Advanced Filters
+              </button>
+            </div>
           </div>
 
           {loading ? (
-            <div className="loading">Loading packages...</div>
+            <PackageSkeletonGrid count={6} />
           ) : (
             <AnimatePresence mode="wait">
               {sortedPackages.length > 0 ? (
@@ -255,7 +380,10 @@ const PackagesBrowse = () => {
                       pkg={pkg}
                       isSelected={selectedPackages.includes(pkg.id)}
                       onToggle={() => togglePackageSelection(pkg.id)}
+                      isSaved={savedPackageIds.includes(pkg.id)}
+                      onWishlist={() => toggleWishlist(pkg)}
                       images={stateImageMap[pkg.imageFolder] || []}
+                      fallbackImage={stateFallbackImages[pkg.state] || tamilnaduImg}
                     />
                   ))}
                 </motion.div>
@@ -272,14 +400,18 @@ const PackagesBrowse = () => {
               )}
             </AnimatePresence>
           )}
+          <PackageCompareTray packages={selectedComparePackages} onClear={() => setSelectedPackages([])} />
         </section>
       </div>
     </main>
   );
 };
 
-const PackageCard = ({ pkg, isSelected, onToggle, images }) => {
-  const visibleImages = images.length ? images.slice(0, 3) : [tamilnaduImg, tamilnaduImg, tamilnaduImg];
+const PackageCard = ({ pkg, isSelected, isSaved, onToggle, onWishlist, images, fallbackImage }) => {
+  const uploadedImages = [pkg.image1, pkg.image2, pkg.image3].filter(Boolean);
+  const visibleImages = uploadedImages.length
+    ? uploadedImages
+    : images.length ? images.slice(0, 5) : [fallbackImage, fallbackImage, fallbackImage];
   const [activeIndex, setActiveIndex] = useState(0);
 
   return (
@@ -289,18 +421,16 @@ const PackageCard = ({ pkg, isSelected, onToggle, images }) => {
       whileHover={{ y: -8 }}
       transition={{ duration: 0.25 }}
     >
-      {/* Selection Checkbox */}
       <label className="selection-checkbox">
         <input type="checkbox" checked={isSelected} onChange={onToggle} />
         <span className="checkmark"></span>
       </label>
 
-      {/* Package Image */}
       <div className="package-image-container">
         <div className="image-carousel">
           {visibleImages.map((src, idx) => (
             <div
-              key={idx}
+              key={src || idx}
               className={`carousel-slide ${idx === activeIndex ? "active" : ""}`}
               style={{ backgroundImage: `url(${src})` }}
             />
@@ -310,14 +440,15 @@ const PackageCard = ({ pkg, isSelected, onToggle, images }) => {
           {visibleImages.map((_, idx) => (
             <button
               key={idx}
+              type="button"
               className={`indicator ${idx === activeIndex ? "active" : ""}`}
               onClick={() => setActiveIndex(idx)}
+              aria-label={`Show image ${idx + 1}`}
             />
           ))}
         </div>
       </div>
 
-      {/* Package Info */}
       <div className="package-info">
         <p className="destination-label">{pkg.destination}</p>
         <h3>{pkg.title}</h3>
@@ -330,7 +461,7 @@ const PackageCard = ({ pkg, isSelected, onToggle, images }) => {
           <div className="meta-item">
             <span className="label">Rating</span>
             <span className="value">
-              {pkg.rating.toFixed(1)} <span className="star">★</span>
+              {Number(pkg.rating || 0).toFixed(1)} <span className="star">star</span>
             </span>
           </div>
         </div>
@@ -342,15 +473,22 @@ const PackageCard = ({ pkg, isSelected, onToggle, images }) => {
         <div className="package-footer">
           <div className="price">
             <span className="label">From</span>
-            <span className="amount">₹{pkg.price.toLocaleString()}</span>
+            <span className="amount">Rs. {pkg.price.toLocaleString("en-IN")}</span>
           </div>
-          <button className="select-btn" onClick={onToggle}>
-            {isSelected ? "✓ Selected" : "Select"}
+          <button className="select-btn" type="button" onClick={onToggle}>
+            {isSelected ? "Selected" : "Select"}
+          </button>
+        </div>
+        <div className="package-footer" style={{ marginTop: 12, gap: 10 }}>
+          <Link className="select-btn" style={{ textAlign: "center", textDecoration: "none" }} to={`/package/${pkg.id}`}>
+            View Details
+          </Link>
+          <button className="select-btn" type="button" onClick={onWishlist}>
+            {isSaved ? "Saved" : "Save"}
           </button>
         </div>
       </div>
     </motion.div>
   );
 };
-
 export default PackagesBrowse;

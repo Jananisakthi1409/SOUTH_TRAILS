@@ -1,6 +1,12 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
+import kochiImg from "../state/kerala/kochi/pexels-jeyzen-24200331.webp";
+import munnarImg from "../state/kerala/munnar/pexels-harsh-14730465.webp";
+import ootyImg from "../state/tamilnadu/ooty/pexels-alexander-savchuk-108847177-9659261.webp";
+import coorgImg from "../state/karnataka/coorg/j.webp";
+import hampiImg from "../state/karnataka/hampi/image.webp";
+import vizagImg from "../state/andhra/rkbeach/image.webp";
 
 const moodCards = [
   { label: "🌿 Peace", title: "Quiet escapes", subtitle: "Slow backwater mornings" },
@@ -27,7 +33,7 @@ const destinations = [
     duration: "2 Days",
     specialty: "Backwaters & Seafood",
     badge: "🔥 Popular",
-    image: "https://images.unsplash.com/photo-1589308078059-be1415eab4c3?auto=format&fit=cover&w=600&q=80"
+    image: kochiImg
   },
   {
     title: "Ooty Tea Drive",
@@ -37,7 +43,7 @@ const destinations = [
     duration: "3 Days",
     specialty: "Tea Gardens",
     badge: "⭐ Traveler Favorite",
-    image: "https://images.unsplash.com/photo-1590050752117-238cb0fb12b1?auto=format&fit=cover&w=600&q=80"
+    image: ootyImg
   },
   {
     title: "Coorg Coffee Trail",
@@ -47,7 +53,7 @@ const destinations = [
     duration: "3 Days",
     specialty: "Coffee Estates",
     badge: "🌿 Peaceful Escape",
-    image: "https://images.unsplash.com/photo-1626593510484-df0a19e1eef4?auto=format&fit=cover&w=600&q=80"
+    image: coorgImg
   },
   {
     title: "Vizag Coastline",
@@ -57,7 +63,7 @@ const destinations = [
     duration: "2 Days",
     specialty: "Seafood & Beaches",
     badge: "",
-    image: "https://images.unsplash.com/photo-1604999333679-b86d54738315?auto=format&fit=cover&w=600&q=80"
+    image: vizagImg
   },
   {
     title: "Hampi Sunrise",
@@ -67,7 +73,7 @@ const destinations = [
     duration: "4 Days",
     specialty: "Temple Architecture",
     badge: "⭐ Traveler Favorite",
-    image: "https://images.unsplash.com/photo-1600100397990-a4783a03eb65?auto=format&fit=cover&w=600&q=80"
+    image: hampiImg
   },
   {
     title: "Munnar Mists",
@@ -77,7 +83,7 @@ const destinations = [
     duration: "3 Days",
     specialty: "Tea Gardens",
     badge: "🔥 Popular",
-    image: "https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?auto=format&fit=cover&w=600&q=80"
+    image: munnarImg
   },
 ];
 
@@ -92,7 +98,7 @@ const curatedPackages = [
     price: "₹8,999",
     rating: 5,
     tag: "🔥 Trending",
-    image: "https://images.unsplash.com/photo-1593693397690-362cb9666fc2?auto=format&fit=cover&w=800&q=80",
+    image: kochiImg,
     highlights: ["Premium Heritage Stay", "Cochin Culinary Trail", "Backwater Countryside Boat Tour", "Private Airport Transfers"]
   },
   {
@@ -104,7 +110,7 @@ const curatedPackages = [
     price: "₹12,499",
     rating: 5,
     tag: "💎 Premium",
-    image: "https://images.unsplash.com/photo-1590050752117-238cb0fb12b1?auto=format&fit=cover&w=800&q=80",
+    image: ootyImg,
     highlights: ["Charming Tea Bungalow Retreat", "Handpicked Leaf Sourcing Workshop", "High-Peak Ridge Treks", "Dedicated Cross-Hill Private SUV"]
   },
   {
@@ -116,7 +122,7 @@ const curatedPackages = [
     price: "₹9,500",
     rating: 5,
     tag: "🏛 Heritage Trail",
-    image: "https://images.unsplash.com/photo-1600100397990-a4783a03eb65?auto=format&fit=cover&w=800&q=80",
+    image: hampiImg,
     highlights: ["Riverside Heritage Resort Luxury", "Exclusive Historical Narrative Guided Walks", "Tungabhadra Coracle Crossing", "Locally Crafted Inter-Site Travel Logs"]
   }
 ];

@@ -1,9 +1,9 @@
 import { supabase } from "./supabase";
+import { apiRequest, isBackendEnabled, shouldUseFallback, toBackendAssetUrl } from "./backendApi";
 import tamilNaduPackages from "../pages/Packages/tamilNaduPackageData";
 import keraPackages from "../pages/Packages/keraPackageData";
 import karnatakaPackages from "../pages/Packages/karnatakaPackageData";
 import andhraPradeshPackages from "../pages/Packages/andhraPradeshPackageData";
-import packagesData from "../pages/Packages/packages";
 
 const fallbackPackages = {
   "Tamil Nadu": tamilNaduPackages.map((pkg) => ({ ...pkg, state: "Tamil Nadu" })),
@@ -22,13 +22,26 @@ const normalizePackage = (pkg) => {
     nights: Number(pkg.nights || 0),
     rating: pkg.rating || null,
     imageFolder,
+    image1: toBackendAssetUrl(pkg.image1),
+    image2: toBackendAssetUrl(pkg.image2),
+    image3: toBackendAssetUrl(pkg.image3),
     places: Array.isArray(pkg.places) ? pkg.places : pkg.places ? JSON.parse(pkg.places) : [],
     included: Array.isArray(pkg.included) ? pkg.included : pkg.included ? JSON.parse(pkg.included) : [],
     highlights: Array.isArray(pkg.highlights) ? pkg.highlights : pkg.highlights ? JSON.parse(pkg.highlights) : [],
   };
 };
 
-export const getPackages = async ({ state, category, search } = {}) => {
+export const getPackages = async ({ state, category, search, minPrice, maxPrice, minDays, maxDays, minRating } = {}) => {
+  if (isBackendEnabled) {
+    try {
+      const data = await apiRequest("/packages", { params: { state, category, search, minPrice, maxPrice, minDays, maxDays, minRating } });
+      if (data?.length) return data.map(normalizePackage);
+    } catch (error) {
+      console.error("getPackages", error);
+      if (!shouldUseFallback(error)) return [];
+    }
+  }
+
   if (!supabase) {
     const statePackages = state ? fallbackPackages[state] || [] : Object.values(fallbackPackages).flat();
     let packages = statePackages;
@@ -63,6 +76,16 @@ export const getPackages = async ({ state, category, search } = {}) => {
 };
 
 export const getPackageById = async (id) => {
+  if (isBackendEnabled) {
+    try {
+      const data = await apiRequest(`/packages/${id}`);
+      if (data) return normalizePackage(data);
+    } catch (error) {
+      console.error("getPackageById", error);
+      if (!shouldUseFallback(error)) return null;
+    }
+  }
+
   if (!supabase) {
     const all = Object.values(fallbackPackages).flat();
     const pkg = all.find((item) => item.id === id || String(item.id) === String(id));
@@ -86,11 +109,21 @@ export const createPackage = async (packageData) => {
     days: Number(packageData.days),
     nights: Number(packageData.nights),
     rating: packageData.rating || null,
-    imageFolder: packageData.imageFolder || "",
+    image_folder: packageData.imageFolder || packageData.image_folder || "",
     places: Array.isArray(packageData.places) ? packageData.places : [],
     included: Array.isArray(packageData.included) ? packageData.included : [],
     highlights: Array.isArray(packageData.highlights) ? packageData.highlights : [],
   };
+  if (isBackendEnabled) {
+    try {
+      const data = await apiRequest("/packages", { method: "POST", body: payload });
+      return { data, error: null };
+    } catch (error) {
+      if (!shouldUseFallback(error)) return { data: null, error };
+      return { data: null, error };
+    }
+  }
+
   if (!supabase) {
     return { data: null, error: { message: "Supabase not configured" } };
   }
@@ -103,6 +136,27 @@ export const createPackage = async (packageData) => {
 };
 
 export const updatePackage = async (id, payload) => {
+  if (isBackendEnabled) {
+    try {
+      const body = {
+        ...payload,
+        price: Number(payload.price),
+        days: Number(payload.days),
+        nights: Number(payload.nights),
+        image_folder: payload.imageFolder || payload.image_folder || "",
+        places: Array.isArray(payload.places) ? payload.places : [],
+        included: Array.isArray(payload.included) ? payload.included : [],
+        highlights: Array.isArray(payload.highlights) ? payload.highlights : [],
+      };
+      delete body.imageFolder;
+      const data = await apiRequest(`/packages/${id}`, { method: "PUT", body });
+      return { data, error: null };
+    } catch (error) {
+      if (!shouldUseFallback(error)) return { data: null, error };
+      return { data: null, error };
+    }
+  }
+
   const { data, error } = await supabase
     .from("packages")
     .update(payload)
@@ -113,6 +167,16 @@ export const updatePackage = async (id, payload) => {
 };
 
 export const deletePackage = async (id) => {
+  if (isBackendEnabled) {
+    try {
+      const data = await apiRequest(`/packages/${id}`, { method: "DELETE" });
+      return { data, error: null };
+    } catch (error) {
+      if (!shouldUseFallback(error)) return { data: null, error };
+      return { data: null, error };
+    }
+  }
+
   const { error } = await supabase
     .from("packages")
     .delete()
@@ -224,13 +288,26 @@ export const seedPackagesToSupabase = async () => {
     console.log("Error:", error);
 
     if (error) {
-      alert(`Seed processed with errors: ${error.message}`);
+      console.error(`Seed processed with errors: ${error.message}`);
     } else {
-      alert(`Success! Successfully seeded ${data?.length || payload.length} items to Supabase.`);
+      console.info(`Successfully seeded ${data?.length || payload.length} items to Supabase.`);
     }
 
   } catch (err) {
     console.error("Catch Error during database seeding operations:", err);
-    alert(`Exception captured during seeding runtime: ${err.message}`);
+  }
+};
+
+export const uploadPackageImages = async (files) => {
+  if (!isBackendEnabled) {
+    return { data: null, error: { message: "Spring Boot API is not configured." } };
+  }
+  try {
+    const formData = new FormData();
+    Array.from(files).slice(0, 5).forEach((file) => formData.append("files", file));
+    const data = await apiRequest("/uploads/packages", { method: "POST", body: formData });
+    return { data: { urls: (data?.urls || []).map(toBackendAssetUrl) }, error: null };
+  } catch (error) {
+    return { data: null, error };
   }
 };

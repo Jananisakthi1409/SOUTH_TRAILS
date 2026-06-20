@@ -1,6 +1,5 @@
 // src/pages/Auth/Login.jsx
-import { Link } from "react-router-dom";
-import loginImage from "./loginimage.png";
+import loginImage from "../Auth/loginimage.webp";
 
 const Login = () => {
   return (

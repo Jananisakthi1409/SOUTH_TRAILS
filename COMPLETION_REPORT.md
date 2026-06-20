@@ -59,8 +59,8 @@
 
 ### Demo Credentials
 ```
-Email:    admin@example.com
-Password: Admin@123
+Email:    admin@southtrails.com
+Password: admin123
 ```
 
 ### Dev Server Status
@@ -406,7 +406,7 @@ The complete admin management system for South Trails is now:
 
 ### Access the Admin Panel Now:
 1. Open: http://localhost:5173/admin/login
-2. Use: admin@example.com / Admin@123
+2. Use: admin@southtrails.com / admin123
 3. Explore: Click through all pages
 
 ### Read Documentation:

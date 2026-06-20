@@ -2,15 +2,15 @@ import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { getPackages } from "../../services/packageService";
-import tamilnaduImg from "../../assets/images/tamilnadu.png";
+import tamilnaduImg from "../../assets/images/tamilnadu.webp";
 
-const imageModules = import.meta.glob("../state/tamilnadu/**/*.{png,jpg,jpeg}", { eager: true });
+const imageModules = import.meta.glob("../state/tamilnadu/**/*.{webp,avif}", { eager: true });
 
 const stateImageMap = Object.entries(imageModules)
   .sort(([a], [b]) => a.localeCompare(b))
   .reduce((map, [path, moduleValue]) => {
     const normalized = path.replace(/\\/g, "/");
-    const match = normalized.match(/tamilnadu\/([^/]+)\/[^/]+\.(png|jpe?g)$/i);
+    const match = normalized.match(/tamilnadu\/([^/]+)\/[^/]+\.(webp|avif)$/i);
     if (!match) return map;
 
     const folder = match[1];

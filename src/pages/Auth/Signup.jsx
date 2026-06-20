@@ -2,7 +2,9 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuthContext } from "../../features/auth/AuthContext";
-import loginImage from "./loginimage.png";
+import { createBooking } from "../../services/bookingService";
+import { validateSignupForm } from "../../utils/validation";
+import loginImage from "./loginimage.webp";
 
 const generatePassId = () => {
   return `ST-${Math.floor(100000 + Math.random() * 900000)}`;
@@ -25,6 +27,7 @@ const Signup = () => {
   const [count, setCount] = useState(3);
   const [passId, setPassId] = useState("");
   const [error, setError] = useState("");
+  const [successBooking, setSuccessBooking] = useState(null);
 
   const handleChange = (field) => (event) => {
     const value = event.target.type === "checkbox" ? event.target.checked : event.target.value;
@@ -33,19 +36,11 @@ const Signup = () => {
   };
 
   const isReady = form.fullName.trim() && form.phone.trim();
-  const isValid =
-    isReady &&
-    form.email.trim() &&
-    form.address.trim() &&
-    form.password &&
-    form.confirmPassword &&
-    form.password === form.confirmPassword &&
-    form.agree;
-
   const handleSubmit = async (event) => {
     event.preventDefault();
-    if (!isValid) {
-      setError("Please fill out all fields and agree to the terms.");
+    const validationError = validateSignupForm(form);
+    if (validationError) {
+      setError(validationError);
       return;
     }
     const result = await signup({
@@ -58,31 +53,70 @@ const Signup = () => {
       setError(result.error);
       return;
     }
+
     const selected = location.state?.selectedPackage;
     if (selected) {
-      const stored = JSON.parse(window.localStorage.getItem("southTrailsBookings") || "[]");
-      window.localStorage.setItem("southTrailsBookings", JSON.stringify([...stored, selected]));
+      if (result.user?.id) {
+        const payload = {
+          customer_id: result.user.id,
+          package_id: selected.packageId,
+          package_snapshot: { id: selected.packageId, title: selected.packageName },
+          travel_date: selected.travelDate || null,
+          travelers: selected.travelers || 1,
+          status: selected.status || "Pending",
+          total_amount: selected.totalAmount || Number(String(selected.price || "").replace(/[^0-9]/g, "")) || null,
+          special_request: selected.specialRequests || selected.special_request || null,
+        };
+
+        try {
+          const { data, error } = await createBooking(payload);
+          if (error) {
+            throw error;
+          }
+          setSuccessBooking(data || selected);
+        } catch (error) {
+          console.error("Booking fallback error:", error);
+          const stored = JSON.parse(window.localStorage.getItem("southTrailsBookings") || "[]");
+          window.localStorage.setItem("southTrailsBookings", JSON.stringify([...stored, selected]));
+          setSuccessBooking(selected);
+        }
+      } else {
+        const stored = JSON.parse(window.localStorage.getItem("southTrailsBookings") || "[]");
+        window.localStorage.setItem("southTrailsBookings", JSON.stringify([...stored, selected]));
+        setSuccessBooking(selected);
+      }
     }
     setPassId(generatePassId());
+    setCount(3);
     setStage("creating");
     window.setTimeout(() => setStage("boarding"), 1200);
   };
 
   useEffect(() => {
     if (stage !== "boarding") return;
-    setCount(3);
     const interval = window.setInterval(() => {
       setCount((value) => {
         if (value <= 1) {
           clearInterval(interval);
-          navigate("/profile");
           return 0;
         }
         return value - 1;
       });
     }, 1000);
     return () => clearInterval(interval);
-  }, [stage, navigate]);
+  }, [stage]);
+
+  useEffect(() => {
+    if (stage === "boarding" && count === 0) {
+      if (successBooking?.id) {
+        navigate(`/booking-success/${successBooking.id}`, {
+          state: { booking: successBooking },
+        });
+        return;
+      }
+      navigate("/profile");
+    }
+  }, [count, navigate, stage, successBooking]);
 
   const info = location.state?.message || "";
 

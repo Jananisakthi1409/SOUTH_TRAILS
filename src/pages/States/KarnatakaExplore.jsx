@@ -1,12 +1,12 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
-import c1 from "../state/karnataka/culturesection/c1.png";
-import c2 from "../state/karnataka/culturesection/c2.png";
-import c3 from "../state/karnataka/culturesection/c3.png";
-import c4 from "../state/karnataka/culturesection/c4.png";
+import c1 from "../state/karnataka/culturesection/c1.webp";
+import c2 from "../state/karnataka/culturesection/c2.webp";
+import c3 from "../state/karnataka/culturesection/c3.webp";
+import c4 from "../state/karnataka/culturesection/c4.webp";
 
 // Load images dynamically from the folder (Vite eager glob)
-const imageModules = import.meta.glob("../state/karnataka/*.{png,jpg,jpeg}", { eager: true });
+const imageModules = import.meta.glob("../state/karnataka/*.{webp,avif}", { eager: true });
 const slides = Object.keys(imageModules).sort().map((p) => imageModules[p].default);
 
 const cultureCards = [

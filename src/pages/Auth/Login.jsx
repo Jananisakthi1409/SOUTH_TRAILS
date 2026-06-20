@@ -2,7 +2,9 @@
 import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuthContext } from "../../features/auth/AuthContext";
-import loginImage from "./loginimage.png";
+import { createBooking } from "../../services/bookingService";
+import { validateLoginForm } from "../../utils/validation";
+import loginImage from "./loginimage.webp";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -19,16 +21,59 @@ const Login = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    const validationError = validateLoginForm(form);
+    if (validationError) {
+      setError(validationError);
+      return;
+    }
+
     const result = await login(form);
     if (!result.success) {
       setError(result.error);
       return;
     }
+
     const selected = location.state?.selectedPackage;
+    let successBooking = null;
     if (selected) {
-      const stored = JSON.parse(window.localStorage.getItem("southTrailsBookings") || "[]");
-      window.localStorage.setItem("southTrailsBookings", JSON.stringify([...stored, selected]));
+      if (result.user?.id) {
+        const payload = {
+          customer_id: result.user.id,
+          package_id: selected.packageId,
+          package_snapshot: { id: selected.packageId, title: selected.packageName },
+          travel_date: selected.travelDate || null,
+          travelers: selected.travelers || 1,
+          status: selected.status || "Pending",
+          total_amount: selected.totalAmount || Number(String(selected.price || "").replace(/[^0-9]/g, "")) || null,
+          special_request: selected.specialRequests || selected.special_request || null,
+        };
+
+        try {
+          const { data, error } = await createBooking(payload);
+          if (error) {
+            throw error;
+          }
+          successBooking = data || selected;
+        } catch (error) {
+          console.error("Booking fallback error:", error);
+          const stored = JSON.parse(window.localStorage.getItem("southTrailsBookings") || "[]");
+          window.localStorage.setItem("southTrailsBookings", JSON.stringify([...stored, selected]));
+          successBooking = selected;
+        }
+      } else {
+        const stored = JSON.parse(window.localStorage.getItem("southTrailsBookings") || "[]");
+        window.localStorage.setItem("southTrailsBookings", JSON.stringify([...stored, selected]));
+        successBooking = selected;
+      }
     }
+
+    if (successBooking?.id) {
+      navigate(`/booking-success/${successBooking.id}`, {
+        state: { booking: successBooking },
+      });
+      return;
+    }
+
     navigate("/profile");
   };
 

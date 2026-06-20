@@ -25,19 +25,6 @@ const itemVariants = {
   },
 };
 
-const buttonVariants = {
-  hidden: { opacity: 0, y: 16 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.8,
-      ease: "easeOut",
-    },
-  },
-  hover: { scale: 1.02, y: -3 },
-};
-
 const videoVariants = {
   hidden: { scale: 1.05 },
   visible: {

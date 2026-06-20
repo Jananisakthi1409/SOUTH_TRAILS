@@ -1,9 +1,9 @@
 import { useParams, Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import tamilnaduImg from "../../assets/images/tamilnadu.png";
-import keralaImg from "../../assets/images/kerala.png";
-import karnatakaImg from "../../assets/images/karnataka.png";
-import andhraImg from "../../assets/images/andhra.png";
+import tamilnaduImg from "../../assets/images/tamilnadu.webp";
+import keralaImg from "../../assets/images/kerala.webp";
+import karnatakaImg from "../../assets/images/karnataka.webp";
+import andhraImg from "../../assets/images/andhra.webp";
 
 const stateContent = {
   "tamil-nadu": {

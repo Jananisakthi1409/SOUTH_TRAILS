@@ -1,11 +1,11 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
-import peaceImg from "../assets/images/peace/p1.jpg";
-import adventureImg from "../assets/images/adventure/pexels-avneet-kaur-669191817-31928086.jpg";
-import foodImg from "../assets/images/Food Trails/pexels-ryshy-s-2149956588-35539324.jpg";
-import romanticImg from "../assets/images/romatinc_escapes/pexels-asadphoto-5785086.jpg";
-import roadImg from "../assets/images/roadtrips/pexels-cottonbro-5329529.jpg";
+import peaceImg from "../pages/state/kerala/backwater/pexels-optically-challenged-21717677.webp";
+import adventureImg from "../pages/state/karnataka/coorg/j.webp";
+import foodImg from "../pages/state/kerala/kochi/pexels-jeyzen-24200331.webp";
+import romanticImg from "../pages/state/tamilnadu/ooty/pexels-alexander-savchuk-108847177-9659261.webp";
+import roadImg from "../pages/state/andhra/rkbeach/image.webp";
 
 const DEFAULT_DURATION = 3000; // 3 seconds
 
@@ -14,63 +14,35 @@ const StoryPreview = ({ className, images: propImages }) => {
   const total = images.length;
   const [index, setIndex] = useState(0);
   const [progress, setProgress] = useState(0);
-
-  const intervalRef = useRef(null);
-  const startTimeRef = useRef(performance.now());
-  const pauseStartRef = useRef(null);
-  const pausedTimeRef = useRef(0);
   const isHoverRef = useRef(false);
 
   useEffect(() => {
-    setIndex(0);
-    setProgress(0);
-    pausedTimeRef.current = 0;
-    startTimeRef.current = performance.now();
-    isHoverRef.current = false;
-    pauseStartRef.current = null;
+    const interval = window.setInterval(() => {
+      if (isHoverRef.current) return;
 
-    intervalRef.current = window.setInterval(() => {
-      updateProgress();
+      setProgress((currentProgress) => {
+        const nextProgress = currentProgress + 50 / DEFAULT_DURATION;
+        if (nextProgress < 1) return nextProgress;
+
+        setIndex((currentIndex) => (currentIndex + 1) % total);
+        return 0;
+      });
     }, 50);
 
     return () => {
-      if (intervalRef.current) {
-        window.clearInterval(intervalRef.current);
-      }
+      window.clearInterval(interval);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [propImages]);
-
-  useEffect(() => {
-    if (progress >= 1) {
-      setIndex((i) => (i + 1) % total);
-      startTimeRef.current = performance.now();
-      pausedTimeRef.current = 0;
-      setProgress(0);
-    }
-  }, [progress, total]);
-
-  const updateProgress = () => {
-    if (isHoverRef.current) return;
-
-    const now = performance.now();
-    const elapsed = now - startTimeRef.current - pausedTimeRef.current;
-    const next = Math.min(Math.max(elapsed / DEFAULT_DURATION, 0), 1);
-    setProgress(next);
-  };
+  }, [total]);
 
   const handleMouseEnter = () => {
     isHoverRef.current = true;
-    if (!pauseStartRef.current) pauseStartRef.current = performance.now();
   };
 
   const handleMouseLeave = () => {
-    if (pauseStartRef.current) {
-      pausedTimeRef.current += performance.now() - pauseStartRef.current;
-      pauseStartRef.current = null;
-    }
     isHoverRef.current = false;
   };
+
+  const safeIndex = index % total;
 
   return (
     <article
@@ -81,8 +53,8 @@ const StoryPreview = ({ className, images: propImages }) => {
       <div className="story-media">
         <AnimatePresence initial={false} mode="wait">
           <motion.img
-            key={images[index]}
-            src={images[index]}
+            key={images[safeIndex]}
+            src={images[safeIndex]}
             alt="story"
             initial={{ opacity: 0.2 }}
             animate={{ opacity: 1 }}
@@ -104,8 +76,8 @@ const StoryPreview = ({ className, images: propImages }) => {
 
           <div className="story-dots">
             {Array.from({ length: total }).map((_, i) => {
-              const isDone = i < index;
-              const isCurrent = i === index;
+              const isDone = i < safeIndex;
+              const isCurrent = i === safeIndex;
               return (
                 <motion.span
                   key={i}

@@ -7,14 +7,14 @@ import { getPackages } from "../../services/packageService";
 import "./KeraPackages.css";
 
 // Import all destination images dynamically
-const imageModules = import.meta.glob("../state/kerala/**/*.{png,jpg,jpeg}", { eager: true });
+const imageModules = import.meta.glob("../state/kerala/**/*.{webp,avif}", { eager: true });
 
 // Map images by destination folder
 const destinationImages = Object.entries(imageModules)
   .sort(([a], [b]) => a.localeCompare(b))
   .reduce((map, [path, moduleValue]) => {
     const normalized = path.replace(/\\/g, "/");
-    const match = normalized.match(/kerala\/([^/]+)\/[^/]+\.(png|jpe?g)$/i);
+    const match = normalized.match(/kerala\/([^/]+)\/[^/]+\.(webp|avif)$/i);
     if (!match) return map;
 
     const folder = match[1];

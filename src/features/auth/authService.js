@@ -1,8 +1,8 @@
 // src/features/auth/authService.js
-export const login = async (credentials) => {
+export const login = async () => {
   return null;
 };
 
-export const signup = async (data) => {
+export const signup = async () => {
   return null;
 };
