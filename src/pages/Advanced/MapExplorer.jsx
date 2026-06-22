@@ -3,37 +3,42 @@ import { Link } from "react-router-dom";
 import { getPackages } from "../../services/packageService";
 import "../../components/advanced/AdvancedUI.css";
 
-const statePins = [
-  { state: "Tamil Nadu", label: "Temples + Hills", top: "62%", left: "54%", route: "/states/tamil-nadu" },
-  { state: "Kerala", label: "Backwaters", top: "74%", left: "37%", route: "/states/kerala" },
-  { state: "Karnataka", label: "Coffee + Heritage", top: "45%", left: "34%", route: "/states/karnataka" },
-  { state: "Andhra Pradesh", label: "Coast + Shrines", top: "32%", left: "62%", route: "/states/andhra-pradesh" },
+const destinationPins = [
+  { destination: "Chennai", label: "Heritage Coast", top: "46%", left: "67%", route: "/destinations/chennai" },
+  { destination: "Madurai", label: "Temple City", top: "72%", left: "48%", route: "/destinations/madurai" },
+  { destination: "Thanjavur", label: "Chola Heritage", top: "61%", left: "58%", route: "/destinations/thanjavur" },
+  { destination: "Ooty", label: "Nilgiri Hills", top: "50%", left: "28%", route: "/destinations/ooty" },
+  { destination: "Kodaikanal", label: "Misty Hills", top: "68%", left: "36%", route: "/destinations/kodaikanal" },
+  { destination: "Rameswaram", label: "Spiritual Coast", top: "81%", left: "64%", route: "/destinations/rameswaram" },
+  { destination: "Kanyakumari", label: "Southern Coast", top: "91%", left: "44%", route: "/destinations/kanyakumari" },
+  { destination: "Coimbatore", label: "Western Gateway", top: "56%", left: "25%", route: "/destinations/coimbatore" },
 ];
 
 const MapExplorer = () => {
   const [packages, setPackages] = useState([]);
-  const [selectedState, setSelectedState] = useState("Kerala");
+  const [selectedDestination, setSelectedDestination] = useState("Madurai");
 
   useEffect(() => {
-    getPackages().then((items) => setPackages(items || []));
+    getPackages({ state: "Tamil Nadu" }).then((items) => setPackages(items || []));
   }, []);
 
   const selectedPackages = useMemo(
-    () => packages.filter((pkg) => pkg.state === selectedState).slice(0, 6),
-    [packages, selectedState]
+    () => packages.filter((pkg) => pkg.destination === selectedDestination).slice(0, 6),
+    [packages, selectedDestination]
   );
 
-  const selectedPin = statePins.find((pin) => pin.state === selectedState) || statePins[0];
+  const selectedPin = destinationPins.find((pin) => pin.destination === selectedDestination) || destinationPins[0];
 
   return (
     <main className="advanced-page">
       <div className="advanced-page-inner">
         <section className="advanced-hero">
           <div className="advanced-hero-copy advanced-panel">
-            <p className="eyebrow">Interactive Explorer</p>
-            <h1>Explore South India by map, route, and package density</h1>
+            <p className="eyebrow">Tamil Nadu Interactive Map</p>
+            <h1>Explore Tamil Nadu by circuit, destination, and package density</h1>
             <p>
-              Click a state pin to preview packages, nearby experiences, route mood, and quick links.
+              Click a destination pin to preview Tamil Nadu packages, route mood,
+              nearby experiences, and destination guides.
             </p>
             <div style={{ display: "flex", gap: "0.75rem", flexWrap: "wrap", marginTop: "1rem" }}>
               <Link className="button button-primary" to="/trip-builder">Build Trip</Link>
@@ -42,36 +47,36 @@ const MapExplorer = () => {
           </div>
 
           <aside className="advanced-panel" style={{ padding: "1.5rem" }}>
-            <p className="eyebrow">{selectedState}</p>
+            <p className="eyebrow">{selectedDestination}</p>
             <h2 style={{ marginTop: 0 }}>{selectedPin.label}</h2>
             <p style={{ color: "#64748b" }}>
-              {selectedPackages.length} matching packages available from the live package catalog.
+              {selectedPackages.length} matching Tamil Nadu packages available from the catalog.
             </p>
-            <Link to={selectedPin.route}>Open state guide</Link>
+            <Link to={selectedPin.route}>Open destination guide</Link>
           </aside>
         </section>
 
         <section className="advanced-hero">
-          <div className="map-stage advanced-panel" aria-label="South India interactive map">
+          <div className="map-stage advanced-panel tamil-map-stage" aria-label="Tamil Nadu interactive map">
             <div className="map-route-line" />
-            {statePins.map((pin) => (
+            {destinationPins.map((pin) => (
               <button
-                key={pin.state}
+                key={pin.destination}
                 type="button"
                 className="map-pin"
                 style={{ top: pin.top, left: pin.left }}
-                onClick={() => setSelectedState(pin.state)}
-                aria-pressed={selectedState === pin.state}
+                onClick={() => setSelectedDestination(pin.destination)}
+                aria-pressed={selectedDestination === pin.destination}
               >
-                {pin.state}
+                {pin.destination}
               </button>
             ))}
           </div>
 
           <div className="advanced-panel" style={{ padding: "1.25rem" }}>
-            <h2 style={{ marginTop: 0 }}>Packages Near {selectedState}</h2>
+            <h2 style={{ marginTop: 0 }}>Packages Near {selectedDestination}</h2>
             <div className="itinerary-timeline">
-              {selectedPackages.map((pkg) => (
+              {selectedPackages.length ? selectedPackages.map((pkg) => (
                 <article key={pkg.id} className="itinerary-day">
                   <p className="eyebrow" style={{ margin: 0 }}>{pkg.category}</p>
                   <h3 style={{ margin: "0.35rem 0" }}>{pkg.title}</h3>
@@ -80,7 +85,12 @@ const MapExplorer = () => {
                   </p>
                   <Link to={`/package/${pkg.id}`}>View package</Link>
                 </article>
-              ))}
+              )) : (
+                <article className="itinerary-day">
+                  <h3>No direct package yet</h3>
+                  <p style={{ color: "#64748b" }}>Use the AI planner to build a custom Tamil Nadu route around this destination.</p>
+                </article>
+              )}
             </div>
           </div>
         </section>

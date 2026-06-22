@@ -1,15 +1,9 @@
 import { supabase } from "./supabase";
-import { apiRequest, isBackendEnabled, shouldUseFallback, toBackendAssetUrl } from "./backendApi";
+import { apiRequest, isBackendEnabled, isLocalFallbackEnabled, shouldUseFallback, toBackendAssetUrl } from "./backendApi";
 import tamilNaduPackages from "../pages/Packages/tamilNaduPackageData";
-import keraPackages from "../pages/Packages/keraPackageData";
-import karnatakaPackages from "../pages/Packages/karnatakaPackageData";
-import andhraPradeshPackages from "../pages/Packages/andhraPradeshPackageData";
 
 const fallbackPackages = {
   "Tamil Nadu": tamilNaduPackages.map((pkg) => ({ ...pkg, state: "Tamil Nadu" })),
-  Kerala: keraPackages.map((pkg) => ({ ...pkg, state: "Kerala" })),
-  Karnataka: karnatakaPackages.map((pkg) => ({ ...pkg, state: "Karnataka" })),
-  "Andhra Pradesh": andhraPradeshPackages.map((pkg) => ({ ...pkg, state: "Andhra Pradesh" })),
 };
 
 const normalizePackage = (pkg) => {
@@ -32,18 +26,9 @@ const normalizePackage = (pkg) => {
 };
 
 export const getPackages = async ({ state, category, search, minPrice, maxPrice, minDays, maxDays, minRating } = {}) => {
-  if (isBackendEnabled) {
-    try {
-      const data = await apiRequest("/packages", { params: { state, category, search, minPrice, maxPrice, minDays, maxDays, minRating } });
-      if (data?.length) return data.map(normalizePackage);
-    } catch (error) {
-      console.error("getPackages", error);
-      if (!shouldUseFallback(error)) return [];
-    }
-  }
-
-  if (!supabase) {
-    const statePackages = state ? fallbackPackages[state] || [] : Object.values(fallbackPackages).flat();
+  const tamilOnlyState = state && state !== "All" ? "Tamil Nadu" : state;
+  const localFallbackPackages = () => {
+    const statePackages = state && state !== "All" ? fallbackPackages["Tamil Nadu"] || [] : Object.values(fallbackPackages).flat();
     let packages = statePackages;
 
     if (category) {
@@ -58,12 +43,36 @@ export const getPackages = async ({ state, category, search, minPrice, maxPrice,
           pkg.category.toLowerCase().includes(query)
       );
     }
+    if (minPrice !== undefined) packages = packages.filter((pkg) => Number(pkg.price) >= Number(minPrice));
+    if (maxPrice !== undefined) packages = packages.filter((pkg) => Number(pkg.price) <= Number(maxPrice));
+    if (minDays !== undefined) packages = packages.filter((pkg) => Number(pkg.days) >= Number(minDays));
+    if (maxDays !== undefined) packages = packages.filter((pkg) => Number(pkg.days) <= Number(maxDays));
+    if (minRating !== undefined) packages = packages.filter((pkg) => Number(pkg.rating || 0) >= Number(minRating));
 
     return packages.map(normalizePackage);
+  };
+
+  if (import.meta.env.DEV && isLocalFallbackEnabled) {
+    return localFallbackPackages();
+  }
+
+  if (isBackendEnabled) {
+    try {
+      const data = await apiRequest("/packages", { params: { state: tamilOnlyState, category, search, minPrice, maxPrice, minDays, maxDays, minRating } });
+      const tamilPackages = (data || []).filter((pkg) => (pkg.state || "Tamil Nadu") === "Tamil Nadu");
+      if (tamilPackages.length) return tamilPackages.map(normalizePackage);
+    } catch (error) {
+      if (shouldUseFallback(error)) return localFallbackPackages();
+      return [];
+    }
+  }
+
+  if (!supabase) {
+    return localFallbackPackages();
   }
 
   let query = supabase.from("packages").select("*");
-  if (state) query = query.eq("state", state);
+  query = query.eq("state", "Tamil Nadu");
   if (category) query = query.eq("category", category);
   if (search) query = query.ilike("title", `%${search}%`);
   
@@ -76,20 +85,28 @@ export const getPackages = async ({ state, category, search, minPrice, maxPrice,
 };
 
 export const getPackageById = async (id) => {
+  const localPackageById = () => {
+    const all = Object.values(fallbackPackages).flat();
+    const pkg = all.find((item) => item.id === id || String(item.id) === String(id));
+    return pkg ? normalizePackage(pkg) : null;
+  };
+
+  if (import.meta.env.DEV && isLocalFallbackEnabled) {
+    return localPackageById();
+  }
+
   if (isBackendEnabled) {
     try {
       const data = await apiRequest(`/packages/${id}`);
-      if (data) return normalizePackage(data);
+      if (data && (data.state || "Tamil Nadu") === "Tamil Nadu") return normalizePackage(data);
     } catch (error) {
-      console.error("getPackageById", error);
-      if (!shouldUseFallback(error)) return null;
+      if (shouldUseFallback(error)) return localPackageById();
+      return null;
     }
   }
 
   if (!supabase) {
-    const all = Object.values(fallbackPackages).flat();
-    const pkg = all.find((item) => item.id === id || String(item.id) === String(id));
-    return pkg ? normalizePackage(pkg) : null;
+    return localPackageById();
   }
 
   const { data, error } = await supabase.from("packages").select("*").eq("id", id).single();
@@ -104,6 +121,7 @@ export const getPackageById = async (id) => {
 export const createPackage = async (packageData) => {
   const payload = {
     ...packageData,
+    state: "Tamil Nadu",
     id: packageData.id || String(Date.now()),
     price: Number(packageData.price),
     days: Number(packageData.days),
@@ -138,8 +156,9 @@ export const createPackage = async (packageData) => {
 export const updatePackage = async (id, payload) => {
   if (isBackendEnabled) {
     try {
-      const body = {
-        ...payload,
+    const body = {
+      ...payload,
+      state: "Tamil Nadu",
         price: Number(payload.price),
         days: Number(payload.days),
         nights: Number(payload.nights),
@@ -159,7 +178,7 @@ export const updatePackage = async (id, payload) => {
 
   const { data, error } = await supabase
     .from("packages")
-    .update(payload)
+    .update({ ...payload, state: "Tamil Nadu" })
     .eq("id", id)
     .select();
 
@@ -213,67 +232,7 @@ export const seedPackagesToSupabase = async () => {
       status: pkg.status || "active",
     }));
 
-    const keralaPayload = keraPackages.map((pkg) => ({
-      id: pkg.id,
-      title: pkg.title,
-      destination: pkg.destination,
-      state: "Kerala",
-      category: pkg.category,
-      days: Number(pkg.days || 0),
-      nights: Number(pkg.nights || 0),
-      price: typeof pkg.price === "string" ? Number(pkg.price.replace(/[^0-9.]/g, "")) : Number(pkg.price || 0),
-      description: pkg.description || "",
-      rating: pkg.rating || null,
-      imageFolder: pkg.imageFolder || "",
-      places: pkg.places || [],
-      included: pkg.included || [],
-      highlights: pkg.highlights || [],
-      status: pkg.status || "active",
-    }));
-
-    const karnatakaPayload = karnatakaPackages.map((pkg) => ({
-      id: pkg.id,
-      title: pkg.title,
-      destination: pkg.destination,
-      state: "Karnataka",
-      category: pkg.category,
-      days: Number(pkg.days || 0),
-      nights: Number(pkg.nights || 0),
-      price: typeof pkg.price === "string" ? Number(pkg.price.replace(/[^0-9.]/g, "")) : Number(pkg.price || 0),
-      description: pkg.description || "",
-      rating: pkg.rating || null,
-      imageFolder: pkg.imageFolder || "",
-      places: pkg.places || [],
-      included: pkg.included || [],
-      highlights: pkg.highlights || [],
-      status: pkg.status || "active",
-    }));
-
-    const andhraPayload = andhraPradeshPackages.map((pkg) => ({
-      id: pkg.id,
-      title: pkg.title,
-      destination: pkg.destination,
-      state: "Andhra Pradesh",
-      category: pkg.category,
-      days: Number(pkg.days || 0),
-      nights: Number(pkg.nights || 0),
-      price: typeof pkg.price === "string" ? Number(pkg.price.replace(/[^0-9.]/g, "")) : Number(pkg.price || 0),
-      description: pkg.description || "",
-      rating: pkg.rating || null,
-      imageFolder: pkg.imageFolder || "",
-      places: pkg.places || [],
-      included: pkg.included || [],
-      highlights: pkg.highlights || [],
-      status: pkg.status || "active",
-    }));
-
-    // 2. Concat into a single integrated array structure using corrected variables
-    const payload = [
-      ...tnPayload,
-      ...keralaPayload,
-      ...karnatakaPayload,
-      ...andhraPayload
-    ];
+    const payload = [...tnPayload];
 
     console.log(`Sending a single payload block containing ${payload.length} records to Supabase...`);
 

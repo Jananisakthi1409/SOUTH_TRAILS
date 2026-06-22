@@ -65,7 +65,7 @@ public class AiTourismController {
 
     @PostMapping("/itinerary")
     Map<String, Object> itinerary(@RequestBody Map<String, Object> payload) {
-        String state = text(payload.get("state"));
+        String state = "Tamil Nadu";
         String travelStyle = fallback(text(payload.get("travelStyle")), "Balanced");
         String season = fallback(text(payload.get("season")), "Current season");
         int duration = Math.max(1, number(payload.get("duration"), number(payload.get("days"), 3)));
@@ -74,7 +74,7 @@ public class AiTourismController {
         List<String> interests = textList(payload.get("interests"));
 
         List<TravelPackage> ranked = packages.findAll().stream()
-                .filter(pkg -> state.isBlank() || equalsIgnoreCase(pkg.getState(), state))
+                .filter(pkg -> equalsIgnoreCase(pkg.getState(), "Tamil Nadu"))
                 .map(pkg -> Map.entry(pkg, itineraryScore(pkg, interests, budget, duration, travelStyle)))
                 .sorted(Map.Entry.<TravelPackage, Integer>comparingByValue().reversed())
                 .limit(6)
@@ -82,10 +82,12 @@ public class AiTourismController {
                 .toList();
 
         List<Map<String, Object>> dayPlan = new ArrayList<>();
-        List<TravelPackage> sourcePackages = ranked.isEmpty() ? packages.findAll().stream().limit(3).toList() : ranked;
+        List<TravelPackage> sourcePackages = ranked.isEmpty()
+                ? packages.findAll().stream().filter(pkg -> equalsIgnoreCase(pkg.getState(), "Tamil Nadu")).limit(3).toList()
+                : ranked;
         if (sourcePackages.isEmpty()) {
             Map<String, Object> emptyResponse = new LinkedHashMap<>();
-            emptyResponse.put("title", travelStyle + " South Trails plan");
+            emptyResponse.put("title", travelStyle + " Tamil Nadu plan");
             emptyResponse.put("summary", "No package catalog data is available yet. Add packages from the existing admin workspace first.");
             emptyResponse.put("season", season);
             emptyResponse.put("travelStyle", travelStyle);
@@ -124,7 +126,7 @@ public class AiTourismController {
         }
 
         Map<String, Object> response = new LinkedHashMap<>();
-        response.put("title", travelStyle + " South Trails plan");
+        response.put("title", travelStyle + " Tamil Nadu plan");
         response.put("summary", "Generated from live package, destination, price, rating, and highlight data without changing the booking flow.");
         response.put("season", season);
         response.put("travelStyle", travelStyle);
@@ -153,8 +155,8 @@ public class AiTourismController {
                 .toList();
 
         String answer = ranked.isEmpty()
-                ? "I could not find a strong catalog match yet. Try sharing a state, budget, duration, and travel mood."
-                : "I found " + ranked.get(0).getTitle() + " as the strongest match because it aligns with your travel intent, budget signals, and South Trails catalog data.";
+                ? "I could not find a strong Tamil Nadu catalog match yet. Try sharing your budget, duration, and travel mood."
+                : "I found " + ranked.get(0).getTitle() + " as the strongest match because it aligns with your travel intent, budget signals, and Tamil Trails catalog data.";
 
         return Map.of(
                 "answer", answer,
@@ -249,7 +251,7 @@ public class AiTourismController {
                 .forEach(notification -> items.add(Map.of(
                         "id", notification.getId(),
                         "type", fallback(notification.getType(), "INFO"),
-                        "title", fallback(notification.getTitle(), "South Trails update"),
+                        "title", fallback(notification.getTitle(), "Tamil Trails update"),
                         "message", fallback(notification.getMessage(), ""),
                         "createdAt", notification.getCreatedAt() == null ? "" : notification.getCreatedAt().toString()
                 )));
@@ -267,7 +269,7 @@ public class AiTourismController {
         items.add(Map.of(
                 "id", "recommendation-" + LocalDate.now(),
                 "type", "RECOMMENDATION",
-                "title", "Fresh South Trails picks",
+                "title", "Fresh Tamil Trails picks",
                 "message", "New recommendations are ready from your booking, wishlist, and rating signals.",
                 "createdAt", LocalDate.now().toString()
         ));
@@ -278,8 +280,8 @@ public class AiTourismController {
     private Map<String, Object> packageCard(TravelPackage pkg) {
         return Map.of(
                 "id", pkg.getId(),
-                "title", fallback(pkg.getTitle(), "South Trails package"),
-                "state", fallback(pkg.getState(), "South India"),
+                "title", fallback(pkg.getTitle(), "Tamil Trails package"),
+                "state", fallback(pkg.getState(), "Tamil Nadu"),
                 "destination", fallback(pkg.getDestination(), "Curated route"),
                 "category", fallback(pkg.getCategory(), "Experience"),
                 "days", pkg.getDays() == null ? 0 : pkg.getDays(),

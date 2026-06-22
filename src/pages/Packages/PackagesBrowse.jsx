@@ -10,9 +10,6 @@ import { useAuthContext } from "../../features/auth/AuthContext";
 import { useToast } from "../../components/ui/Toast";
 import { getWishlist, removeWishlistPackage, saveWishlistPackage } from "../../services/wishlistService";
 import tamilnaduImg from "../../assets/images/tamilnadu.webp";
-import keralaImg from "../../assets/images/kerala.webp";
-import karnatakaImg from "../../assets/images/karnataka.webp";
-import andhraImg from "../../assets/images/andhra.webp";
 import "./PackagesBrowse.css";
 //import { seedPackagesToSupabase } from "../../services/packageService";
 const imageModules = import.meta.glob("../state/**/*.{webp,avif}", { eager: true });
@@ -31,9 +28,6 @@ const stateImageMap = Object.entries(imageModules)
 
 const stateFallbackImages = {
   "Tamil Nadu": tamilnaduImg,
-  Kerala: keralaImg,
-  Karnataka: karnatakaImg,
-  "Andhra Pradesh": andhraImg,
 };
 
 const PackagesBrowse = () => {
@@ -70,7 +64,7 @@ const PackagesBrowse = () => {
         nights: pkg.nights,
         rating: Number(pkg.rating) || 0,
         price: Number(pkg.price) || 0,
-        state: pkg.state,
+        state: "Tamil Nadu",
         image1: pkg.image1,
         image2: pkg.image2,
         image3: pkg.image3,
@@ -109,7 +103,7 @@ const PackagesBrowse = () => {
   // Filter logic
   const filteredPackages = packagesData.filter((pkg) => {
     const categoryMatch = selectedCategory === "All" || pkg.category === selectedCategory;
-    const stateMatch = selectedState === "All" || pkg.state === selectedState;
+    const stateMatch = selectedState === "All" || pkg.state === "Tamil Nadu";
     const ratingMatch = pkg.rating >= minRating;
     const query = searchTerm.trim().toLowerCase();
     const searchMatch =
@@ -142,6 +136,13 @@ const PackagesBrowse = () => {
   const selectedComparePackages = packagesData
     .filter((pkg) => selectedPackages.includes(pkg.id))
     .slice(0, 3);
+
+  const averageRating = packagesData.length
+    ? packagesData.reduce((sum, pkg) => sum + Number(pkg.rating || 0), 0) / packagesData.length
+    : 0;
+  const startingPrice = packagesData.length
+    ? Math.min(...packagesData.map((pkg) => Number(pkg.price || 0)).filter(Boolean))
+    : 0;
 
   const togglePackageSelection = (packageId) => {
     setSelectedPackages((prev) =>
@@ -189,11 +190,41 @@ const PackagesBrowse = () => {
   };
 
   return (
-    
-    <main className="packages-browse-page">
-      <section className="packages-hero">
-        <h1>Explore Curated Packages</h1>
-        <p>Find your perfect South India escape with our Airbnb-style filters</p>
+    <main className="packages-browse-page !w-full !max-w-none !p-0">
+      <section className="packages-royal-hero">
+        <img src={tamilnaduImg} alt="" className="packages-royal-hero__image" />
+        <div className="packages-royal-hero__shade" />
+        <div className="packages-royal-hero__content">
+          <div>
+            <p className="royal-eyebrow">Tamil Nadu private journeys</p>
+            <h1>Royal travel collections.</h1>
+            <p>
+              Curated temple circuits, hill retreats, coastal escapes, food trails,
+              and luxury weekends with handpicked stays, route planning, and smooth booking.
+            </p>
+            <div className="royal-hero-actions">
+              <a href="#package-collection" className="royal-primary-link">Explore packages</a>
+              <button className="royal-secondary-link" type="button" onClick={() => setIsFilterDrawerOpen(true)}>
+                Concierge filters
+              </button>
+            </div>
+          </div>
+
+          <div className="royal-stat-panel" aria-label="Package highlights">
+            <div>
+              <span>{packagesData.length || "--"}</span>
+              <p>Curated routes</p>
+            </div>
+            <div>
+              <span>{averageRating ? averageRating.toFixed(1) : "--"}</span>
+              <p>Average rating</p>
+            </div>
+            <div>
+              <span>{startingPrice ? `Rs. ${startingPrice.toLocaleString("en-IN")}` : "--"}</span>
+              <p>Starting price</p>
+            </div>
+          </div>
+        </div>
       </section>
 
       <SmartFilterDrawer
@@ -213,11 +244,11 @@ const PackagesBrowse = () => {
         onReset={resetFilters}
       />
 
-      <div className="packages-container">
+      <div id="package-collection" className="packages-container packages-royal-shell px-4 py-10 sm:px-6 lg:px-8">
         {/* Sidebar Filters */}
         <aside className="filters-sidebar glass-card">
           <div className="filters-header">
-            <h2>Filters</h2>
+            <h2>Curate</h2>
             <button className="reset-filters-btn" onClick={resetFilters}>
               Reset
             </button>
@@ -321,7 +352,7 @@ const PackagesBrowse = () => {
               onClick={handleConfirm}
               disabled={selectedPackages.length === 0}
             >
-              Confirm & Go Home
+              Compare selected
             </button>
           </div>
         </aside>
@@ -333,18 +364,13 @@ const PackagesBrowse = () => {
               Showing <strong>{sortedPackages.length}</strong> of{" "}
               <strong>{packagesData.length}</strong> packages
             </p>
-            <div style={{ display: "flex", gap: "0.75rem", flexWrap: "wrap", alignItems: "center" }}>
+            <div className="package-toolbar-controls">
               <input
                 type="search"
                 value={searchTerm}
                 onChange={(event) => setSearchTerm(event.target.value)}
                 placeholder="Search packages, places, moods..."
-                style={{
-                  minWidth: 260,
-                  padding: "0.75rem 1rem",
-                  border: "1px solid #cbd5e1",
-                  borderRadius: 10,
-                }}
+                className="package-search-input"
               />
               <select
                 value={selectedState}
@@ -352,12 +378,12 @@ const PackagesBrowse = () => {
                 className="sort-select"
                 aria-label="Filter by state"
               >
-                {["All", "Tamil Nadu", "Kerala", "Karnataka", "Andhra Pradesh"].map((state) => (
+                {["All", "Tamil Nadu"].map((state) => (
                   <option key={state}>{state}</option>
                 ))}
               </select>
               <button className="smart-filter-toggle" type="button" onClick={() => setIsFilterDrawerOpen(true)}>
-                Advanced Filters
+                Concierge filters
               </button>
             </div>
           </div>
@@ -436,6 +462,11 @@ const PackageCard = ({ pkg, isSelected, isSaved, onToggle, onWishlist, images, f
             />
           ))}
         </div>
+        <div className="package-image-overlay" />
+        <div className="package-card-badges">
+          <span>{pkg.category}</span>
+          <span>{pkg.days}D / {pkg.nights}N</span>
+        </div>
         <div className="image-indicators">
           {visibleImages.map((_, idx) => (
             <button
@@ -461,7 +492,7 @@ const PackageCard = ({ pkg, isSelected, isSaved, onToggle, onWishlist, images, f
           <div className="meta-item">
             <span className="label">Rating</span>
             <span className="value">
-              {Number(pkg.rating || 0).toFixed(1)} <span className="star">star</span>
+              {Number(pkg.rating || 0).toFixed(1)} <span className="star">/ 5</span>
             </span>
           </div>
         </div>
@@ -470,7 +501,7 @@ const PackageCard = ({ pkg, isSelected, isSaved, onToggle, onWishlist, images, f
           <strong>Places:</strong> {pkg.places.join(", ")}
         </p>
 
-        <div className="package-footer">
+        <div className="package-footer package-price-row">
           <div className="price">
             <span className="label">From</span>
             <span className="amount">Rs. {pkg.price.toLocaleString("en-IN")}</span>
@@ -479,11 +510,11 @@ const PackageCard = ({ pkg, isSelected, isSaved, onToggle, onWishlist, images, f
             {isSelected ? "Selected" : "Select"}
           </button>
         </div>
-        <div className="package-footer" style={{ marginTop: 12, gap: 10 }}>
-          <Link className="select-btn" style={{ textAlign: "center", textDecoration: "none" }} to={`/package/${pkg.id}`}>
+        <div className="package-actions-row">
+          <Link className="details-btn" to={`/package/${pkg.id}`}>
             View Details
           </Link>
-          <button className="select-btn" type="button" onClick={onWishlist}>
+          <button className="save-btn" type="button" onClick={onWishlist}>
             {isSaved ? "Saved" : "Save"}
           </button>
         </div>

@@ -4,9 +4,9 @@ import { motion } from "framer-motion";
 import { chatWithOracle } from "../../services/aiTourismService";
 
 const examplePrompts = [
-  "Need a peaceful Kerala trip under Rs. 12000",
-  "Plan a family temple and culture route for 4 people",
-  "Suggest a premium hill station escape with waterfalls",
+  "Need a peaceful Tamil Nadu temple and food trip under Rs. 12000",
+  "Plan a family Madurai, Rameswaram, and Chettinad route for 4 people",
+  "Suggest a premium Ooty and Kodaikanal hill station escape with waterfalls",
 ];
 
 const Oracle = () => {
@@ -24,7 +24,7 @@ const Oracle = () => {
 
     setLoading(true);
     setError("");
-    const { data, error: requestError } = await chatWithOracle({ message: prompt, language });
+    const { data, error: requestError } = await chatWithOracle({ message: `Tamil Nadu only: ${prompt}`, language });
     if (requestError) {
       setError(requestError.message || "Unable to reach the AI Travel Oracle.");
       setResult(null);
@@ -39,9 +39,9 @@ const Oracle = () => {
       <section className="section explore-header">
         <div className="section-heading">
           <p className="eyebrow">AI Travel Oracle</p>
-          <h2>Conversational South India travel assistant</h2>
+          <h2>Conversational Tamil Nadu travel assistant</h2>
           <p className="section-copy">
-            Ask in natural language. The Oracle uses the current South Trails package catalog, destinations, ratings, and highlights.
+            Ask in natural language. Tamil Nadu Explorer AI uses the Tamil Trails package catalog, destinations, ratings, festivals, food routes, and highlights.
           </p>
         </div>
       </section>

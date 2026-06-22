@@ -3,6 +3,8 @@ import { AnimatePresence, motion } from "framer-motion";
 import { BrowserRouter, Navigate, Routes, Route, useLocation, useParams } from "react-router-dom";
 
 import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
+import ErrorBoundary from "./components/ErrorBoundary";
 import CommandPalette from "./components/advanced/CommandPalette";
 import LuxuryExperienceLayer from "./components/advanced/LuxuryExperienceLayer";
 import { ToastProvider } from "./components/ui/Toast";
@@ -17,23 +19,22 @@ const Explore = lazy(() => import("./pages/Explore/Explore"));
 const Oracle = lazy(() => import("./pages/Oracle/Oracle"));
 const Curated = lazy(() => import("./pages/Curated/Curated"));
 
-const StatePage = lazy(() => import("./pages/States/StatePage"));
 const TamilNaduExplore = lazy(() => import("./pages/States/TamilNaduExplore"));
-const KeraExplore = lazy(() => import("./pages/States/KeraExplore"));
-const KarnatakaExplore = lazy(() => import("./pages/States/KarnatakaExplore"));
-const AndhraPradeshExplore = lazy(() => import("./pages/States/AndhraPradeshExplore"));
+const Chennai = lazy(() => import("./pages/Destinations/Chennai"));
+const Madurai = lazy(() => import("./pages/Destinations/Madurai"));
+const Thanjavur = lazy(() => import("./pages/Destinations/Thanjavur"));
+const Ooty = lazy(() => import("./pages/Destinations/Ooty"));
+const Kodaikanal = lazy(() => import("./pages/Destinations/Kodaikanal"));
+const Rameswaram = lazy(() => import("./pages/Destinations/Rameswaram"));
+const Kanyakumari = lazy(() => import("./pages/Destinations/Kanyakumari"));
+const Coimbatore = lazy(() => import("./pages/Destinations/Coimbatore"));
 
 const MoodPage = lazy(() => import("./pages/Moods/MoodPage"));
 const PlacePage = lazy(() => import("./pages/Places/PlacePage"));
 
-const PackageCategory = lazy(() => import("./pages/Packages/PackageCategory"));
-const PackageDetails = lazy(() => import("./pages/Packages/PackageDetails"));
 const AllPackageDetails = lazy(() => import("./pages/Packages/AllPackageDetails"));
 const PackagesBrowse = lazy(() => import("./pages/Packages/PackagesBrowse"));
 const TamilNaduPackages = lazy(() => import("./pages/Packages/TamilNaduPackages"));
-const KeraPackages = lazy(() => import("./pages/Packages/KeraPackages"));
-const KarnatakaPackages = lazy(() => import("./pages/Packages/KarnatakaPackages"));
-const AndhraPradeshPackages = lazy(() => import("./pages/Packages/AndhraPradeshPackages"));
 
 const Booking = lazy(() => import("./pages/Booking/Booking"));
 const BookingSuccess = lazy(() => import("./pages/Booking/BookingSuccess"));
@@ -47,6 +48,7 @@ const MapExplorer = lazy(() => import("./pages/Advanced/MapExplorer"));
 const MoodQuiz = lazy(() => import("./pages/Advanced/MoodQuiz"));
 const WebsiteFlow = lazy(() => import("./pages/Advanced/WebsiteFlow"));
 const EcosystemCollection = lazy(() => import("./pages/Advanced/EcosystemCollection"));
+const TravelFeaturePage = lazy(() => import("./pages/Advanced/TravelFeaturePage"));
 
 const AdminLogin = lazy(() => import("./pages/Booking/AdminLogin"));
 const AdminDashboard = lazy(() => import("./pages/Booking/AdminDashboard"));
@@ -57,6 +59,14 @@ const AdminUsers = lazy(() => import("./pages/Booking/AdminUsers"));
 const AdminAnalytics = lazy(() => import("./pages/Booking/AdminAnalytics"));
 const AdminReviews = lazy(() => import("./pages/Booking/AdminReviews"));
 const AdminKanban = lazy(() => import("./pages/Advanced/AdminKanban"));
+
+const NotFound = lazy(() => import("./pages/NotFound"));
+const About = lazy(() => import("./pages/About/About"));
+const FAQ = lazy(() => import("./pages/FAQ/FAQ"));
+const Privacy = lazy(() => import("./pages/Legal/Privacy"));
+const Terms = lazy(() => import("./pages/Legal/Terms"));
+const HelpCenter = lazy(() => import("./pages/Help/HelpCenter"));
+const Search = lazy(() => import("./pages/Search/Search"));
 
 const PageFallback = () => (
   <main className="app-shell route-loading">
@@ -76,23 +86,31 @@ const LegacyPackageRedirect = () => {
   return <Navigate to={`/package/${packageId}`} replace />;
 };
 
+const TamilNaduOnlyRedirect = () => <Navigate to="/states/tamil-nadu" replace />;
+
 function AppContent() {
   const location = useLocation();
 
   const isAdminRoute =
     location.pathname.startsWith("/admin");
+  const isPremiumLanding =
+    location.pathname === "/" ||
+    location.pathname === "/states/tamil-nadu" ||
+    location.pathname === "/about-tamil-nadu";
 
   return (
     <>
+      <a href="#main-content" className="skip-to-content">Skip to content</a>
       {!isAdminRoute && <Navbar />}
       {!isAdminRoute && <CommandPalette />}
       {!isAdminRoute && <LuxuryExperienceLayer />}
 
-      <Suspense fallback={<PageFallback />}>
-        <AnimatePresence mode="wait">
-          <motion.div
+      <main id="main-content" className="flex-grow">
+        <Suspense fallback={<PageFallback />}>
+          <AnimatePresence mode="wait">
+            <motion.div
             key={location.pathname}
-            className={`route-stage${!isAdminRoute ? " route-stage--luxury" : ""}`}
+            className={`route-stage${!isAdminRoute && !isPremiumLanding ? " route-stage--luxury" : ""}`}
             initial={{ opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
@@ -104,6 +122,27 @@ function AppContent() {
 
         {/* Explore */}
         <Route path="/explore" element={<Explore />} />
+        <Route path="/destinations" element={<Explore />} />
+        <Route path="/experiences" element={<Explore />} />
+        <Route path="/heritage" element={<EcosystemCollection type="marketplace" />} />
+        <Route path="/food-trails" element={<EcosystemCollection type="marketplace" />} />
+        <Route path="/festivals" element={<EcosystemCollection type="events" />} />
+        <Route path="/food-culture" element={<TravelFeaturePage type="food" />} />
+        <Route path="/hotels" element={<TravelFeaturePage type="stays" />} />
+        <Route path="/stays" element={<TravelFeaturePage type="stays" />} />
+        <Route path="/itinerary-builder" element={<TravelFeaturePage type="itinerary" />} />
+        <Route path="/travel-info" element={<TravelFeaturePage type="travelInfo" />} />
+        <Route path="/gallery" element={<TravelFeaturePage type="gallery" />} />
+        <Route path="/blog" element={<TravelFeaturePage type="blog" />} />
+        <Route path="/wishlist" element={<TravelFeaturePage type="wishlist" />} />
+        <Route path="/reviews" element={<TravelFeaturePage type="reviews" />} />
+        <Route path="/premium-features" element={<TravelFeaturePage type="premium" />} />
+        <Route path="/virtual-tour" element={<TravelFeaturePage type="premium" />} />
+        <Route path="/voice-search" element={<TravelFeaturePage type="premium" />} />
+        <Route path="/dark-mode" element={<TravelFeaturePage type="premium" />} />
+        <Route path="/language" element={<TravelFeaturePage type="premium" />} />
+        <Route path="/ai-chatbot" element={<Oracle />} />
+        <Route path="/about-tamil-nadu" element={<TamilNaduExplore />} />
         <Route path="/oracle" element={<Oracle />} />
         <Route path="/curated" element={<Curated />} />
 
@@ -112,26 +151,20 @@ function AppContent() {
           path="/states/tamil-nadu"
           element={<TamilNaduExplore />}
         />
+        <Route path="/states/kerala" element={<TamilNaduOnlyRedirect />} />
+        <Route path="/states/karnataka" element={<TamilNaduOnlyRedirect />} />
+        <Route path="/states/andhra-pradesh" element={<TamilNaduOnlyRedirect />} />
+        <Route path="/states/:state" element={<TamilNaduOnlyRedirect />} />
 
-        <Route
-          path="/states/kerala"
-          element={<KeraExplore />}
-        />
-
-        <Route
-          path="/states/karnataka"
-          element={<KarnatakaExplore />}
-        />
-
-        <Route
-          path="/states/andhra-pradesh"
-          element={<AndhraPradeshExplore />}
-        />
-
-        <Route
-          path="/states/:state"
-          element={<StatePage />}
-        />
+        {/* Tamil Nadu Destinations */}
+        <Route path="/destinations/chennai" element={<Chennai />} />
+        <Route path="/destinations/madurai" element={<Madurai />} />
+        <Route path="/destinations/thanjavur" element={<Thanjavur />} />
+        <Route path="/destinations/ooty" element={<Ooty />} />
+        <Route path="/destinations/kodaikanal" element={<Kodaikanal />} />
+        <Route path="/destinations/rameswaram" element={<Rameswaram />} />
+        <Route path="/destinations/kanyakumari" element={<Kanyakumari />} />
+        <Route path="/destinations/coimbatore" element={<Coimbatore />} />
 
         {/* Packages */}
         <Route
@@ -141,7 +174,7 @@ function AppContent() {
 
         <Route
           path="/packages/:packageId"
-          element={<PackageDetails />}
+          element={<AllPackageDetails />}
         />
         <Route
           path="/package/:packageId"
@@ -150,7 +183,7 @@ function AppContent() {
 
         <Route
           path="/states/:state/packages/:category"
-          element={<PackageCategory />}
+          element={<Navigate to="/packages" replace />}
         />
 
         {/* Tamil Nadu Packages */}
@@ -164,38 +197,12 @@ function AppContent() {
           element={<LegacyPackageRedirect />}
         />
 
-        {/* Kerala Packages */}
-        <Route
-          path="/kerala-packages"
-          element={<KeraPackages />}
-        />
-
-        <Route
-          path="/kerala-package/:packageId"
-          element={<LegacyPackageRedirect />}
-        />
-
-        {/* Karnataka Packages */}
-        <Route
-          path="/karnataka-packages"
-          element={<KarnatakaPackages />}
-        />
-
-        <Route
-          path="/karnataka-package/:packageId"
-          element={<LegacyPackageRedirect />}
-        />
-
-        {/* Andhra Packages */}
-        <Route
-          path="/andhra-packages"
-          element={<AndhraPradeshPackages />}
-        />
-
-        <Route
-          path="/andhra-package/:packageId"
-          element={<LegacyPackageRedirect />}
-        />
+        <Route path="/kerala-packages" element={<Navigate to="/packages" replace />} />
+        <Route path="/karnataka-packages" element={<Navigate to="/packages" replace />} />
+        <Route path="/andhra-packages" element={<Navigate to="/packages" replace />} />
+        <Route path="/kerala-package/:packageId" element={<LegacyPackageRedirect />} />
+        <Route path="/karnataka-package/:packageId" element={<LegacyPackageRedirect />} />
+        <Route path="/andhra-package/:packageId" element={<LegacyPackageRedirect />} />
 
         {/* Booking */}
         <Route path="/booking" element={<Booking />} />
@@ -208,8 +215,14 @@ function AppContent() {
         <Route path="/profile" element={<Profile />} />
         <Route path="/profile/bookings" element={<Profile />} />
 
-        {/* Contact */}
+        {/* Contact & Support */}
         <Route path="/contact" element={<ContactOwner />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/faq" element={<FAQ />} />
+        <Route path="/privacy" element={<Privacy />} />
+        <Route path="/terms" element={<Terms />} />
+        <Route path="/help" element={<HelpCenter />} />
+        <Route path="/search" element={<Search />} />
 
         {/* Advanced Experiences */}
         <Route path="/trip-builder" element={<TripBuilder />} />
@@ -278,25 +291,31 @@ function AppContent() {
             path="/admin/kanban"
             element={<AdminRoute><AdminKanban /></AdminRoute>}
           />
-        </Routes>
-          </motion.div>
-        </AnimatePresence>
-      </Suspense>
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+            </motion.div>
+          </AnimatePresence>
+        </Suspense>
+      </main>
+      
+      {!isAdminRoute && <Footer />}
     </>
   );
 }
 
 function App() {
   return (
-    <AuthProvider>
-      <ToastProvider>
-        <AdminProvider>
-          <BrowserRouter>
-            <AppContent />
-          </BrowserRouter>
-        </AdminProvider>
-      </ToastProvider>
-    </AuthProvider>
+    <ErrorBoundary>
+      <AuthProvider>
+        <ToastProvider>
+          <AdminProvider>
+            <BrowserRouter>
+              <AppContent />
+            </BrowserRouter>
+          </AdminProvider>
+        </ToastProvider>
+      </AuthProvider>
+    </ErrorBoundary>
   );
 }
 

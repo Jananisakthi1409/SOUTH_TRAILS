@@ -281,7 +281,7 @@ const StatePackageDetails = ({ backPath, classPrefix, destinationImages }) => {
                 <p className="destination-label">{pkg.destination}</p>
                 <h1>{pkg.title}</h1>
                 <div className="rating-line">
-                  <span className="rating">{pkg.rating || "4.8"} star</span>
+                  <span className="rating">{pkg.rating || "4.8"} / 5</span>
                   <span className="category-badge">{pkg.category}</span>
                 </div>
               </div>
@@ -339,7 +339,7 @@ const StatePackageDetails = ({ backPath, classPrefix, destinationImages }) => {
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: idx * 0.04 }}
                 >
-                  <span className="checkmark">OK</span>
+                  <span className="checkmark">Included</span>
                   <span>{item}</span>
                 </motion.div>
               ))}

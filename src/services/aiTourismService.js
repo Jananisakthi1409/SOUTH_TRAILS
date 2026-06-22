@@ -1,4 +1,4 @@
-import { apiRequest, isBackendEnabled, toBackendAssetUrl } from "./backendApi";
+import { apiRequest, isBackendEnabled, isLocalFallbackEnabled, toBackendAssetUrl } from "./backendApi";
 
 const normalizePackage = (pkg) => ({
   ...pkg,
@@ -10,10 +10,10 @@ const normalizePackage = (pkg) => ({
 });
 
 export const generateAiItinerary = async (preferences) => {
-  if (!isBackendEnabled) {
+  if (!isBackendEnabled || isLocalFallbackEnabled) {
     return {
       data: null,
-      error: { message: "Spring Boot AI endpoints are not configured." },
+      error: { message: "Using local planner matches while AI endpoints are unavailable." },
     };
   }
 

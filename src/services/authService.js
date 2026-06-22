@@ -1,17 +1,7 @@
 import { supabase } from "./supabase";
-import { apiRequest, isBackendEnabled } from "./backendApi";
 import { createCustomer, getCustomerById } from "./customerService";
 
 export const signInAdmin = async ({ email, password }) => {
-  if (isBackendEnabled) {
-    try {
-      const data = await apiRequest("/auth/admin/signin", { method: "POST", body: { email, password } });
-      return { data, error: null };
-    } catch (error) {
-      return { data: null, error };
-    }
-  }
-
   if (!supabase) {
     return { data: null, error: { message: "Supabase not configured" } };
   }
@@ -19,15 +9,6 @@ export const signInAdmin = async ({ email, password }) => {
 };
 
 export const signUpCustomer = async ({ email, password, name, phone }) => {
-  if (isBackendEnabled) {
-    try {
-      const data = await apiRequest("/auth/customer/signup", { method: "POST", body: { email, password, name, phone } });
-      return { data, error: null };
-    } catch (error) {
-      return { data: null, error };
-    }
-  }
-
   if (!supabase) {
     return { data: null, error: { message: "Supabase not configured" } };
   }
@@ -58,15 +39,6 @@ export const signUpCustomer = async ({ email, password, name, phone }) => {
 };
 
 export const signInCustomer = async ({ email, password }) => {
-  if (isBackendEnabled) {
-    try {
-      const data = await apiRequest("/auth/customer/signin", { method: "POST", body: { email, password } });
-      return { data, error: null };
-    } catch (error) {
-      return { data: null, error };
-    }
-  }
-
   if (!supabase) {
     return { data: null, error: { message: "Supabase not configured" } };
   }
@@ -74,15 +46,6 @@ export const signInCustomer = async ({ email, password }) => {
 };
 
 export const signOutCustomer = async () => {
-  if (isBackendEnabled) {
-    try {
-      await apiRequest("/auth/signout", { method: "POST", body: {} });
-      return { error: null };
-    } catch (error) {
-      return { error };
-    }
-  }
-
   if (!supabase) {
     return { error: { message: "Supabase not configured" } };
   }
@@ -92,20 +55,6 @@ export const signOutCustomer = async () => {
 export const signOutAdmin = signOutCustomer;
 
 export const getCurrentSession = async () => {
-  if (isBackendEnabled) {
-    let user;
-    try {
-      const raw = typeof window === "undefined" ? null : window.localStorage.getItem("southTrailsUser");
-      user = raw ? JSON.parse(raw) : null;
-    } catch {
-      return { data: { session: null }, error: null };
-    }
-    if (!user?.id) {
-      return { data: { session: null }, error: null };
-    }
-    return { data: { session: user ? { user } : null }, error: null };
-  }
-
   if (!supabase) {
     return { data: null, error: { message: "Supabase not configured" } };
   }
@@ -113,10 +62,6 @@ export const getCurrentSession = async () => {
 };
 
 export const getCustomerProfile = async (customerId) => {
-  if (isBackendEnabled) {
-    return getCustomerById(customerId);
-  }
-
   if (!supabase) {
     return { data: null, error: { message: "Supabase not configured" } };
   }
@@ -124,10 +69,6 @@ export const getCustomerProfile = async (customerId) => {
 };
 
 export const onAuthStateChange = (callback) => {
-  if (isBackendEnabled) {
-    return { data: { subscription: { unsubscribe: () => {} } }, error: null };
-  }
-
   if (!supabase) {
     return { data: null, error: { message: "Supabase not configured" } };
   }

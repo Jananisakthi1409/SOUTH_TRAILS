@@ -4,21 +4,14 @@ import { useAuthContext } from "../../features/auth/AuthContext";
 import { getPackageById } from "../../services/packageService";
 import { createBooking } from "../../services/bookingService";
 import tamilnaduImg from "../../assets/images/tamilnadu.webp";
-import keralaImg from "../../assets/images/kerala.webp";
-import karnatakaImg from "../../assets/images/karnataka.webp";
-import andhraImg from "../../assets/images/andhra.webp";
 
 const packageImages = {
   "ooty-family-escape": tamilnaduImg,
-  "kodaikanal-family-retreat": karnatakaImg,
+  "kodaikanal-family-retreat": tamilnaduImg,
   "yercaud-family-tour": tamilnaduImg,
-  "hampi-solo-journey": karnatakaImg,
-  "coorg-friends-trip": karnatakaImg,
-  "kerala-couple-retreat": keralaImg,
   "ooty-weekend-getaway": tamilnaduImg,
-  "madurai-temple-tour": andhraImg,
-  "kanyakumari-adventure": andhraImg,
-  "kerala-luxury-retreat": keralaImg,
+  "madurai-temple-tour": tamilnaduImg,
+  "kanyakumari-adventure": tamilnaduImg,
 };
 
 const packageData = {
@@ -91,7 +84,7 @@ const PackageDetails = () => {
   };
 
   const formattedPrice = typeof item.price === "number" ? `₹${item.price.toLocaleString()}` : item.price;
-  const packageImage = packageImages[packageId] || keralaImg;
+  const packageImage = packageImages[packageId] || tamilnaduImg;
 
   const handleBook = async () => {
     const selected = {

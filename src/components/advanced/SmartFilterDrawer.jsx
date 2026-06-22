@@ -1,6 +1,6 @@
 import "./AdvancedUI.css";
 
-const states = ["All", "Tamil Nadu", "Kerala", "Karnataka", "Andhra Pradesh"];
+const states = ["All", "Tamil Nadu"];
 
 const SmartFilterDrawer = ({ open, filters, onChange, onClose, onReset }) => {
   if (!open) return null;

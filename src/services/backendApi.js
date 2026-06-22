@@ -4,7 +4,7 @@ export const isBackendEnabled = Boolean(API_BASE_URL);
 export const isLocalFallbackEnabled =
   !isBackendEnabled ||
   import.meta.env.VITE_ENABLE_LOCAL_FALLBACK === "true" ||
-  (import.meta.env.DEV && !isBackendEnabled && import.meta.env.VITE_ENABLE_LOCAL_FALLBACK !== "false");
+  (import.meta.env.DEV && import.meta.env.VITE_ENABLE_LOCAL_FALLBACK !== "false");
 
 export class BackendApiError extends Error {
   constructor(message, status) {

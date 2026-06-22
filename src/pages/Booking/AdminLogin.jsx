@@ -6,12 +6,12 @@ import { signInAdmin } from "../../services/authService";
 import { validateLoginForm } from "../../utils/validation";
 
 const credentials = {
-  email: "admin@southtrails.com",
+  email: "admin@tamiltrails.com",
   password: "admin123",
 };
 
 const operationalFeatures = [
-  { code: "PKG", title: "Package Inventory", desc: "Create, edit, price, and publish South India packages." },
+  { code: "PKG", title: "Package Inventory", desc: "Create, edit, price, and publish Tamil Nadu packages." },
   { code: "BKG", title: "Booking Pipeline", desc: "Review reservations and move bookings through operations." },
   { code: "USR", title: "User Management", desc: "Track customer profiles, booking history, and activity." },
   { code: "ANL", title: "Analytics", desc: "Monitor revenue, package performance, and demand trends." },
@@ -20,7 +20,7 @@ const operationalFeatures = [
 const operationalKPIs = [
   { metric: "1,000+", category: "Travelers Routed" },
   { metric: "500+", category: "Completed Bookings" },
-  { metric: "4", category: "Active States" },
+  { metric: "1", category: "Active Region" },
   { metric: "4.9", category: "Avg Rating" },
 ];
 
@@ -75,13 +75,13 @@ const AdminLogin = () => {
         <div>
           <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "8px" }}>
             <span style={{ width: 34, height: 34, borderRadius: 10, background: "rgba(255,255,255,0.12)", display: "grid", placeItems: "center", fontWeight: 900 }}>ST</span>
-            <h2 style={{ fontSize: "20px", fontWeight: "800", letterSpacing: "0.05em", textTransform: "uppercase", margin: 0 }}>South Trails</h2>
+            <h2 style={{ fontSize: "20px", fontWeight: "800", letterSpacing: "0.05em", textTransform: "uppercase", margin: 0 }}>Tamil Trails</h2>
           </div>
           <span style={{ display: "block", fontSize: "12px", fontWeight: "700", textTransform: "uppercase", letterSpacing: "0.15em", color: "#2dd4bf", backgroundColor: "rgba(45,212,191,0.12)", padding: "4px 10px", borderRadius: "4px", width: "fit-content" }}>
             Travel Management Console
           </span>
           <h2 style={{ fontSize: "clamp(2.2rem, 5vw, 4rem)", fontWeight: "900", color: "#ffffff", margin: "28px 0 12px", lineHeight: "1.08" }}>
-            Manage premium journeys across South India.
+            Manage premium journeys across Tamil Nadu.
           </h2>
           <p style={{ margin: 0, fontSize: "15px", color: "#ccfbf1", maxWidth: "600px", lineHeight: "1.6" }}>
             A protected operations workspace for packages, bookings, customers, analytics, and travel pipeline control.
@@ -132,8 +132,8 @@ const AdminLogin = () => {
 
         <div style={{ maxWidth: "390px", width: "100%", margin: "0 auto" }}>
           <div style={{ marginBottom: "28px" }}>
-            <h1 style={{ margin: 0, fontSize: "24px", fontWeight: "900", color: "#0f172a" }}>South Trails Admin</h1>
-            <p style={{ margin: "6px 0 0", fontSize: "14px", color: "#64748b" }}>Secure access for South Trails operations.</p>
+            <h1 style={{ margin: 0, fontSize: "24px", fontWeight: "900", color: "#0f172a" }}>Tamil Trails Admin</h1>
+            <p style={{ margin: "6px 0 0", fontSize: "14px", color: "#64748b" }}>Secure access for Tamil Trails operations.</p>
           </div>
 
           <div style={{ border: "1px solid #99f6e4", background: "#f0fdfa", borderRadius: 12, padding: 14, marginBottom: 18 }}>
@@ -157,7 +157,7 @@ const AdminLogin = () => {
               <input
                 id="admin-email"
                 type="email"
-                placeholder="admin@southtrails.com"
+                placeholder="admin@tamiltrails.com"
                 value={email}
                 onChange={(event) => {
                   setEmail(event.target.value);
@@ -212,7 +212,7 @@ const AdminLogin = () => {
 
         <footer style={{ borderTop: "1px solid #f1f5f9", paddingTop: "16px", textAlign: "center" }}>
           <p style={{ margin: 0, fontSize: "11px", color: "#94a3b8", fontWeight: "500", letterSpacing: "0.02em" }}>
-            Copyright 2026 South Trails Ltd. All rights reserved.
+            Copyright 2026 Tamil Trails Ltd. All rights reserved.
           </p>
         </footer>
       </section>

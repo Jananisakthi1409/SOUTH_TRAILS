@@ -155,7 +155,7 @@ const Booking = () => {
       <section className="booking-shell">
         <div className="booking-hero-copy">
           <p className="booking-kicker">Secure Trip Checkout</p>
-          <h1>Reserve your South India escape</h1>
+          <h1>Reserve your Tamil Nadu escape</h1>
           <p>
             Pick a package, choose your date, and save the booking to your traveler profile.
           </p>

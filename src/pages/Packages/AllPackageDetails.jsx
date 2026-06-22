@@ -5,9 +5,6 @@ const imageModules = import.meta.glob("../state/**/*.{webp,avif}");
 
 const allDestinationImages = {
   ...buildDestinationImages(imageModules, "tamilnadu"),
-  ...buildDestinationImages(imageModules, "kerala"),
-  ...buildDestinationImages(imageModules, "karnataka"),
-  ...buildDestinationImages(imageModules, "andhra"),
 };
 
 const AllPackageDetails = () => (

@@ -23,7 +23,7 @@ const AdminPackages = () => {
     nights: "",
     category: "",
     description: "",
-    state: "Kerala",
+    state: "Tamil Nadu",
     images: []
   });
 
@@ -84,7 +84,7 @@ const AdminPackages = () => {
       id: "",
       title: "",
       destination: "",
-      state: "Kerala",
+      state: "Tamil Nadu",
       price: "",
       days: "",
       nights: "",
@@ -154,7 +154,7 @@ const AdminPackages = () => {
       id: pkg.id,
       title: pkg.title,
       destination: pkg.destination,
-      state: pkg.state || "Kerala",
+      state: "Tamil Nadu",
       price: pkg.price,
       days: pkg.days,
       nights: pkg.nights,
@@ -184,7 +184,7 @@ const AdminPackages = () => {
     showToast("Package deleted successfully.", "success");
   };
 
-  const statesList = ["All", "Tamil Nadu", "Kerala", "Karnataka", "Andhra Pradesh"];
+  const statesList = ["All", "Tamil Nadu"];
 
   return (
     <div style={{ display: "flex", backgroundColor: "#f8fafc", minHeight: "100vh", fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" }}>
@@ -193,8 +193,8 @@ const AdminPackages = () => {
       <aside style={{ width: "260px", backgroundColor: "#ffffff", borderRight: "1px solid #e2e8f0", position: "fixed", top: 0, bottom: 0, left: 0, display: "flex", flexDirection: "column", justifyContent: "space-between", padding: "32px 24px", zIndex: 100 }}>
         <div>
           <div style={{ paddingBottom: "32px", borderBottom: "1px solid #f1f5f9" }}>
-            <h2 style={{ fontSize: "20px", fontWeight: "700", color: "#0f766e", margin: 0, letterSpacing: "-0.025em" }}>SOUTH TRAILS</h2>
-            <p style={{ fontSize: "12px", color: "#64748b", margin: "4px 0 0 0", fontWeight: "500", letterSpacing: "0.05em", textTransform: "uppercase" }}>Premium Travel Admin</p>
+            <h2 style={{ fontSize: "20px", fontWeight: "700", color: "#0f766e", margin: 0, letterSpacing: "-0.025em" }}>TAMIL TRAILS</h2>
+            <p style={{ fontSize: "12px", color: "#64748b", margin: "4px 0 0 0", fontWeight: "500", letterSpacing: "0.05em", textTransform: "uppercase" }}>Tamil Nadu Travel Admin</p>
           </div>
 
           <nav style={{ display: "flex", flexDirection: "column", gap: "8px", marginTop: "32px" }}>
@@ -224,7 +224,7 @@ const AdminPackages = () => {
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "32px", flexWrap: "wrap", gap: "16px" }}>
           <div>
             <h1 style={{ fontSize: "28px", fontWeight: "700", color: "#0f172a", margin: 0, letterSpacing: "-0.025em" }}>Package Management</h1>
-            <p style={{ fontSize: "15px", color: "#64748b", margin: "6px 0 0 0" }}>Create, edit, and manage your premium custom itineraries.</p>
+            <p style={{ fontSize: "15px", color: "#64748b", margin: "6px 0 0 0" }}>Create, edit, and manage premium Tamil Nadu itineraries.</p>
           </div>
           
           <button 
@@ -270,12 +270,12 @@ const AdminPackages = () => {
               
               <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
                 <label style={{ fontSize: "13px", fontWeight: "600", color: "#475569" }}>Package Title</label>
-                <input type="text" placeholder="e.g., Luxury Backwaters Premium Cruise" value={formData.title} onChange={(e) => setFormData({...formData, title: e.target.value})} style={{ padding: "11px 14px", borderRadius: "8px", border: "1px solid #cbd5e1", fontSize: "14px", color: "#0f172a", outline: "none" }} />
+                <input type="text" placeholder="e.g., Madurai Temple Trail" value={formData.title} onChange={(e) => setFormData({...formData, title: e.target.value})} style={{ padding: "11px 14px", borderRadius: "8px", border: "1px solid #cbd5e1", fontSize: "14px", color: "#0f172a", outline: "none" }} />
               </div>
 
               <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
                 <label style={{ fontSize: "13px", fontWeight: "600", color: "#475569" }}>Destination Spotlight</label>
-                <input type="text" placeholder="e.g., Alleppey, Kumarakom" value={formData.destination} onChange={(e) => setFormData({...formData, destination: e.target.value})} style={{ padding: "11px 14px", borderRadius: "8px", border: "1px solid #cbd5e1", fontSize: "14px", color: "#0f172a", outline: "none" }} />
+                <input type="text" placeholder="e.g., Madurai, Rameswaram" value={formData.destination} onChange={(e) => setFormData({...formData, destination: e.target.value})} style={{ padding: "11px 14px", borderRadius: "8px", border: "1px solid #cbd5e1", fontSize: "14px", color: "#0f172a", outline: "none" }} />
               </div>
 
               <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
@@ -299,12 +299,9 @@ const AdminPackages = () => {
               </div>
 
               <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
-                <label style={{ fontSize: "13px", fontWeight: "600", color: "#475569" }}>Regional State Territory</label>
+                <label style={{ fontSize: "13px", fontWeight: "600", color: "#475569" }}>Region</label>
                 <select value={formData.state} onChange={(e) => setFormData({...formData, state: e.target.value})} style={{ padding: "11px 14px", borderRadius: "8px", border: "1px solid #cbd5e1", fontSize: "14px", color: "#0f172a", outline: "none", backgroundColor: "#fff" }}>
                   <option value="Tamil Nadu">Tamil Nadu</option>
-                  <option value="Kerala">Kerala</option>
-                  <option value="Karnataka">Karnataka</option>
-                  <option value="Andhra Pradesh">Andhra Pradesh</option>
                 </select>
               </div>
             </div>
@@ -415,7 +412,7 @@ const AdminPackages = () => {
                           <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center", color: "#94a3b8", fontSize: "14px", fontWeight: "500", backgroundColor: "#e2e8f0" }}>No Asset Media Uploaded</div>
                         )}
                         <div style={{ position: "absolute", top: "12px", left: "12px", backgroundColor: "rgba(255, 255, 255, 0.95)", backdropFilter: "blur(4px)", padding: "4px 10px", borderRadius: "9999px", fontSize: "11px", fontWeight: "700", color: "#0f766e", letterSpacing: "0.02em", textTransform: "uppercase", boxShadow: "0 1px 2px rgba(0,0,0,0.05)" }}>
-                          {pkg.state || "South India"}
+                          {pkg.state || "Tamil Nadu"}
                         </div>
                         <div style={{ position: "absolute", top: "12px", right: "12px", backgroundColor: "#dcfce7", padding: "4px 10px", borderRadius: "9999px", fontSize: "11px", fontWeight: "700", color: "#15803d" }}>
                           {pkg.status || "Active"}

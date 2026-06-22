@@ -48,7 +48,7 @@ public class DataSeeder implements CommandLineRunner {
             HandicraftProductRepository handicrafts,
             EcoScoreRepository ecoScores,
             PasswordEncoder passwordEncoder,
-            @Value("${app.admin.email:admin@southtrails.com}") String adminEmail,
+            @Value("${app.admin.email:admin@tamiltrails.com}") String adminEmail,
             @Value("${app.admin.password:admin123}") String adminPassword
     ) {
         this.packages = packages;
@@ -187,6 +187,7 @@ public class DataSeeder implements CommandLineRunner {
                     .filter(line -> !line.isBlank() && !line.startsWith("#"))
                     .map(line -> line.split("\\|", -1))
                     .filter(parts -> parts.length >= 10)
+                    .filter(parts -> "Tamil Nadu".equalsIgnoreCase(parts[3]))
                     .map(parts -> pkg(
                             parts[0],
                             parts[1],
@@ -219,7 +220,7 @@ public class DataSeeder implements CommandLineRunner {
         pkg.setPrice(BigDecimal.valueOf(price));
         pkg.setRating(rating);
         pkg.setImageFolder(imageFolder);
-        pkg.setDescription("Curated South India itinerary with premium stays, guided routes, and flexible booking support.");
+        pkg.setDescription("Curated Tamil Nadu itinerary with premium stays, guided routes, and flexible booking support.");
         pkg.setPlaces(List.of(destination.split(", ")));
         pkg.setIncluded(List.of("Hotel stay", "Private transport", "Local guide", "Breakfast"));
         pkg.setHighlights(List.of("Premium route planning", "Verified stays", "Local cultural experiences"));
@@ -254,41 +255,26 @@ public class DataSeeder implements CommandLineRunner {
 
     private String localLanguage(String state) {
         if ("Tamil Nadu".equalsIgnoreCase(state)) return "Tamil";
-        if ("Kerala".equalsIgnoreCase(state)) return "Malayalam";
-        if ("Karnataka".equalsIgnoreCase(state)) return "Kannada";
-        if ("Andhra Pradesh".equalsIgnoreCase(state)) return "Telugu";
-        return "Regional language";
+        return "Tamil";
     }
 
     private String guideName(TravelPackage pkg) {
         if ("Tamil Nadu".equalsIgnoreCase(pkg.getState())) return "Arun Heritage Guide";
-        if ("Kerala".equalsIgnoreCase(pkg.getState())) return "Meera Backwater Guide";
-        if ("Karnataka".equalsIgnoreCase(pkg.getState())) return "Nikhil Trail Guide";
-        if ("Andhra Pradesh".equalsIgnoreCase(pkg.getState())) return "Sai Coastal Guide";
-        return "Verified South Trails Guide";
+        return "Verified Tamil Trails Guide";
     }
 
     private String hostName(TravelPackage pkg) {
         if ("Tamil Nadu".equalsIgnoreCase(pkg.getState())) return "Lakshmi";
-        if ("Kerala".equalsIgnoreCase(pkg.getState())) return "Anitha";
-        if ("Karnataka".equalsIgnoreCase(pkg.getState())) return "Kavya";
-        if ("Andhra Pradesh".equalsIgnoreCase(pkg.getState())) return "Deepthi";
         return "Local Host";
     }
 
     private String artisanName(TravelPackage pkg) {
         if ("Tamil Nadu".equalsIgnoreCase(pkg.getState())) return "Chettinad Craft Collective";
-        if ("Kerala".equalsIgnoreCase(pkg.getState())) return "Alleppey Coir Studio";
-        if ("Karnataka".equalsIgnoreCase(pkg.getState())) return "Mysore Artisan House";
-        if ("Andhra Pradesh".equalsIgnoreCase(pkg.getState())) return "Kalamkari Makers Guild";
-        return "South Trails Artisan Collective";
+        return "Tamil Trails Artisan Collective";
     }
 
     private String craftProduct(TravelPackage pkg) {
         if ("Tamil Nadu".equalsIgnoreCase(pkg.getState())) return "Temple brass keepsake";
-        if ("Kerala".equalsIgnoreCase(pkg.getState())) return "Handwoven coir craft";
-        if ("Karnataka".equalsIgnoreCase(pkg.getState())) return "Sandalwood-inspired souvenir";
-        if ("Andhra Pradesh".equalsIgnoreCase(pkg.getState())) return "Kalamkari textile art";
         return "Traditional local craft";
     }
 }

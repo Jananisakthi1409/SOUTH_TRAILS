@@ -116,7 +116,7 @@ export const AuthProvider = ({ children }) => {
   const login = async ({ email, password }) => {
     if (!isSupabaseEnabled && !isBackendEnabled) {
       const existing = getStoredUser();
-      if (!existing || existing.email !== email || existing.password !== password) {
+      if (!existing || existing.email !== email) {
         return { success: false, error: "Invalid email or password. Please try again." };
       }
       const nextUser = { ...existing, isLoggedIn: true };
@@ -164,7 +164,7 @@ export const AuthProvider = ({ children }) => {
       if (existing?.email === email) {
         return { success: false, error: "Email already registered. Please login instead." };
       }
-      const nextUser = { fullName, email, phone, password, isLoggedIn: true };
+      const nextUser = { id: `local-${Date.now()}`, fullName, email, phone, role: "CUSTOMER", isLoggedIn: true };
       saveUser(nextUser);
       setUser(nextUser);
       return { success: true };
