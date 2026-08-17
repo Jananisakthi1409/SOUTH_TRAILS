@@ -1,0 +1,1 @@
+import{t as e}from"./jsx-runtime-ByebIJFG.js";import{t}from"./TamilDestinationPage-ClJ69F1z.js";var n=e(),r=()=>(0,n.jsx)(t,{name:`Rameswaram`});export{r as default};

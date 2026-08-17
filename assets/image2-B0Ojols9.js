@@ -1,1 +1,0 @@
-import{r as e}from"./chunk-Cyuzqnbw.js";var t=e({default:()=>n}),n=`/SOUTH_TRAILS/assets/image2-CjfFs7PB.webp`;export{n as default,t};
