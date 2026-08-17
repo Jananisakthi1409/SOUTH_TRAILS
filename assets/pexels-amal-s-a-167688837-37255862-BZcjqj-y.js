@@ -1,0 +1,1 @@
+import{r as e}from"./chunk-Cyuzqnbw.js";var t=e({default:()=>n}),n=`/SOUTH_TRAILS/assets/pexels-amal-s-a-167688837-37255862-Dq93C7ZP.webp`;export{n as default,t};

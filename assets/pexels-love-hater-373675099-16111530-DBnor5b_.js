@@ -1,0 +1,1 @@
+import{r as e}from"./chunk-Cyuzqnbw.js";var t=e({default:()=>n}),n=`/SOUTH_TRAILS/assets/pexels-love-hater-373675099-16111530-C1DJ8JUx.webp`;export{n as default,t};

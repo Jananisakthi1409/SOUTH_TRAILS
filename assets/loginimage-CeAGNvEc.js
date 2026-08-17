@@ -1,0 +1,1 @@
+var e=`/SOUTH_TRAILS/assets/loginimage-DX6Xx0O4.webp`;export{e as t};

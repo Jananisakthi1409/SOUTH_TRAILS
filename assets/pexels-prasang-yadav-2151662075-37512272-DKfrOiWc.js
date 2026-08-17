@@ -1,0 +1,1 @@
+import{r as e}from"./chunk-Cyuzqnbw.js";var t=e({default:()=>n}),n=`/SOUTH_TRAILS/assets/pexels-prasang-yadav-2151662075-37512272-l2gwvh2v.webp`;export{n as default,t};

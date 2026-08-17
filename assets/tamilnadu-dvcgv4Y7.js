@@ -1,0 +1,1 @@
+var e=`/SOUTH_TRAILS/assets/tamilnadu-CQx_3T93.webp`;export{e as t};

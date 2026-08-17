@@ -1,0 +1,1 @@
+import{r as e}from"./chunk-Cyuzqnbw.js";var t=e({default:()=>n}),n=`/SOUTH_TRAILS/assets/pexels-ravi-roshan-2875998-26889568-WCHXzH5R.webp`;export{n as default,t};

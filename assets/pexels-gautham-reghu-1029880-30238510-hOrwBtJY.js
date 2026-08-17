@@ -1,0 +1,1 @@
+import{r as e}from"./chunk-Cyuzqnbw.js";var t=e({default:()=>n}),n=`/SOUTH_TRAILS/assets/pexels-gautham-reghu-1029880-30238510-CB6-qSes.webp`;export{n as default,t};

@@ -1,0 +1,1 @@
+import{r as e}from"./chunk-Cyuzqnbw.js";var t=e({default:()=>n}),n=`/SOUTH_TRAILS/assets/pexels-renjith-tomy-pkm-138432405-35673373-C33qxy6D.webp`;export{n as default,t};

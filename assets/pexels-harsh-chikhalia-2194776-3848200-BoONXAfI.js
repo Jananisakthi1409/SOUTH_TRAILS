@@ -1,0 +1,1 @@
+import{r as e}from"./chunk-Cyuzqnbw.js";var t=e({default:()=>n}),n=`/SOUTH_TRAILS/assets/pexels-harsh-chikhalia-2194776-3848200-CPeOZvBE.webp`;export{n as default,t};

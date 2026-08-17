@@ -1,0 +1,1 @@
+import{t as e}from"./jsx-runtime-ByebIJFG.js";import{t}from"./TamilDestinationPage-DbW7VPaF.js";var n=e(),r=()=>(0,n.jsx)(t,{name:`Kodaikanal`});export{r as default};

@@ -1,0 +1,1 @@
+import{r as e}from"./chunk-Cyuzqnbw.js";var t=e({default:()=>n}),n=`/SOUTH_TRAILS/assets/pexels-thilina-alagiyawanna-3266092-36609003-DKRIqrNY.webp`;export{t as n,n as t};

@@ -1,0 +1,1 @@
+import{r as e}from"./chunk-Cyuzqnbw.js";var t=e({default:()=>n}),n=`/SOUTH_TRAILS/assets/pexels-logalongwithme-28668658-Kepne_wR.webp`;export{t as n,n as t};

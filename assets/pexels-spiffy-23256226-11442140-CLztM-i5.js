@@ -1,0 +1,1 @@
+import{r as e}from"./chunk-Cyuzqnbw.js";var t=e({default:()=>n}),n=`/SOUTH_TRAILS/assets/pexels-spiffy-23256226-11442140-Cpq9cZSH.webp`;export{n as default,t};

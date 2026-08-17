@@ -1,0 +1,1 @@
+import{r as e}from"./chunk-Cyuzqnbw.js";var t=e({default:()=>n}),n=`/SOUTH_TRAILS/assets/pexels-rohit-mayon-2158452643-37304883-CU0hMD6b.webp`;export{n as default,t};

@@ -1,0 +1,1 @@
+import{r as e}from"./chunk-Cyuzqnbw.js";var t=e({default:()=>n}),n=`/SOUTH_TRAILS/assets/pexels-animesh-paul-150064-35620983-DGLnUdeU.webp`;export{n as default,t};

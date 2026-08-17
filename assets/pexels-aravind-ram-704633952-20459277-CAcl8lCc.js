@@ -1,0 +1,1 @@
+import{r as e}from"./chunk-Cyuzqnbw.js";var t=e({default:()=>n}),n=`/SOUTH_TRAILS/assets/pexels-aravind-ram-704633952-20459277-DL9zfv_c.webp`;export{n as default,t};
