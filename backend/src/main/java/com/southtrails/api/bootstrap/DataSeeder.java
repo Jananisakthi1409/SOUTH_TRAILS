@@ -48,8 +48,8 @@ public class DataSeeder implements CommandLineRunner {
             HandicraftProductRepository handicrafts,
             EcoScoreRepository ecoScores,
             PasswordEncoder passwordEncoder,
-            @Value("${app.admin.email:admin@tamiltrails.com}") String adminEmail,
-            @Value("${app.admin.password:admin123}") String adminPassword
+            @Value("${app.admin.email:admin@tamiltrails.com}") @org.springframework.lang.NonNull String adminEmail,
+            @Value("${app.admin.password:admin123}") @org.springframework.lang.NonNull String adminPassword
     ) {
         this.packages = packages;
         this.admins = admins;
@@ -165,15 +165,17 @@ public class DataSeeder implements CommandLineRunner {
     }
 
     private void seedAdmin() {
-        admins.findByEmailIgnoreCase(adminEmail).orElseGet(() -> {
-            AdminAccount admin = new AdminAccount();
-            admin.setEmail(adminEmail);
-            admin.setName("Admin User");
-            admin.setRole("ADMIN");
-            admin.setActive(true);
-            admin.setPasswordHash(passwordEncoder.encode(adminPassword));
-            return admins.save(admin);
-        });
+        if (adminEmail != null && !adminEmail.isBlank()) {
+            admins.findByEmailIgnoreCase(adminEmail).orElseGet(() -> {
+                AdminAccount admin = new AdminAccount();
+                admin.setEmail(adminEmail);
+                admin.setName("Admin User");
+                admin.setRole("ADMIN");
+                admin.setActive(true);
+                admin.setPasswordHash(passwordEncoder.encode(adminPassword));
+                return admins.save(admin);
+            });
+        }
     }
 
     private List<TravelPackage> seedPackages() {
@@ -183,11 +185,10 @@ public class DataSeeder implements CommandLineRunner {
 
         try (var reader = new BufferedReader(new InputStreamReader(stream, StandardCharsets.UTF_8))) {
             reader.lines()
-                    .map(String::trim)
+                    .map((String line) -> line.trim())
                     .filter(line -> !line.isBlank() && !line.startsWith("#"))
                     .map(line -> line.split("\\|", -1))
                     .filter(parts -> parts.length >= 10)
-                    .filter(parts -> "Tamil Nadu".equalsIgnoreCase(parts[3]))
                     .map(parts -> pkg(
                             parts[0],
                             parts[1],

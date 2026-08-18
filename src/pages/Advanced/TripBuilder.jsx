@@ -86,12 +86,12 @@ const TripBuilder = () => {
         <div className="trip-builder-hero__shade absolute inset-0" />
         <div className="trip-builder-hero__content relative mx-auto grid max-w-7xl gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-end">
           <div>
-            <p className="trip-builder-eyebrow font-mono text-xs font-bold uppercase tracking-[0.28em] text-[#f0c94a]">AI Trip Builder</p>
+            <p className="trip-builder-eyebrow font-mono text-xs font-bold uppercase tracking-[0.28em] text-[#0b6b43]">AI Trip Builder</p>
             <h1 className="mt-5 max-w-4xl font-display text-[clamp(3.8rem,9vw,8rem)] uppercase leading-[0.82]">
               Private route atelier.
             </h1>
             <p className="mt-7 max-w-2xl text-base leading-8 text-white/70">
-              Choose duration, season, budget, interests, and travel style. Tamil Trails shapes a royal Tamil Nadu itinerary with day-wise flow and package matches.
+              Choose duration, season, budget, interests, and travel style. South Trails shapes a royal Tamil Nadu itinerary with day-wise flow and package matches.
             </p>
           </div>
           <div className="trip-brief-card rounded-md border border-white/12 bg-white/10 p-6 shadow-luxury backdrop-blur-xl">
@@ -109,7 +109,7 @@ const TripBuilder = () => {
         </div>
       </section>
 
-      <section className="trip-builder-workspace bg-[#f5efe6] px-5 py-16 text-[#1a0a00] sm:px-8 lg:px-12">
+      <section className="trip-builder-workspace bg-[#ffffff] px-5 py-16 text-[#022c22] sm:px-8 lg:px-12">
         <div className="mx-auto grid max-w-7xl gap-6 lg:grid-cols-[0.9fr_1.1fr]">
           <form className="trip-builder-form grid gap-5 rounded-md bg-white p-6 shadow-luxury" onSubmit={(event) => event.preventDefault()}>
             <div className="grid gap-5 md:grid-cols-2">
@@ -148,7 +148,7 @@ const TripBuilder = () => {
               <input value={form.interests} onChange={(event) => update("interests", event.target.value)} className={inputClass} />
             </Field>
             <button
-              className="trip-generate-btn min-h-14 rounded-md bg-[#c8440a] px-7 font-black text-white disabled:opacity-60"
+              className="trip-generate-btn min-h-14 rounded-md bg-[#0b6b43] px-7 font-black text-white disabled:opacity-60"
               type="button"
               onClick={generateTrip}
               disabled={loading}
@@ -162,7 +162,7 @@ const TripBuilder = () => {
             <img src={rameswaramImg} alt="" className="h-full w-full object-cover opacity-75" />
             <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent" />
             <div className="absolute bottom-0 p-8">
-              <p className="font-mono text-xs font-bold uppercase tracking-[0.28em] text-[#f0c94a]">AI output</p>
+              <p className="font-mono text-xs font-bold uppercase tracking-[0.28em] text-[#0b6b43]">AI output</p>
               <h2 className="mt-4 text-4xl font-black">A route you can book, not just read.</h2>
               <p className="mt-4 max-w-lg leading-7 text-white/70">
                 Generated itineraries appear below with day-wise structure and package matches.
@@ -177,13 +177,13 @@ const TripBuilder = () => {
           <div className="mx-auto max-w-7xl">
             {itinerary && (
               <div className="trip-plan-card mb-8 rounded-md border border-white/10 bg-white/5 p-6 shadow-luxury">
-                <p className="font-mono text-xs font-bold uppercase tracking-[0.28em] text-[#f0c94a]">Generated plan</p>
+                <p className="font-mono text-xs font-bold uppercase tracking-[0.28em] text-[#0b6b43]">Generated plan</p>
                 <h2 className="mt-3 text-4xl font-black">{itinerary.title}</h2>
                 <p className="mt-4 max-w-3xl leading-7 text-white/70">{itinerary.summary}</p>
                 <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
                   {(itinerary.dayPlan || []).map((day) => (
                     <article key={day.day} className="trip-day-card rounded-md border border-white/10 bg-white/5 p-5">
-                      <p className="font-mono text-[0.7rem] font-bold uppercase tracking-[0.2em] text-[#f0c94a]">Day {day.day}</p>
+                      <p className="font-mono text-[0.7rem] font-bold uppercase tracking-[0.2em] text-[#0b6b43]">Day {day.day}</p>
                       <h3 className="mt-2 text-xl font-black">{day.destination}</h3>
                       <p className="mt-2 text-sm leading-6 text-white/65">{day.focus}</p>
                     </article>
@@ -195,12 +195,12 @@ const TripBuilder = () => {
             <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
               {results.map((pkg) => (
                 <article key={pkg.id} className="trip-match-card rounded-md border border-white/10 bg-white/5 p-5 shadow-luxury">
-                  <p className="font-mono text-[0.7rem] font-bold uppercase tracking-[0.2em] text-[#f0c94a]">{pkg.state || "Tamil Nadu"}</p>
+                  <p className="font-mono text-[0.7rem] font-bold uppercase tracking-[0.2em] text-[#0b6b43]">{pkg.state || "Tamil Nadu"}</p>
                   <h3 className="mt-2 text-2xl font-black">{pkg.title}</h3>
                   <p className="mt-3 text-sm leading-6 text-white/65">
                     {pkg.destination} / {pkg.days}D / {pkg.nights}N / Rs. {Number(pkg.price || 0).toLocaleString("en-IN")}
                   </p>
-                  <Link to={`/package/${pkg.id}`} className="mt-5 inline-flex font-black text-[#f0c94a]">View package</Link>
+                  <Link to={`/package/${pkg.id}`} className="mt-5 inline-flex font-black text-[#0b6b43]">View package</Link>
                 </article>
               ))}
             </div>
@@ -212,12 +212,12 @@ const TripBuilder = () => {
 };
 
 const Field = ({ label, children }) => (
-  <label className="trip-field block text-sm font-black text-[#1a0a00]">
+  <label className="trip-field block text-sm font-black text-[#022c22]">
     {label}
     <div className="mt-2">{children}</div>
   </label>
 );
 
-const inputClass = "trip-builder-input min-h-12 w-full rounded-md border border-[#d8cfc2] bg-[#fffaf4] px-4 text-[#1a0a00] outline-none";
+const inputClass = "trip-builder-input min-h-12 w-full rounded-md border border-[#d8efe5] bg-[#ffffff] px-4 text-[#022c22] outline-none";
 
 export default TripBuilder;

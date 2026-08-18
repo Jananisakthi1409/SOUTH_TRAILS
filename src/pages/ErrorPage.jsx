@@ -15,7 +15,7 @@ const ErrorPage = () => {
           ⚠
         </div>
         <h1 className="mb-4 font-display text-4xl text-white">Oops! Something broke.</h1>
-        <p className="mb-8 text-[#f5efe6]/70">
+        <p className="mb-8 text-[#ffffff]/70">
           Sorry, an unexpected error has occurred while trying to load this page.
         </p>
         
@@ -30,7 +30,7 @@ const ErrorPage = () => {
         <div className="flex flex-wrap items-center justify-center gap-4">
           <button
             onClick={() => window.location.reload()}
-            className="inline-flex h-12 items-center justify-center rounded-md bg-[#f0c94a] px-8 text-sm font-bold text-[#1a0a00] transition hover:bg-white"
+            className="inline-flex h-12 items-center justify-center rounded-md bg-[#0b6b43] px-8 text-sm font-bold text-[#022c22] transition hover:bg-white"
           >
             Try Again
           </button>

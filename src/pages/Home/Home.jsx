@@ -93,13 +93,6 @@ const seasonal = [
   ["Festival", "Pongal, Margazhi, Chithirai routes", meenakshiImage],
 ];
 
-const navItems = [
-  ["Destinations", "/explore"],
-  ["Packages", "/packages"],
-  ["Planner", "/trip-builder"],
-  ["Contact", "/contact"],
-];
-
 const slideVariants = {
   enter: { opacity: 0, scale: 1.05 },
   center: { opacity: 1, scale: 1 },
@@ -140,21 +133,27 @@ const Home = () => {
   const moveSlide = (direction) => setActiveIndex((current) => (current + direction + destinations.length) % destinations.length);
   const searchDestinations = (event) => {
     event.preventDefault();
-    const query = searchTerm.trim().toLowerCase();
+    const query = searchTerm.trim();
     if (!query) {
-      navigate("/explore");
+      navigate("/packages");
       return;
     }
 
+    const lower = query.toLowerCase();
     const match = destinations.find((item) =>
-      [item.id, item.title, item.label, item.summary].join(" ").toLowerCase().includes(query)
+      [item.id, item.title, item.label, item.summary].join(" ").toLowerCase().includes(lower)
     );
-    navigate(match?.to || "/explore");
+
+    if (match) {
+      navigate(match.to);
+    } else {
+      navigate(`/packages?search=${encodeURIComponent(query)}`);
+    }
   };
 
   return (
-    <main className="min-h-screen bg-[#07110f] font-sans text-white">
-      <section className="relative min-h-screen overflow-hidden">
+    <main className="travel-home min-h-screen bg-[#064e3b] font-sans text-white">
+      <section className="relative min-h-[75vh] max-h-[640px] overflow-hidden">
         <AnimatePresence mode="wait">
           <motion.div
             key={activeDestination.id}
@@ -171,9 +170,9 @@ const Home = () => {
 
         <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(3,10,12,0.96)_0%,rgba(3,12,16,0.78)_35%,rgba(4,18,20,0.2)_64%,rgba(4,12,15,0.86)_100%)]" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_64%_48%,rgba(240,201,74,0.14),transparent_30%),linear-gradient(180deg,rgba(0,0,0,0.18)_0%,rgba(0,0,0,0.76)_100%)]" />
-        <div className="absolute inset-x-0 top-0 h-2 bg-[#2a9d8f]" />
+        <div className="absolute inset-x-0 top-0 h-2 bg-[#0b6b43]" />
 
-        <div className="absolute inset-x-0 top-0 h-2 bg-[#2a9d8f]" />
+        <div className="absolute inset-x-0 top-0 h-2 bg-[#0b6b43]" />
 
         <aside className="absolute bottom-24 left-5 top-28 z-20 hidden w-10 flex-col items-center justify-between md:flex">
           <div className="relative h-[58vh] w-px bg-white/20">
@@ -203,7 +202,7 @@ const Home = () => {
           </span>
         </aside>
 
-        <section className="relative z-10 grid min-h-screen grid-cols-1 items-end gap-8 px-5 pb-10 pt-28 sm:px-8 md:pl-24 lg:grid-cols-[minmax(0,1fr)_minmax(420px,0.86fr)] lg:px-12 lg:pb-16 lg:pt-32">
+        <section className="relative z-10 mx-auto grid min-h-[75vh] max-h-[640px] max-w-[1320px] grid-cols-1 items-center gap-6 px-5 pb-8 pt-20 sm:px-8 md:pl-20 lg:grid-cols-[minmax(0,1fr)_minmax(340px,0.8fr)] lg:px-8 lg:pb-10 lg:pt-24">
           <AnimatePresence mode="wait">
             <motion.div
               key={activeDestination.id}
@@ -214,10 +213,10 @@ const Home = () => {
               transition={{ duration: 0.55, ease: "easeOut" }}
               className="max-w-4xl"
             >
-              <p className="mb-5 font-mono text-xs font-bold uppercase tracking-[0.34em] text-[#f0c94a]">
+              <p className="mb-5 font-mono text-xs font-bold uppercase tracking-[0.34em] text-emerald-400">
                 {activeDestination.label}
               </p>
-              <h1 className="max-w-[820px] font-display text-[clamp(4.2rem,9vw,8.4rem)] uppercase leading-[0.84] tracking-normal text-white drop-shadow-2xl">
+              <h1 className="max-w-[600px] font-display text-[clamp(2.2rem,4.5vw,3.5rem)] uppercase leading-[1.02] tracking-tight text-white drop-shadow-md">
                 {activeDestination.title}
               </h1>
               <p className="mt-7 max-w-2xl text-sm font-medium leading-7 text-white/78 sm:text-base">
@@ -232,16 +231,16 @@ const Home = () => {
                   placeholder="Search Ooty, Madurai, Rameswaram..."
                   aria-label="Search destinations"
                 />
-                <button type="submit" className="min-h-12 rounded-md bg-[#f0c94a] px-6 font-black text-[#1a0a00]">
+                <button type="submit" className="min-h-12 rounded-md bg-[#15803d] px-6 font-bold text-white transition hover:bg-[#166534]">
                   Search
                 </button>
               </form>
 
-              <div className="mt-9 flex flex-wrap items-center gap-5">
-                <Link to="/explore" className="group inline-flex min-h-14 items-center gap-6 rounded-md bg-[#2f7dd3] px-8 text-lg font-black text-white shadow-luxury transition hover:-translate-y-1 hover:bg-[#3d8ee9]">
-                  Explore <span className="text-xl transition group-hover:translate-x-1">-&gt;</span>
+              <div className="mt-6 flex flex-wrap items-center gap-4">
+                <Link to="/explore" className="group inline-flex h-11 items-center gap-3 rounded-lg bg-[#15803d] px-6 text-sm font-bold text-white shadow-md transition hover:bg-[#166534]">
+                  Explore <span className="text-base transition group-hover:translate-x-1">-&gt;</span>
                 </Link>
-                <Link to="/trip-builder" className="inline-flex min-h-14 items-center rounded-md border border-white/20 bg-white/10 px-8 text-sm font-black uppercase tracking-[0.18em] text-white backdrop-blur-xl transition hover:bg-white hover:text-[#10201e]">
+                <Link to="/trip-builder" className="inline-flex h-11 items-center rounded-lg border border-white/30 bg-white/10 px-6 text-xs font-bold uppercase tracking-wider text-white backdrop-blur-md transition hover:bg-white hover:text-[#166534]">
                   Plan Trip
                 </Link>
                 <span className="font-mono text-xs font-bold uppercase tracking-[0.22em] text-white/65">{activeDestination.meta}</span>
@@ -256,8 +255,8 @@ const Home = () => {
                   type="button"
                   key={card.id}
                   onClick={() => goToSlide(card.destinationIndex)}
-                  className={`group relative shrink-0 overflow-hidden rounded-md border border-white/14 bg-white/10 text-left shadow-luxury outline-none transition hover:-translate-y-3 hover:border-white/50 focus-visible:ring-2 focus-visible:ring-[#f0c94a] ${
-                    index === 0 ? "h-[390px] w-[255px]" : "h-[330px] w-[250px]"
+                  className={`group relative shrink-0 overflow-hidden rounded-xl border border-white/14 bg-white/10 text-left shadow-md outline-none transition hover:-translate-y-2 hover:border-white/50 focus-visible:ring-2 focus-visible:ring-[#15803d] ${
+                    index === 0 ? "h-[280px] w-[210px]" : "h-[240px] w-[190px]"
                   }`}
                   initial={{ opacity: 0, x: 60 }}
                   animate={{ opacity: 1, x: 0 }}
@@ -273,10 +272,10 @@ const Home = () => {
                       ))}
                     </div>
                   </div>
-                  <span className="absolute right-4 top-5 grid h-12 w-12 place-items-center rounded-full bg-white text-[#19312e] shadow-xl">+</span>
+                  <span className="absolute right-3 top-3 grid h-8 w-8 place-items-center rounded-full bg-white text-xs text-[#19312e] shadow-md">+</span>
                   <div className="absolute bottom-0 p-4">
-                    <p className="font-mono text-[0.65rem] font-bold uppercase tracking-[0.18em] text-[#f0c94a]">{card.label}</p>
-                    <p className="mt-2 line-clamp-2 text-sm font-semibold leading-5 text-white/88">{card.summary}</p>
+                    <p className="font-mono text-[0.65rem] font-bold uppercase tracking-[0.18em] text-emerald-400">{card.label}</p>
+                    <p className="mt-2 line-clamp-2 text-sm font-semibold leading-5 text-white">{card.summary}</p>
                   </div>
                 </motion.button>
               ))}
@@ -284,10 +283,10 @@ const Home = () => {
           </div>
 
           <div className="absolute bottom-9 left-1/2 z-20 flex -translate-x-1/2 items-center gap-3 lg:bottom-14">
-            <button type="button" onClick={() => moveSlide(-1)} className="grid h-11 w-11 place-items-center rounded-full border border-white/15 bg-white/20 text-xl text-white backdrop-blur-xl transition hover:bg-white hover:text-[#12302d]" aria-label="Previous destination">
+            <button type="button" onClick={() => moveSlide(-1)} className="grid h-11 w-11 place-items-center rounded-full border border-white/15 bg-white/20 text-xl text-white backdrop-blur-xl transition hover:bg-white hover:text-[#0f766e]" aria-label="Previous destination">
               &lt;
             </button>
-            <button type="button" onClick={() => moveSlide(1)} className="grid h-11 w-11 place-items-center rounded-full border border-white/15 bg-white/20 text-xl text-white backdrop-blur-xl transition hover:bg-white hover:text-[#12302d]" aria-label="Next destination">
+            <button type="button" onClick={() => moveSlide(1)} className="grid h-11 w-11 place-items-center rounded-full border border-white/15 bg-white/20 text-xl text-white backdrop-blur-xl transition hover:bg-white hover:text-[#0f766e]" aria-label="Next destination">
               &gt;
             </button>
           </div>
@@ -302,20 +301,20 @@ const Home = () => {
         </section>
       </section>
 
-      <section className="bg-[#f5efe6] px-5 py-20 text-[#1a0a00] sm:px-8 lg:px-12">
+      <section className="bg-[#f8fafc] px-5 py-16 text-[#1f2937] sm:px-8 lg:px-12">
         <div className="mx-auto max-w-7xl">
           <div className="max-w-3xl">
-            <p className="font-mono text-xs font-bold uppercase tracking-[0.28em] text-[#c8440a]">Popular places</p>
-            <h2 className="mt-4 font-display text-[clamp(2.8rem,6vw,6rem)] leading-[0.9]">Travel Tamil Nadu by mood, season, and story.</h2>
+            <p className="font-mono text-xs font-bold uppercase tracking-[0.28em] text-[#15803d]">Popular places</p>
+            <h2 className="mt-2 font-display text-[clamp(2rem,4vw,3.2rem)] font-extrabold leading-[1.05] text-[#1f2937]">Travel Tamil Nadu by mood, season, and story.</h2>
           </div>
-          <div className="mt-12 grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+          <div className="mt-8 grid gap-5 md:grid-cols-2 xl:grid-cols-4">
             {collections.map(([title, text, image, to]) => (
-              <Link key={title} to={to} className="group relative min-h-[360px] overflow-hidden rounded-md bg-black shadow-luxury">
-                <img src={image} alt={title} loading="lazy" className="h-full w-full object-cover opacity-80 transition duration-700 group-hover:scale-110" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/86 via-black/20 to-transparent" />
+              <Link key={title} to={to} className="group relative min-h-[300px] overflow-hidden rounded-xl bg-white border border-[#e5e7eb] shadow-sm transition hover:shadow-md hover:border-[#15803d]/40">
+                <img src={image} alt={title} loading="lazy" className="h-full w-full object-cover transition duration-700 group-hover:scale-105" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
                 <div className="absolute inset-x-0 bottom-0 p-5 text-white">
-                  <h3 className="text-2xl font-black">{title}</h3>
-                  <p className="mt-3 text-sm leading-6 text-white/75">{text}</p>
+                  <h3 className="text-xl font-bold">{title}</h3>
+                  <p className="mt-2 text-xs leading-relaxed text-white/85">{text}</p>
                 </div>
               </Link>
             ))}
@@ -323,17 +322,17 @@ const Home = () => {
         </div>
       </section>
 
-      <section className="bg-[#fffaf4] px-5 py-20 text-[#1a0a00] sm:px-8 lg:px-12">
+      <section className="bg-[#f0fdf4] px-5 py-16 text-[#1f2937] sm:px-8 lg:px-12 border-y border-[#e5e7eb]">
         <div className="mx-auto max-w-7xl">
-          <p className="font-mono text-xs font-bold uppercase tracking-[0.28em] text-[#c8440a]">Seasonal recommendations</p>
-          <h2 className="mt-4 max-w-4xl font-display text-[clamp(2.8rem,6vw,5.8rem)] leading-[0.9]">Right place, right season.</h2>
-          <div className="mt-12 grid gap-5 md:grid-cols-3">
+          <p className="font-mono text-xs font-bold uppercase tracking-[0.28em] text-[#15803d]">Seasonal recommendations</p>
+          <h2 className="mt-2 max-w-3xl font-display text-[clamp(2rem,4vw,3.2rem)] font-extrabold leading-[1.05] text-[#1f2937]">Right place, right season.</h2>
+          <div className="mt-8 grid gap-5 md:grid-cols-3">
             {seasonal.map(([title, text, image]) => (
-              <article key={title} className="overflow-hidden rounded-md bg-white shadow-luxury">
-                <img src={image} alt={title} loading="lazy" className="h-56 w-full object-cover" />
-                <div className="p-6">
-                  <h3 className="text-2xl font-black">{title}</h3>
-                  <p className="mt-3 text-sm leading-6 text-[#6b5f55]">{text}</p>
+              <article key={title} className="overflow-hidden rounded-xl border border-[#e5e7eb] bg-white shadow-sm transition hover:border-[#15803d]/40">
+                <img src={image} alt={title} loading="lazy" className="h-48 w-full object-cover" />
+                <div className="p-5">
+                  <h3 className="text-lg font-bold text-[#1f2937]">{title}</h3>
+                  <p className="mt-2 text-xs leading-relaxed text-[#6b7280]">{text}</p>
                 </div>
               </article>
             ))}
@@ -341,22 +340,22 @@ const Home = () => {
         </div>
       </section>
 
-      <section className="bg-[#07110f] px-5 py-20 sm:px-8 lg:px-12">
+      <section className="bg-[#f8fafc] px-5 py-16 sm:px-8 lg:px-12">
         <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[0.8fr_1.2fr]">
           <div>
-            <p className="font-mono text-xs font-bold uppercase tracking-[0.28em] text-[#f0c94a]">Signature packages</p>
-            <h2 className="mt-4 font-display text-[clamp(2.8rem,6vw,5.6rem)] leading-[0.9]">Premium routes, ready to book.</h2>
-            <p className="mt-6 max-w-md leading-7 text-white/65">Temple circuits, tea country escapes, coastal pilgrimages, culinary routes, and custom luxury itineraries.</p>
-            <Link to="/packages" className="mt-8 inline-flex rounded-md bg-white px-7 py-4 font-black text-[#10201e]">View packages</Link>
+            <p className="font-mono text-xs font-bold uppercase tracking-[0.28em] text-[#15803d]">Signature packages</p>
+            <h2 className="mt-2 font-display text-[clamp(2rem,4vw,3.2rem)] font-extrabold leading-[1.05] text-[#1f2937]">Premium routes, ready to book.</h2>
+            <p className="mt-4 max-w-md text-xs leading-relaxed text-[#6b7280]">Temple circuits, tea country escapes, coastal pilgrimages, culinary routes, and custom luxury itineraries.</p>
+            <Link to="/packages" className="mt-6 inline-flex rounded-lg bg-[#15803d] px-6 py-3 text-xs font-bold text-white transition hover:bg-[#166534]">View packages</Link>
           </div>
           <div className="grid gap-5 md:grid-cols-3">
             {packages.map(([title, text, price, image]) => (
-              <article key={title} className="overflow-hidden rounded-md border border-white/10 bg-white/5 shadow-luxury">
-                <img src={image} alt={title} loading="lazy" className="h-56 w-full object-cover" />
-                <div className="p-5">
-                  <p className="font-mono text-[0.68rem] font-bold uppercase tracking-[0.18em] text-[#f0c94a]">{price}</p>
-                  <h3 className="mt-3 text-xl font-black">{title}</h3>
-                  <p className="mt-3 text-sm leading-6 text-white/65">{text}</p>
+              <article key={title} className="overflow-hidden rounded-xl border border-[#e5e7eb] bg-white shadow-sm">
+                <img src={image} alt={title} loading="lazy" className="h-44 w-full object-cover" />
+                <div className="p-4">
+                  <p className="font-mono text-[0.68rem] font-bold uppercase tracking-[0.18em] text-[#15803d]">{price}</p>
+                  <h3 className="mt-2 text-base font-bold text-[#1f2937]">{title}</h3>
+                  <p className="mt-2 text-xs leading-relaxed text-[#6b7280]">{text}</p>
                 </div>
               </article>
             ))}
@@ -364,14 +363,14 @@ const Home = () => {
         </div>
       </section>
 
-      <section className="bg-[#12302d] px-5 py-20 sm:px-8 lg:px-12">
+      <section className="bg-[#0f766e] px-5 py-20 sm:px-8 lg:px-12">
         <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[1fr_0.8fr]">
           <div className="relative min-h-[460px] overflow-hidden rounded-md shadow-luxury">
             <img src={valparaiImage} alt="Valparai Hills" loading="lazy" className="h-full w-full object-cover" />
             <div className="absolute inset-0 bg-gradient-to-r from-black/70 to-transparent" />
             <div className="absolute bottom-0 max-w-xl p-8">
-              <p className="font-mono text-xs font-bold uppercase tracking-[0.28em] text-[#f0c94a]">Concierge form</p>
-              <h2 className="mt-4 font-display text-[clamp(2.6rem,6vw,5rem)] leading-[0.9]">Start a custom Tamil Nadu plan.</h2>
+              <p className="font-mono text-xs font-bold uppercase tracking-[0.28em] text-emerald-400">Concierge form</p>
+              <h2 className="mt-2 font-display text-[clamp(2rem,4vw,3rem)] leading-[1.05] text-white">Start a custom Tamil Nadu plan.</h2>
             </div>
           </div>
           <form
@@ -411,7 +410,7 @@ const Home = () => {
             </label>
             <Link
               to="/contact"
-              className="mt-7 inline-flex min-h-14 w-full items-center justify-center rounded-md bg-[#f0c94a] px-6 text-center font-black text-[#1a0a00]"
+              className="mt-7 inline-flex min-h-14 w-full items-center justify-center rounded-md bg-[#0b6b43] px-6 text-center font-black text-[#022c22]"
             >
               Continue to enquiry
             </Link>
@@ -420,20 +419,20 @@ const Home = () => {
         </div>
       </section>
 
-      <section className="bg-[#f5efe6] px-5 py-20 text-[#1a0a00] sm:px-8 lg:px-12">
+      <section className="bg-[#f0fdf4] px-5 py-16 text-[#1f2937] sm:px-8 lg:px-12 border-t border-[#e5e7eb]">
         <div className="mx-auto max-w-7xl">
-          <p className="font-mono text-xs font-bold uppercase tracking-[0.28em] text-[#c8440a]">Testimonials</p>
-          <div className="mt-8 grid gap-5 md:grid-cols-3">
+          <p className="font-mono text-xs font-bold uppercase tracking-[0.28em] text-[#15803d]">Testimonials</p>
+          <div className="mt-6 grid gap-5 md:grid-cols-3">
             {testimonials.map(([name, quote]) => (
-              <article key={name} className="rounded-md bg-white p-6 shadow-luxury">
-                <p className="text-lg font-bold leading-8">"{quote}"</p>
-                <strong className="mt-6 block">{name}</strong>
+              <article key={name} className="rounded-xl border border-[#e5e7eb] bg-white p-5 text-[#1f2937] shadow-sm">
+                <p className="text-sm font-semibold leading-relaxed text-[#1f2937]">"{quote}"</p>
+                <strong className="mt-4 block text-xs font-bold text-[#15803d]">{name}</strong>
               </article>
             ))}
           </div>
-          <div className="mt-12 rounded-md bg-[#07110f] p-8 text-white shadow-luxury">
-            <h2 className="font-display text-[clamp(2.5rem,6vw,5rem)] leading-[0.9]">Ready to build your Tamil Nadu trip?</h2>
-            <Link to="/trip-builder" className="mt-7 inline-flex rounded-md bg-[#f0c94a] px-7 py-4 font-black text-[#1a0a00]">
+          <div className="mt-10 rounded-2xl bg-[#166534] p-8 text-white shadow-sm">
+            <h2 className="font-display text-[clamp(1.8rem,4vw,2.5rem)] font-extrabold leading-[1.05] text-white">Ready to build your Tamil Nadu trip?</h2>
+            <Link to="/trip-builder" className="mt-5 inline-flex rounded-lg bg-white px-6 py-3 text-xs font-bold text-[#166534] transition hover:bg-[#f0fdf4]">
               Start planning
             </Link>
           </div>

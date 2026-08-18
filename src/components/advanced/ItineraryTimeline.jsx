@@ -13,8 +13,8 @@ const ItineraryTimeline = ({ places = [], days = 3 }) => {
       {items.map((item) => (
         <article key={item.day} className="itinerary-day">
           <p className="eyebrow" style={{ margin: 0 }}>Day {item.day}</p>
-          <strong style={{ display: "block", margin: "0.35rem 0", color: "#0f172a", fontSize: "1.05rem" }}>{item.place}</strong>
-          <p style={{ margin: 0, color: "#64748b" }}>{item.time} · guided route, local food stop, and scenic photo pause.</p>
+          <strong style={{ display: "block", margin: "0.35rem 0", color: "#022c22", fontSize: "1.05rem" }}>{item.place}</strong>
+          <p style={{ margin: 0, color: "#35705c" }}>{item.time} · guided route, local food stop, and scenic photo pause.</p>
         </article>
       ))}
     </div>

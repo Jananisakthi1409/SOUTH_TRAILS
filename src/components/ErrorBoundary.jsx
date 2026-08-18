@@ -22,7 +22,7 @@ class ErrorBoundary extends Component {
   render() {
     if (this.state.hasError) {
       return (
-        <main className="min-h-screen bg-[#07110f] font-sans text-white flex items-center justify-center px-5">
+        <main className="min-h-screen bg-[#064e3b] font-sans text-white flex items-center justify-center px-5">
           <div className="max-w-xl text-center">
             <div className="mx-auto mb-8 grid h-24 w-24 place-items-center rounded-full bg-red-500/20 text-5xl">
               ⚠
@@ -43,7 +43,7 @@ class ErrorBoundary extends Component {
               <button
                 type="button"
                 onClick={this.handleRetry}
-                className="inline-flex min-h-14 items-center gap-3 rounded-md bg-[#f0c94a] px-8 text-lg font-black text-[#1a0a00] shadow-luxury transition hover:-translate-y-1"
+                className="inline-flex min-h-14 items-center gap-3 rounded-md bg-[#0b6b43] px-8 text-lg font-black text-[#022c22] shadow-luxury transition hover:-translate-y-1"
               >
                 Try Again
               </button>
@@ -56,7 +56,7 @@ class ErrorBoundary extends Component {
             </div>
             <p className="mt-8 text-sm text-white/40">
               Need help?{" "}
-              <Link to="/contact" className="text-[#f0c94a] underline underline-offset-4 hover:text-white transition">
+              <Link to="/contact" className="text-[#0b6b43] underline underline-offset-4 hover:text-white transition">
                 Contact support
               </Link>
             </p>

@@ -1,16 +1,19 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { chatWithOracle } from "../../services/aiTourismService";
 
 const examplePrompts = [
   "Need a peaceful Tamil Nadu temple and food trip under Rs. 12000",
   "Plan a family Madurai, Rameswaram, and Chettinad route for 4 people",
   "Suggest a premium Ooty and Kodaikanal hill station escape with waterfalls",
+  "Best 3-day solo backpacking itinerary across coastal Tamil Nadu",
 ];
 
+const languages = ["English", "Tamil", "Malayalam", "Kannada", "Telugu", "Hindi"];
+
 const Oracle = () => {
-  const [prompt, setPrompt] = useState(examplePrompts[0]);
+  const [prompt, setPrompt] = useState("");
   const [language, setLanguage] = useState("English");
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
@@ -18,15 +21,18 @@ const Oracle = () => {
 
   const askOracle = async () => {
     if (!prompt.trim()) {
-      setError("Describe the trip you want first.");
+      setError("Please describe the trip you want first.");
       return;
     }
-
     setLoading(true);
     setError("");
-    const { data, error: requestError } = await chatWithOracle({ message: `Tamil Nadu only: ${prompt}`, language });
+    setResult(null);
+    const { data, error: requestError } = await chatWithOracle({
+      message: `Tamil Nadu only: ${prompt}`,
+      language,
+    });
     if (requestError) {
-      setError(requestError.message || "Unable to reach the AI Travel Oracle.");
+      setError(requestError.message || "Unable to reach the AI Travel Oracle. Please try again.");
       setResult(null);
     } else {
       setResult(data);
@@ -35,151 +41,134 @@ const Oracle = () => {
   };
 
   return (
-    <main className="app-shell explore-page">
-      <section className="section explore-header">
-        <div className="section-heading">
-          <p className="eyebrow">AI Travel Oracle</p>
-          <h2>Conversational Tamil Nadu travel assistant</h2>
-          <p className="section-copy">
-            Ask in natural language. Tamil Nadu Explorer AI uses the Tamil Trails package catalog, destinations, ratings, festivals, food routes, and highlights.
+    <main className="min-h-screen bg-[#f8fafc] text-[#1f2937]">
+      {/* ── Hero ── */}
+      <section className="bg-gradient-to-b from-[#f0fdf4] to-[#f8fafc] px-6 pb-12 pt-28 border-b border-[#e5e7eb] text-center">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="mx-auto max-w-3xl"
+        >
+          <span className="mb-3 inline-block rounded-full border border-[#dcfce7] bg-[#dcfce7]/60 px-4 py-1 text-xs font-bold uppercase tracking-wider text-[#166534]">
+            🤖 AI Travel Oracle
+          </span>
+          <h1 className="mb-3 font-display text-3xl font-extrabold text-[#1f2937] md:text-5xl">
+            Conversational Travel Assistant
+          </h1>
+          <p className="text-xs leading-relaxed text-[#6b7280]">
+            Ask in natural language. Oracle uses the South Trails package catalog, destinations,
+            ratings, festivals, and food routes to craft your itinerary.
           </p>
-        </div>
+        </motion.div>
       </section>
 
-      <section className="section explore-mood-section">
-        <div className="section-heading">
-          <p className="eyebrow">Your input</p>
-          <h2>Describe your ideal trip</h2>
-        </div>
-
-        <div className="destination-grid">
-          <motion.article className="destination-card" whileHover={{ y: -6 }} transition={{ duration: 0.3 }}>
-            <label htmlFor="oracle-language" style={labelStyle}>Language</label>
-            <select
-              id="oracle-language"
-              value={language}
-              onChange={(event) => setLanguage(event.target.value)}
-              style={inputStyle}
+      {/* ── Input ── */}
+      <section className="px-6 py-12">
+        <div className="mx-auto max-w-5xl">
+          <div className="grid gap-6 lg:grid-cols-[1fr_320px]">
+            {/* Main Form */}
+            <motion.div
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1, duration: 0.4 }}
+              className="rounded-xl border border-[#e5e7eb] bg-white p-6 shadow-sm"
             >
-              {["English", "Tamil", "Malayalam", "Kannada", "Telugu", "Hindi"].map((item) => (
-                <option key={item}>{item}</option>
-              ))}
-            </select>
+              <h2 className="mb-4 font-display text-base font-bold text-[#1f2937]">Describe your ideal trip</h2>
 
-            <label htmlFor="oracle-prompt" style={labelStyle}>Travel request</label>
-            <textarea
-              id="oracle-prompt"
-              className="oracle-input"
-              value={prompt}
-              onChange={(event) => setPrompt(event.target.value)}
-              rows={5}
-              style={{ ...inputStyle, minHeight: 140 }}
-            />
-
-            <div style={{ display: "flex", gap: "0.75rem", flexWrap: "wrap", marginTop: "1rem" }}>
-              <button className="button button-primary" type="button" onClick={askOracle} disabled={loading}>
-                {loading ? "Thinking..." : "Ask Oracle"}
-              </button>
-              <Link className="button button-secondary" to="/trip-builder">Build Itinerary</Link>
-            </div>
-
-            {error && <p style={{ color: "#b91c1c", marginTop: "1rem" }}>{error}</p>}
-          </motion.article>
-
-          <motion.article className="destination-card" whileHover={{ y: -6 }} transition={{ duration: 0.3 }}>
-            <h3>Prompt starters</h3>
-            <div style={{ display: "grid", gap: "0.75rem" }}>
-              {examplePrompts.map((item) => (
-                <button
-                  key={item}
-                  type="button"
-                  onClick={() => setPrompt(item)}
-                  style={promptButtonStyle}
+              <div className="mb-4">
+                <label className="mb-1.5 block text-xs font-semibold text-[#1f2937]">
+                  Language
+                </label>
+                <select
+                  id="oracle-language"
+                  value={language}
+                  onChange={(e) => setLanguage(e.target.value)}
+                  className="w-full rounded-lg border border-[#e5e7eb] bg-white px-3 py-2 text-xs text-[#1f2937] outline-none focus:border-[#15803d]"
                 >
-                  {item}
+                  {languages.map((lang) => (
+                    <option key={lang}>{lang}</option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="mb-5">
+                <label
+                  htmlFor="oracle-prompt"
+                  className="mb-1.5 block text-xs font-semibold text-[#1f2937]"
+                >
+                  Travel Request
+                </label>
+                <textarea
+                  id="oracle-prompt"
+                  value={prompt}
+                  onChange={(e) => {
+                    setPrompt(e.target.value);
+                    setError("");
+                  }}
+                  placeholder="E.g. Plan a 5-day family trip to Madurai and Rameswaram under ₹15,000 per person..."
+                  rows={4}
+                  className="w-full resize-none rounded-lg border border-[#e5e7eb] bg-white p-3 text-xs text-[#1f2937] placeholder-[#9ca3af] outline-none focus:border-[#15803d]"
+                />
+                {error && <p className="mt-1 text-xs text-red-600">⚠️ {error}</p>}
+              </div>
+
+              <div className="flex gap-3">
+                <button
+                  type="button"
+                  onClick={askOracle}
+                  disabled={loading}
+                  className="inline-flex h-10 items-center justify-center rounded-lg bg-[#15803d] px-6 text-xs font-bold text-white transition hover:bg-[#166534] disabled:opacity-60"
+                >
+                  {loading ? "Thinking..." : "Ask Oracle"}
                 </button>
-              ))}
-            </div>
-          </motion.article>
-        </div>
-      </section>
+                <Link
+                  to="/trip-builder"
+                  className="inline-flex h-10 items-center justify-center rounded-lg border border-[#e5e7eb] bg-white px-5 text-xs font-bold text-[#1f2937] transition hover:border-[#15803d]"
+                >
+                  Build Itinerary
+                </Link>
+              </div>
+            </motion.div>
 
-      <section className="section explore-state-section">
-        <div className="section-heading">
-          <p className="eyebrow">Output</p>
-          <h2>Catalog-aware response</h2>
-        </div>
-
-        {!result ? (
-          <div className="destination-grid">
-            <article className="destination-card">
-              <h3>Ready when you are</h3>
-              <p>Ask for a budget, mood, state, travel style, family size, or season to get package-linked suggestions.</p>
-            </article>
-          </div>
-        ) : (
-          <div className="destination-grid">
-            <article className="destination-card">
-              <h3>Oracle answer</h3>
-              <p>{result.answer}</p>
-              <p style={{ color: "#64748b" }}>Language target: {result.language}</p>
-              <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
-                {(result.quick_actions || result.quickActions || []).map((action) => (
-                  <span key={action} style={pillStyle}>{action}</span>
+            {/* Prompt Starters */}
+            <div className="rounded-xl border border-[#e5e7eb] bg-white p-5 shadow-sm">
+              <h3 className="mb-3 text-xs font-bold uppercase tracking-wider text-[#15803d]">
+                Prompt Starters
+              </h3>
+              <div className="flex flex-col gap-2.5">
+                {examplePrompts.map((item) => (
+                  <button
+                    key={item}
+                    type="button"
+                    onClick={() => {
+                      setPrompt(item);
+                      setError("");
+                    }}
+                    className="w-full rounded-lg border border-[#e5e7eb] bg-[#f8fafc] p-3 text-left text-xs text-[#1f2937] transition hover:border-[#15803d] hover:bg-[#f0fdf4]"
+                  >
+                    → {item}
+                  </button>
                 ))}
               </div>
-            </article>
-
-            {(result.suggestedPackages || []).map((pkg) => (
-              <article key={pkg.id} className="destination-card">
-                <p className="eyebrow">{pkg.state}</p>
-                <h3>{pkg.title}</h3>
-                <p>{pkg.destination} - {pkg.days}D / {pkg.nights}N - Rs. {Number(pkg.price).toLocaleString("en-IN")}</p>
-                <Link to={`/package/${pkg.id}`}>View package</Link>
-              </article>
-            ))}
+            </div>
           </div>
-        )}
+        </div>
+      </section>
+
+      {/* ── Result ── */}
+      <section className="px-6 pb-16">
+        <div className="mx-auto max-w-5xl">
+          {result && (
+            <div className="rounded-xl border border-[#e5e7eb] bg-white p-6 shadow-sm">
+              <h3 className="mb-2 font-display text-base font-bold text-[#1f2937]">Oracle Response</h3>
+              <p className="text-xs leading-relaxed text-[#6b7280]">{result.answer}</p>
+            </div>
+          )}
+        </div>
       </section>
     </main>
   );
-};
-
-const labelStyle = {
-  display: "block",
-  margin: "0 0 0.45rem",
-  color: "#334155",
-  fontWeight: 800,
-};
-
-const inputStyle = {
-  width: "100%",
-  marginBottom: "1rem",
-  padding: "0.8rem",
-  border: "1px solid #cbd5e1",
-  borderRadius: "10px",
-  font: "inherit",
-};
-
-const promptButtonStyle = {
-  textAlign: "left",
-  padding: "0.85rem",
-  borderRadius: "10px",
-  border: "1px solid #cbd5e1",
-  background: "#ffffff",
-  color: "#0f172a",
-  cursor: "pointer",
-  fontWeight: 700,
-};
-
-const pillStyle = {
-  display: "inline-flex",
-  padding: "0.45rem 0.7rem",
-  borderRadius: 999,
-  background: "#f0fdfa",
-  color: "#0f766e",
-  fontWeight: 800,
-  fontSize: "0.85rem",
 };
 
 export default Oracle;

@@ -13,25 +13,25 @@ export const LoadingSpinner = ({ size = "md", fullScreen = false }) => {
       <div className={`relative ${sizeClasses[size]}`}>
         {/* Outer rotating ring */}
         <motion.div
-          className="absolute inset-0 rounded-full border-4 border-[#07110f] border-t-[#f0c94a]"
+          className="absolute inset-0 rounded-full border-4 border-[#064e3b] border-t-[#0b6b43]"
           animate={{ rotate: 360 }}
           transition={{ duration: 1.2, repeat: Infinity, ease: "linear" }}
         />
         {/* Inner pulsing circle */}
         <motion.div
-          className="absolute inset-2 rounded-full bg-[#f0c94a]/20 blur-sm"
+          className="absolute inset-2 rounded-full bg-[#0b6b43]/20 blur-sm"
           animate={{ scale: [0.8, 1.2, 0.8], opacity: [0.5, 1, 0.5] }}
           transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
         />
         {/* Inner core */}
-        <div className="absolute inset-3 rounded-full bg-[#f0c94a]" />
+        <div className="absolute inset-3 rounded-full bg-[#0b6b43]" />
       </div>
     </div>
   );
 
   if (fullScreen) {
     return (
-      <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#07110f]/80 backdrop-blur-sm">
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#064e3b]/80 backdrop-blur-sm">
         {spinner}
       </div>
     );

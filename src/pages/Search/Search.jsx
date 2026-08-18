@@ -31,13 +31,13 @@ const Search = () => {
               type="text"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder="Search Tamil Trails..."
-              className="w-full rounded-2xl border border-white/20 bg-[#030a0c] py-6 pl-8 pr-16 text-xl text-white placeholder-white/30 focus:border-[#f0c94a] focus:outline-none focus:ring-1 focus:ring-[#f0c94a] shadow-luxury"
+              placeholder="Search South Trails..."
+              className="w-full rounded-2xl border border-white/20 bg-[#022c22] py-6 pl-8 pr-16 text-xl text-white placeholder-white/30 focus:border-[#0b6b43] focus:outline-none focus:ring-1 focus:ring-[#0b6b43] shadow-luxury"
               autoFocus
             />
             <button 
               type="submit"
-              className="absolute right-4 top-1/2 -translate-y-1/2 flex h-12 w-12 items-center justify-center rounded-xl bg-[#f0c94a] text-black transition hover:bg-white"
+              className="absolute right-4 top-1/2 -translate-y-1/2 flex h-12 w-12 items-center justify-center rounded-xl bg-[#0b6b43] text-black transition hover:bg-white"
             >
               🔍
             </button>

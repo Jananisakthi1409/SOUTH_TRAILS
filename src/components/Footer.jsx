@@ -1,28 +1,57 @@
 import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
+
+const footerGroups = [
+  {
+    title: "Explore",
+    links: [
+      ["Destinations", "/explore"],
+      ["Tour Packages", "/packages"],
+      ["AI Planner", "/oracle"],
+    ],
+  },
+  {
+    title: "Company",
+    links: [
+      ["About Us", "/about"],
+      ["Contact", "/contact"],
+      ["Help Center", "/help"],
+    ],
+  },
+  {
+    title: "Legal",
+    links: [
+      ["Privacy Policy", "/privacy"],
+      ["Terms of Service", "/terms"],
+      ["FAQ", "/faq"],
+    ],
+  },
+];
 
 const Footer = () => {
   return (
-    <footer className="relative mt-24 border-t border-white/10 bg-[#030a0c] px-6 py-20 text-[#f5efe6] md:px-12 lg:px-24">
-      {/* Decorative top border glow */}
-      <div className="absolute top-0 left-1/2 h-[1px] w-1/2 -translate-x-1/2 bg-gradient-to-r from-transparent via-[#f0c94a]/30 to-transparent"></div>
-
+    <footer className="mt-16 border-t border-[#bbf7d0] bg-[#166534] px-6 py-14 text-white md:px-12 lg:px-20">
       <div className="mx-auto max-w-[1400px]">
-        <div className="grid gap-16 md:grid-cols-2 lg:grid-cols-12">
-          {/* Brand Column */}
+        <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-12">
           <div className="lg:col-span-5">
-            <Link to="/" className="inline-block text-3xl font-display text-white transition hover:text-[#f0c94a]" aria-label="Tamil Trails Home">
-              Tamil <span className="text-[#f0c94a]">Trails</span>
+            <Link
+              to="/"
+              className="inline-flex items-center gap-3 text-2xl font-black text-white transition hover:text-[#dcfce7]"
+              aria-label="South Trails Home"
+            >
+              <span className="grid h-10 w-10 place-items-center rounded-md bg-white text-sm font-black text-[#166534]">
+                ST
+              </span>
+              South Trails
             </Link>
-            <p className="mt-6 max-w-sm text-sm leading-relaxed text-[#f5efe6]/70">
-              Discover the soul of South India. We curate premium, immersive journeys through Tamil Nadu's ancient temples, serene hills, and vibrant culture.
+            <p className="mt-5 max-w-sm text-sm leading-7 text-white/75">
+              Discover South India through curated destination guides, packages, bookings, and practical travel support.
             </p>
-            <div className="mt-8 flex gap-4">
-              {['Facebook', 'Instagram', 'Twitter'].map((social) => (
+            <div className="mt-7 flex gap-3">
+              {["Facebook", "Instagram", "Twitter"].map((social) => (
                 <a
                   key={social}
                   href="#"
-                  className="flex h-10 w-10 items-center justify-center rounded-full bg-white/5 text-sm text-[#f5efe6]/70 transition hover:bg-[#f0c94a] hover:text-[#030a0c]"
+                  className="flex h-10 w-10 items-center justify-center rounded-md border border-white/15 bg-white/10 text-sm font-bold text-white/80 transition hover:bg-white hover:text-[#166534]"
                   aria-label={social}
                 >
                   <span className="sr-only">{social}</span>
@@ -32,47 +61,31 @@ const Footer = () => {
             </div>
           </div>
 
-          {/* Links Columns */}
-          <div className="grid grid-cols-2 gap-8 lg:col-span-7 sm:grid-cols-3">
-            <div>
-              <h4 className="mb-6 font-display text-lg text-white">Explore</h4>
-              <ul className="space-y-4 text-sm text-[#f5efe6]/60">
-                <li><Link to="/explore" className="transition hover:text-[#f0c94a]">Destinations</Link></li>
-                <li><Link to="/packages" className="transition hover:text-[#f0c94a]">Tour Packages</Link></li>
-                <li><Link to="/oracle" className="transition hover:text-[#f0c94a]">AI Planner</Link></li>
-              </ul>
-            </div>
-            
-            <div>
-              <h4 className="mb-6 font-display text-lg text-white">Company</h4>
-              <ul className="space-y-4 text-sm text-[#f5efe6]/60">
-                <li><Link to="/about" className="transition hover:text-[#f0c94a]">About Us</Link></li>
-                <li><Link to="/contact" className="transition hover:text-[#f0c94a]">Contact</Link></li>
-                <li><Link to="/help" className="transition hover:text-[#f0c94a]">Help Center</Link></li>
-              </ul>
-            </div>
-
-            <div className="col-span-2 sm:col-span-1">
-              <h4 className="mb-6 font-display text-lg text-white">Legal</h4>
-              <ul className="space-y-4 text-sm text-[#f5efe6]/60">
-                <li><Link to="/privacy" className="transition hover:text-[#f0c94a]">Privacy Policy</Link></li>
-                <li><Link to="/terms" className="transition hover:text-[#f0c94a]">Terms of Service</Link></li>
-                <li><Link to="/faq" className="transition hover:text-[#f0c94a]">FAQ</Link></li>
-              </ul>
-            </div>
+          <div className="grid grid-cols-2 gap-8 sm:grid-cols-3 lg:col-span-7">
+            {footerGroups.map((group) => (
+              <div key={group.title} className={group.title === "Legal" ? "col-span-2 sm:col-span-1" : ""}>
+                <h4 className="mb-4 text-sm font-black uppercase tracking-widest text-[#dcfce7]">
+                  {group.title}
+                </h4>
+                <ul className="space-y-3 text-sm text-white/75">
+                  {group.links.map(([label, to]) => (
+                    <li key={to}>
+                      <Link to={to} className="transition hover:text-white">
+                        {label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
           </div>
         </div>
 
-        {/* Bottom Bar */}
-        <div className="mt-20 flex flex-col items-center justify-between gap-6 border-t border-white/10 pt-8 sm:flex-row">
-          <p className="text-xs text-[#f5efe6]/50">
-            &copy; {new Date().getFullYear()} Tamil Trails. All rights reserved.
+        <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-white/15 pt-6 sm:flex-row">
+          <p className="text-xs text-white/65">
+            &copy; {new Date().getFullYear()} South Trails. All rights reserved.
           </p>
-          <div className="flex gap-6 text-xs text-[#f5efe6]/50">
-            <span>Made with precision</span>
-            <span className="text-[#f0c94a]">✦</span>
-            <span>Based in Tamil Nadu</span>
-          </div>
+          <span className="text-xs text-white/65">Based in South India</span>
         </div>
       </div>
     </footer>

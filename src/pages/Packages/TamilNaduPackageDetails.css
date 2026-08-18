@@ -200,7 +200,7 @@
 }
 
 .price-card {
-  background: #f0f7ff;
+  background: #f0fdf4;
   border: 2px solid var(--primary-blue);
   border-radius: 12px;
   padding: 1.2rem;
@@ -287,7 +287,7 @@
 
 .place-card {
   padding: 1.2rem;
-  background: #f0f7ff;
+  background: #f0fdf4;
   border: 2px solid var(--border-gray);
   border-radius: 12px;
   text-align: center;

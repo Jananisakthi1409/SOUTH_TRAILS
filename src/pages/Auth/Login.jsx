@@ -89,7 +89,7 @@ const Login = () => {
 
         <section className="login-side login-form-side">
           <div className="login-card glass-card">
-            <span className="login-badge">Tamil Trails</span>
+            <span className="login-badge">South Trails</span>
             <div className="login-intro">
               <h1>Begin Your Journey</h1>
               <p>Access curated experiences across Tamil Nadu.</p>

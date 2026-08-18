@@ -45,7 +45,7 @@ const CustomerManage = () => {
         minHeight: "100vh",
       }}
     >
-      <h1 style={{ color: "#1e293b" }}>Customer Management</h1>
+      <h1 style={{ color: "#064e3b" }}>Customer Management</h1>
 
       <input
         type="text"
@@ -79,7 +79,7 @@ const CustomerManage = () => {
           <thead>
             <tr
               style={{
-                background: "#0f172a",
+                background: "#022c22",
                 color: "white",
               }}
             >
@@ -178,7 +178,7 @@ const tdStyle = {
 };
 
 const viewBtn = {
-  background: "#0ea5e9",
+  background: "#0b6b43",
   color: "white",
   border: "none",
   padding: "8px 14px",
@@ -188,7 +188,7 @@ const viewBtn = {
 };
 
 const deleteBtn = {
-  background: "#ef4444",
+  background: "#064e3b",
   color: "white",
   border: "none",
   padding: "8px 14px",
@@ -214,7 +214,7 @@ const modal = {
 
 const closeBtn = {
   marginTop: "20px",
-  background: "#0f172a",
+  background: "#022c22",
   color: "white",
   border: "none",
   padding: "10px 18px",

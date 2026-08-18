@@ -7,7 +7,10 @@ const adminLinks = [
   { label: "Customers", to: "/admin/customers" },
   { label: "Bookings", to: "/admin/bookings" },
   { label: "Users", to: "/admin/users" },
+  { label: "Ecosystem", to: "/admin/ecosystem" },
+  { label: "Reviews", to: "/admin/reviews" },
   { label: "Analytics", to: "/admin/analytics" },
+  { label: "Kanban Board", to: "/admin/kanban" },
 ];
 
 const AdminLayout = ({ title, subtitle, actions, onLogout, children }) => {

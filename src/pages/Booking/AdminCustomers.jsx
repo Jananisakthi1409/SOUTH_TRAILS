@@ -78,35 +78,38 @@ const AdminCustomers = () => {
     } else if (norm === "pending") {
       return { bg: "#fef7e0", color: "#b06000" };
     } else {
-      return { bg: "#fce8e6", color: "#c5221f" };
+      return { bg: "#fce8e6", color: "#064e3b" };
     }
   };
 
   return (
-    <div style={{ display: "flex", backgroundColor: "#f8fafc", minHeight: "100vh", fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" }}>
+    <div style={{ display: "flex", backgroundColor: "#ffffff", minHeight: "100vh", fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" }}>
       
       {/* Premium Sidebar Navigation */}
-      <aside style={{ width: "260px", backgroundColor: "#ffffff", borderRight: "1px solid #e2e8f0", position: "fixed", top: 0, bottom: 0, left: 0, display: "flex", flexDirection: "column", justifyContent: "space-between", padding: "32px 24px", zIndex: 100 }}>
+      <aside style={{ width: "260px", backgroundColor: "#ffffff", borderRight: "1px solid #d8efe5", position: "fixed", top: 0, bottom: 0, left: 0, display: "flex", flexDirection: "column", justifyContent: "space-between", padding: "32px 24px", zIndex: 100 }}>
         <div>
-          <div style={{ paddingBottom: "32px", borderBottom: "1px solid #f1f5f9" }}>
+          <div style={{ paddingBottom: "32px", borderBottom: "1px solid #f0fdf4" }}>
             <h2 style={{ fontSize: "20px", fontWeight: "700", color: "#0f766e", margin: 0, letterSpacing: "-0.025em" }}>SOUTH TRAILS</h2>
-            <p style={{ fontSize: "12px", color: "#64748b", margin: "4px 0 0 0", fontWeight: "500", letterSpacing: "0.05em", textTransform: "uppercase" }}>Premium Travel Admin</p>
+            <p style={{ fontSize: "12px", color: "#35705c", margin: "4px 0 0 0", fontWeight: "500", letterSpacing: "0.05em", textTransform: "uppercase" }}>Premium Travel Admin</p>
           </div>
 
           <nav style={{ display: "flex", flexDirection: "column", gap: "8px", marginTop: "32px" }}>
-            <Link to="/admin/dashboard" style={{ display: "flex", alignItems: "center", padding: "12px 16px", borderRadius: "8px", textDecoration: "none", color: "#64748b", fontWeight: "500", fontSize: "14px" }}>Dashboard</Link>
-            <Link to="/admin/packages" style={{ display: "flex", alignItems: "center", padding: "12px 16px", borderRadius: "8px", textDecoration: "none", color: "#64748b", fontWeight: "500", fontSize: "14px" }}>Packages</Link>
+            <Link to="/admin/dashboard" style={{ display: "flex", alignItems: "center", padding: "12px 16px", borderRadius: "8px", textDecoration: "none", color: "#35705c", fontWeight: "500", fontSize: "14px" }}>Dashboard</Link>
+            <Link to="/admin/packages" style={{ display: "flex", alignItems: "center", padding: "12px 16px", borderRadius: "8px", textDecoration: "none", color: "#35705c", fontWeight: "500", fontSize: "14px" }}>Packages</Link>
             <Link to="/admin/customers" style={{ display: "flex", alignItems: "center", padding: "12px 16px", borderRadius: "8px", textDecoration: "none", backgroundColor: "#f0fdfa", color: "#0f766e", fontWeight: "600", fontSize: "14px" }}>Customers</Link>
-            <Link to="/admin/bookings" style={{ display: "flex", alignItems: "center", padding: "12px 16px", borderRadius: "8px", textDecoration: "none", color: "#64748b", fontWeight: "500", fontSize: "14px" }}>Bookings</Link>
-            <Link to="/admin/reviews" style={{ display: "flex", alignItems: "center", padding: "12px 16px", borderRadius: "8px", textDecoration: "none", color: "#64748b", fontWeight: "500", fontSize: "14px" }}>Reviews</Link>
-            <Link to="/admin/analytics" style={{ display: "flex", alignItems: "center", padding: "12px 16px", borderRadius: "8px", textDecoration: "none", color: "#64748b", fontWeight: "500", fontSize: "14px" }}>Analytics</Link>
+            <Link to="/admin/bookings" style={{ display: "flex", alignItems: "center", padding: "12px 16px", borderRadius: "8px", textDecoration: "none", color: "#35705c", fontWeight: "500", fontSize: "14px" }}>Bookings</Link>
+            <Link to="/admin/users" style={{ display: "flex", alignItems: "center", padding: "12px 16px", borderRadius: "8px", textDecoration: "none", color: "#35705c", fontWeight: "500", fontSize: "14px" }}>Users</Link>
+            <Link to="/admin/ecosystem" style={{ display: "flex", alignItems: "center", padding: "12px 16px", borderRadius: "8px", textDecoration: "none", color: "#35705c", fontWeight: "500", fontSize: "14px" }}>Ecosystem</Link>
+            <Link to="/admin/reviews" style={{ display: "flex", alignItems: "center", padding: "12px 16px", borderRadius: "8px", textDecoration: "none", color: "#35705c", fontWeight: "500", fontSize: "14px" }}>Reviews</Link>
+            <Link to="/admin/analytics" style={{ display: "flex", alignItems: "center", padding: "12px 16px", borderRadius: "8px", textDecoration: "none", color: "#35705c", fontWeight: "500", fontSize: "14px" }}>Analytics</Link>
+            <Link to="/admin/kanban" style={{ display: "flex", alignItems: "center", padding: "12px 16px", borderRadius: "8px", textDecoration: "none", color: "#35705c", fontWeight: "500", fontSize: "14px" }}>Kanban Board</Link>
           </nav>
         </div>
 
-        <div style={{ borderTop: "1px solid #f1f5f9", paddingTop: "24px" }}>
+        <div style={{ borderTop: "1px solid #f0fdf4", paddingTop: "24px" }}>
           <button 
             onClick={() => { logout(); navigate("/admin/login"); }}
-            style={{ width: "100%", display: "flex", alignItems: "center", justifyContent: "center", padding: "12px", borderRadius: "8px", border: "1px solid #e2e8f0", backgroundColor: "#ffffff", color: "#dc2626", fontWeight: "600", fontSize: "14px", cursor: "pointer", transition: "all 0.2s" }}
+            style={{ width: "100%", display: "flex", alignItems: "center", justifyContent: "center", padding: "12px", borderRadius: "8px", border: "1px solid #d8efe5", backgroundColor: "#ffffff", color: "#064e3b", fontWeight: "600", fontSize: "14px", cursor: "pointer", transition: "all 0.2s" }}
           >
             Logout
           </button>
@@ -120,50 +123,50 @@ const AdminCustomers = () => {
         {pendingDeleteId && (
           <div style={{ position: "fixed", inset: 0, zIndex: 1000, display: "grid", placeItems: "center", backgroundColor: "rgba(15, 23, 42, 0.36)", padding: "1rem" }}>
             <div style={{ width: "min(420px, 100%)", backgroundColor: "#ffffff", borderRadius: "12px", padding: "24px", boxShadow: "0 24px 80px rgba(15,23,42,0.24)" }}>
-              <h3 style={{ margin: "0 0 8px 0", fontSize: "18px", color: "#0f172a" }}>Delete customer?</h3>
-              <p style={{ margin: "0 0 20px 0", color: "#64748b", lineHeight: 1.5 }}>This removes the customer record from the admin workspace.</p>
+              <h3 style={{ margin: "0 0 8px 0", fontSize: "18px", color: "#022c22" }}>Delete customer?</h3>
+              <p style={{ margin: "0 0 20px 0", color: "#35705c", lineHeight: 1.5 }}>This removes the customer record from the admin workspace.</p>
               <div style={{ display: "flex", justifyContent: "flex-end", gap: "10px" }}>
-                <button type="button" onClick={() => setPendingDeleteId(null)} style={{ padding: "10px 16px", borderRadius: "8px", border: "1px solid #cbd5e1", background: "#ffffff", color: "#334155", fontWeight: 600 }}>Cancel</button>
-                <button type="button" onClick={confirmDeleteCustomer} style={{ padding: "10px 16px", borderRadius: "8px", border: "none", background: "#dc2626", color: "#ffffff", fontWeight: 700 }}>Delete</button>
+                <button type="button" onClick={() => setPendingDeleteId(null)} style={{ padding: "10px 16px", borderRadius: "8px", border: "1px solid #afd6c3", background: "#ffffff", color: "#164e36", fontWeight: 600 }}>Cancel</button>
+                <button type="button" onClick={confirmDeleteCustomer} style={{ padding: "10px 16px", borderRadius: "8px", border: "none", background: "#064e3b", color: "#ffffff", fontWeight: 700 }}>Delete</button>
               </div>
             </div>
           </div>
         )}
         <div style={{ marginBottom: "32px" }}>
-          <h1 style={{ fontSize: "28px", fontWeight: "700", color: "#0f172a", margin: 0, letterSpacing: "-0.025em" }}>Customer Management</h1>
-          <p style={{ fontSize: "15px", color: "#64748b", margin: "6px 0 0 0" }}>Manage travelers, corporate files, bookings and premium customer relationship tracking.</p>
+          <h1 style={{ fontSize: "28px", fontWeight: "700", color: "#022c22", margin: 0, letterSpacing: "-0.025em" }}>Customer Management</h1>
+          <p style={{ fontSize: "15px", color: "#35705c", margin: "6px 0 0 0" }}>Manage travelers, corporate files, bookings and premium customer relationship tracking.</p>
         </div>
 
         {/* Executive High-Impact Statistics Grid */}
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "24px", marginBottom: "40px" }}>
-          <div style={{ backgroundColor: "#ffffff", borderRadius: "12px", border: "1px solid #e2e8f0", padding: "24px", borderLeft: "4px solid #14b8a6", boxShadow: "0 1px 3px 0 rgba(0, 0, 0, 0.02)" }}>
-            <p style={{ margin: 0, fontSize: "13px", fontWeight: "600", color: "#64748b", textTransform: "uppercase", letterSpacing: "0.05em" }}>Total Customers</p>
-            <p style={{ margin: "8px 0 0 0", fontSize: "28px", fontWeight: "700", color: "#0f172a" }}>{customers.length}</p>
+          <div style={{ backgroundColor: "#ffffff", borderRadius: "12px", border: "1px solid #d8efe5", padding: "24px", borderLeft: "4px solid #0b6b43", boxShadow: "0 1px 3px 0 rgba(0, 0, 0, 0.02)" }}>
+            <p style={{ margin: 0, fontSize: "13px", fontWeight: "600", color: "#35705c", textTransform: "uppercase", letterSpacing: "0.05em" }}>Total Customers</p>
+            <p style={{ margin: "8px 0 0 0", fontSize: "28px", fontWeight: "700", color: "#022c22" }}>{customers.length}</p>
           </div>
-          <div style={{ backgroundColor: "#ffffff", borderRadius: "12px", border: "1px solid #e2e8f0", padding: "24px", borderLeft: "4px solid #0f766e", boxShadow: "0 1px 3px 0 rgba(0, 0, 0, 0.02)" }}>
-            <p style={{ margin: 0, fontSize: "13px", fontWeight: "600", color: "#64748b", textTransform: "uppercase", letterSpacing: "0.05em" }}>Active Bookings</p>
-            <p style={{ margin: "8px 0 0 0", fontSize: "28px", fontWeight: "700", color: "#0f172a" }}>{customers.filter(c => c.status === "Active").length}</p>
+          <div style={{ backgroundColor: "#ffffff", borderRadius: "12px", border: "1px solid #d8efe5", padding: "24px", borderLeft: "4px solid #0f766e", boxShadow: "0 1px 3px 0 rgba(0, 0, 0, 0.02)" }}>
+            <p style={{ margin: 0, fontSize: "13px", fontWeight: "600", color: "#35705c", textTransform: "uppercase", letterSpacing: "0.05em" }}>Active Bookings</p>
+            <p style={{ margin: "8px 0 0 0", fontSize: "28px", fontWeight: "700", color: "#022c22" }}>{customers.filter(c => c.status === "Active").length}</p>
           </div>
-          <div style={{ backgroundColor: "#ffffff", borderRadius: "12px", border: "1px solid #e2e8f0", padding: "24px", borderLeft: "4px solid #14b8a6", boxShadow: "0 1px 3px 0 rgba(0, 0, 0, 0.02)" }}>
-            <p style={{ margin: 0, fontSize: "13px", fontWeight: "600", color: "#64748b", textTransform: "uppercase", letterSpacing: "0.05em" }}>Total Travelers</p>
-            <p style={{ margin: "8px 0 0 0", fontSize: "28px", fontWeight: "700", color: "#0f172a" }}>{customers.reduce((sum, c) => sum + c.travelers, 0)}</p>
+          <div style={{ backgroundColor: "#ffffff", borderRadius: "12px", border: "1px solid #d8efe5", padding: "24px", borderLeft: "4px solid #0b6b43", boxShadow: "0 1px 3px 0 rgba(0, 0, 0, 0.02)" }}>
+            <p style={{ margin: 0, fontSize: "13px", fontWeight: "600", color: "#35705c", textTransform: "uppercase", letterSpacing: "0.05em" }}>Total Travelers</p>
+            <p style={{ margin: "8px 0 0 0", fontSize: "28px", fontWeight: "700", color: "#022c22" }}>{customers.reduce((sum, c) => sum + c.travelers, 0)}</p>
           </div>
-          <div style={{ backgroundColor: "#ffffff", borderRadius: "12px", border: "1px solid #e2e8f0", padding: "24px", borderLeft: "4px solid #0f766e", boxShadow: "0 1px 3px 0 rgba(0, 0, 0, 0.02)" }}>
-            <p style={{ margin: 0, fontSize: "13px", fontWeight: "600", color: "#64748b", textTransform: "uppercase", letterSpacing: "0.05em" }}>Potential Pipeline Revenue</p>
+          <div style={{ backgroundColor: "#ffffff", borderRadius: "12px", border: "1px solid #d8efe5", padding: "24px", borderLeft: "4px solid #0f766e", boxShadow: "0 1px 3px 0 rgba(0, 0, 0, 0.02)" }}>
+            <p style={{ margin: 0, fontSize: "13px", fontWeight: "600", color: "#35705c", textTransform: "uppercase", letterSpacing: "0.05em" }}>Potential Pipeline Revenue</p>
             <p style={{ margin: "8px 0 0 0", fontSize: "28px", fontWeight: "700", color: "#0f766e" }}>₹{(customers.length * 15000).toLocaleString()}</p>
           </div>
         </div>
 
         {/* Global Search Interface Control */}
-        <div style={{ backgroundColor: "#ffffff", borderRadius: "12px", border: "1px solid #e2e8f0", padding: "16px 24px", marginBottom: "32px", boxShadow: "0 1px 2px 0 rgba(0, 0, 0, 0.01)" }}>
+        <div style={{ backgroundColor: "#ffffff", borderRadius: "12px", border: "1px solid #d8efe5", padding: "16px 24px", marginBottom: "32px", boxShadow: "0 1px 2px 0 rgba(0, 0, 0, 0.01)" }}>
           <div style={{ position: "relative", display: "flex", alignItems: "center" }}>
-            <span style={{ position: "absolute", left: "16px", color: "#94a3b8", fontSize: "16px", pointerEvents: "none" }}>🔍</span>
+            <span style={{ position: "absolute", left: "16px", color: "#6f9986", fontSize: "16px", pointerEvents: "none" }}>🔍</span>
             <input
               type="text"
               placeholder="Search modern CRM directory via passenger name, corporate email, or telephone routing sequence..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              style={{ width: "100%", padding: "12px 16px", paddingLeft: "44px", borderRadius: "8px", border: "1px solid #cbd5e1", fontSize: "14px", color: "#0f172a", outline: "none", transition: "border-color 0.15s ease" }}
+              style={{ width: "100%", padding: "12px 16px", paddingLeft: "44px", borderRadius: "8px", border: "1px solid #afd6c3", fontSize: "14px", color: "#022c22", outline: "none", transition: "border-color 0.15s ease" }}
             />
           </div>
         </div>
@@ -180,7 +183,7 @@ const AdminCustomers = () => {
                 style={{
                   backgroundColor: "#ffffff",
                   borderRadius: "14px",
-                  border: "1px solid #e2e8f0",
+                  border: "1px solid #d8efe5",
                   padding: "24px",
                   display: "flex",
                   flexDirection: "column",
@@ -198,8 +201,8 @@ const AdminCustomers = () => {
                         {getInitials(customer.name)}
                       </div>
                       <div>
-                        <h4 style={{ margin: 0, fontSize: "16px", fontWeight: "700", color: "#0f172a" }}>{customer.name}</h4>
-                        <span style={{ fontSize: "11px", color: "#94a3b8", fontWeight: "600", letterSpacing: "0.02em" }}>ID: {customer.id}</span>
+                        <h4 style={{ margin: 0, fontSize: "16px", fontWeight: "700", color: "#022c22" }}>{customer.name}</h4>
+                        <span style={{ fontSize: "11px", color: "#6f9986", fontWeight: "600", letterSpacing: "0.02em" }}>ID: {customer.id}</span>
                       </div>
                     </div>
                     <span style={{ backgroundColor: badge.bg, color: badge.color, padding: "4px 10px", borderRadius: "9999px", fontSize: "11px", fontWeight: "700", textTransform: "uppercase", letterSpacing: "0.02em" }}>
@@ -208,28 +211,28 @@ const AdminCustomers = () => {
                   </div>
 
                   {/* Core Demographics Contact Block */}
-                  <div style={{ display: "flex", flexDirection: "column", gap: "6px", marginBottom: "18px", paddingBottom: "16px", borderBottom: "1px solid #f1f5f9" }}>
-                    <div style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "13px", color: "#475569" }}>
-                      <span style={{ color: "#94a3b8" }}>✉️</span> {customer.email}
+                  <div style={{ display: "flex", flexDirection: "column", gap: "6px", marginBottom: "18px", paddingBottom: "16px", borderBottom: "1px solid #f0fdf4" }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "13px", color: "#2f6b52" }}>
+                      <span style={{ color: "#6f9986" }}>✉️</span> {customer.email}
                     </div>
-                    <div style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "13px", color: "#475569" }}>
-                      <span style={{ color: "#94a3b8" }}>📞</span> {customer.phone}
+                    <div style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "13px", color: "#2f6b52" }}>
+                      <span style={{ color: "#6f9986" }}>📞</span> {customer.phone}
                     </div>
                   </div>
 
                   {/* Curated Expedition Booking Info Block */}
-                  <div style={{ backgroundColor: "#f8fafc", borderRadius: "8px", padding: "14px", marginBottom: "20px" }}>
-                    <span style={{ display: "block", fontSize: "10px", color: "#94a3b8", fontWeight: "700", textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: "4px" }}>Active Itinerary</span>
+                  <div style={{ backgroundColor: "#ffffff", borderRadius: "8px", padding: "14px", marginBottom: "20px" }}>
+                    <span style={{ display: "block", fontSize: "10px", color: "#6f9986", fontWeight: "700", textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: "4px" }}>Active Itinerary</span>
                     <span style={{ display: "block", fontSize: "14px", fontWeight: "600", color: "#0f766e", marginBottom: "8px" }}>{customer.package}</span>
                     
-                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", borderTop: "1px solid #e2e8f0", paddingTop: "8px" }}>
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", borderTop: "1px solid #d8efe5", paddingTop: "8px" }}>
                       <div>
-                        <span style={{ display: "block", fontSize: "9px", color: "#94a3b8", textTransform: "uppercase", fontWeight: "600" }}>Departure</span>
-                        <span style={{ fontSize: "12px", fontWeight: "500", color: "#334155" }}>{customer.travelDate}</span>
+                        <span style={{ display: "block", fontSize: "9px", color: "#6f9986", textTransform: "uppercase", fontWeight: "600" }}>Departure</span>
+                        <span style={{ fontSize: "12px", fontWeight: "500", color: "#164e36" }}>{customer.travelDate}</span>
                       </div>
                       <div style={{ textAlign: "right" }}>
-                        <span style={{ display: "block", fontSize: "9px", color: "#94a3b8", textTransform: "uppercase", fontWeight: "600" }}>Party Size</span>
-                        <span style={{ fontSize: "12px", fontWeight: "600", color: "#334155" }}>{customer.travelers} Pax</span>
+                        <span style={{ display: "block", fontSize: "9px", color: "#6f9986", textTransform: "uppercase", fontWeight: "600" }}>Party Size</span>
+                        <span style={{ fontSize: "12px", fontWeight: "600", color: "#164e36" }}>{customer.travelers} Pax</span>
                       </div>
                     </div>
                   </div>
@@ -241,7 +244,7 @@ const AdminCustomers = () => {
                     onClick={() => showToast(`Opening history for ${customer.name}.`, "info")}
                     onMouseEnter={() => setHoveredBtn(`history-${customer.id}`)}
                     onMouseLeave={() => setHoveredBtn(null)}
-                    style={{ flex: 1, padding: "10px", borderRadius: "6px", border: "1px solid #cbd5e1", backgroundColor: hoveredBtn === `history-${customer.id}` ? "#f8fafc" : "#ffffff", color: "#334155", fontSize: "13px", fontWeight: "600", cursor: "pointer", transition: "all 0.15s" }}
+                    style={{ flex: 1, padding: "10px", borderRadius: "6px", border: "1px solid #afd6c3", backgroundColor: hoveredBtn === `history-${customer.id}` ? "#ffffff" : "#ffffff", color: "#164e36", fontSize: "13px", fontWeight: "600", cursor: "pointer", transition: "all 0.15s" }}
                   >
                     View History
                   </button>
@@ -249,7 +252,7 @@ const AdminCustomers = () => {
                     onClick={() => handleDeleteCustomer(customer.id)}
                     onMouseEnter={() => setHoveredBtn(`delete-${customer.id}`)}
                     onMouseLeave={() => setHoveredBtn(null)}
-                    style={{ padding: "10px 14px", borderRadius: "6px", border: "1px solid #fecaca", backgroundColor: hoveredBtn === `delete-${customer.id}` ? "#fef2f2" : "#ffffff", color: "#dc2626", fontSize: "13px", cursor: "pointer", transition: "all 0.15s" }}
+                    style={{ padding: "10px 14px", borderRadius: "6px", border: "1px solid #d8efe5", backgroundColor: hoveredBtn === `delete-${customer.id}` ? "#f0fdf4" : "#ffffff", color: "#064e3b", fontSize: "13px", cursor: "pointer", transition: "all 0.15s" }}
                   >
                     🗑️
                   </button>
@@ -262,28 +265,28 @@ const AdminCustomers = () => {
 
         {/* Dynamic Empty State Configuration Fallback */}
         {filteredCustomers.length === 0 && (
-          <div style={{ textAlign: "center", padding: "64px 24px", backgroundColor: "#ffffff", borderRadius: "12px", border: "1px dashed #cbd5e1", marginBottom: "48px" }}>
-            <p style={{ margin: 0, fontSize: "15px", color: "#64748b", fontWeight: "500" }}>No customer profiles matches standard indices for "{searchTerm}".</p>
-            <p style={{ margin: "4px 0 0 0", fontSize: "13px", color: "#94a3b8" }}>Verify indexing strategy or reset lookup string query parameter parameters.</p>
+          <div style={{ textAlign: "center", padding: "64px 24px", backgroundColor: "#ffffff", borderRadius: "12px", border: "1px dashed #afd6c3", marginBottom: "48px" }}>
+            <p style={{ margin: 0, fontSize: "15px", color: "#35705c", fontWeight: "500" }}>No customer profiles matches standard indices for "{searchTerm}".</p>
+            <p style={{ margin: "4px 0 0 0", fontSize: "13px", color: "#6f9986" }}>Verify indexing strategy or reset lookup string query parameter parameters.</p>
           </div>
         )}
 
         {/* Customer Intelligence Section */}
-        <div style={{ backgroundColor: "#ffffff", borderRadius: "12px", border: "1px solid #e2e8f0", padding: "32px", boxShadow: "0 1px 3px 0 rgba(0, 0, 0, 0.01)" }}>
-          <h3 style={{ margin: "0 0 8px 0", fontSize: "18px", fontWeight: "700", color: "#0f172a" }}>Recent Travelers</h3>
-          <p style={{ margin: "0 0 24px 0", fontSize: "14px", color: "#64748b" }}>Live status track of the latest travelers deploying on verified South Indian custom expedition blocks.</p>
+        <div style={{ backgroundColor: "#ffffff", borderRadius: "12px", border: "1px solid #d8efe5", padding: "32px", boxShadow: "0 1px 3px 0 rgba(0, 0, 0, 0.01)" }}>
+          <h3 style={{ margin: "0 0 8px 0", fontSize: "18px", fontWeight: "700", color: "#022c22" }}>Recent Travelers</h3>
+          <p style={{ margin: "0 0 24px 0", fontSize: "14px", color: "#35705c" }}>Live status track of the latest travelers deploying on verified South Indian custom expedition blocks.</p>
           
           <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
             {customers.slice(0, 5).map((c, index) => (
-              <div key={`insight-${index}`} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "12px 16px", borderRadius: "8px", backgroundColor: "#f8fafc", border: "1px solid #f1f5f9" }}>
+              <div key={`insight-${index}`} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "12px 16px", borderRadius: "8px", backgroundColor: "#ffffff", border: "1px solid #f0fdf4" }}>
                 <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-                  <span style={{ fontSize: "14px", fontWeight: "600", color: "#475569" }}>#{index + 1}</span>
+                  <span style={{ fontSize: "14px", fontWeight: "600", color: "#2f6b52" }}>#{index + 1}</span>
                   <div>
-                    <span style={{ fontWeight: "600", color: "#0f172a", fontSize: "14px" }}>{c.name}</span>
-                    <span style={{ fontSize: "12px", color: "#64748b", marginLeft: "12px" }}>Scheduled for: {c.package}</span>
+                    <span style={{ fontWeight: "600", color: "#022c22", fontSize: "14px" }}>{c.name}</span>
+                    <span style={{ fontSize: "12px", color: "#35705c", marginLeft: "12px" }}>Scheduled for: {c.package}</span>
                   </div>
                 </div>
-                <span style={{ fontSize: "12px", color: "#94a3b8", fontWeight: "500" }}>Departure date: {c.travelDate}</span>
+                <span style={{ fontSize: "12px", color: "#6f9986", fontWeight: "500" }}>Departure date: {c.travelDate}</span>
               </div>
             ))}
           </div>

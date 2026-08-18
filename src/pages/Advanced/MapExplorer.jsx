@@ -49,7 +49,7 @@ const MapExplorer = () => {
           <aside className="advanced-panel" style={{ padding: "1.5rem" }}>
             <p className="eyebrow">{selectedDestination}</p>
             <h2 style={{ marginTop: 0 }}>{selectedPin.label}</h2>
-            <p style={{ color: "#64748b" }}>
+            <p style={{ color: "#35705c" }}>
               {selectedPackages.length} matching Tamil Nadu packages available from the catalog.
             </p>
             <Link to={selectedPin.route}>Open destination guide</Link>
@@ -80,7 +80,7 @@ const MapExplorer = () => {
                 <article key={pkg.id} className="itinerary-day">
                   <p className="eyebrow" style={{ margin: 0 }}>{pkg.category}</p>
                   <h3 style={{ margin: "0.35rem 0" }}>{pkg.title}</h3>
-                  <p style={{ margin: "0 0 0.7rem", color: "#64748b" }}>
+                  <p style={{ margin: "0 0 0.7rem", color: "#35705c" }}>
                     {pkg.days}D / {pkg.nights}N - Rs. {Number(pkg.price || 0).toLocaleString("en-IN")}
                   </p>
                   <Link to={`/package/${pkg.id}`}>View package</Link>
@@ -88,7 +88,7 @@ const MapExplorer = () => {
               )) : (
                 <article className="itinerary-day">
                   <h3>No direct package yet</h3>
-                  <p style={{ color: "#64748b" }}>Use the AI planner to build a custom Tamil Nadu route around this destination.</p>
+                  <p style={{ color: "#35705c" }}>Use the AI planner to build a custom Tamil Nadu route around this destination.</p>
                 </article>
               )}
             </div>

@@ -44,7 +44,8 @@ public class UploadController {
     }
 
     private String store(MultipartFile file, Path uploadDir) {
-        String contentType = file.getContentType() == null ? "" : file.getContentType().toLowerCase(Locale.ROOT);
+        String rawContentType = file.getContentType();
+        String contentType = rawContentType == null ? "" : rawContentType.toLowerCase(Locale.ROOT);
         if (!ALLOWED_TYPES.contains(contentType)) {
             throw new IllegalArgumentException("Only JPG, PNG, WebP, and AVIF images are allowed.");
         }

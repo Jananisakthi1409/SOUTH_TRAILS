@@ -46,7 +46,7 @@ const Payment = () => {
     return {
       id: `INV-${bookingId}`,
       bookingId,
-      packageName: booking?.packageName || snapshot.title || "Tamil Trails Package",
+      packageName: booking?.packageName || snapshot.title || "South Trails Package",
       traveler: user?.fullName || user?.name || "Traveler",
       travelDate: booking?.travel_date || booking?.travelDate || "Flexible",
       travelers: booking?.travelers || 1,
@@ -80,7 +80,7 @@ const Payment = () => {
 
   const downloadReceipt = () => {
     const lines = [
-      "Tamil Trails Payment Receipt",
+      "South Trails Payment Receipt",
       `Invoice: ${invoice.id}`,
       `Booking: ${invoice.bookingId}`,
       `Traveler: ${invoice.traveler}`,

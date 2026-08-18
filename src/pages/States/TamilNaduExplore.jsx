@@ -107,7 +107,7 @@ const TamilNaduExplore = () => {
   };
 
   return (
-    <main className="relative min-h-screen overflow-hidden bg-[#07110f] font-sans text-white">
+    <main className="relative min-h-screen overflow-hidden bg-[#064e3b] font-sans text-white">
       <AnimatePresence mode="wait">
         <motion.div
           key={activeDestination.id}
@@ -128,14 +128,14 @@ const TamilNaduExplore = () => {
 
       <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(3,10,12,0.96)_0%,rgba(3,12,16,0.78)_35%,rgba(4,18,20,0.2)_64%,rgba(4,12,15,0.86)_100%)]" />
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_64%_48%,rgba(240,201,74,0.14),transparent_30%),linear-gradient(180deg,rgba(0,0,0,0.18)_0%,rgba(0,0,0,0.76)_100%)]" />
-      <div className="absolute inset-x-0 top-0 h-2 bg-[#2a9d8f]" />
+      <div className="absolute inset-x-0 top-0 h-2 bg-[#0b6b43]" />
 
       <header className="absolute left-0 right-0 top-2 z-30 flex items-center justify-between px-5 py-6 sm:px-8 lg:px-12">
         <Link to="/" className="flex items-center gap-3 text-2xl font-black tracking-tight">
-          <span className="grid h-9 w-9 place-items-center rounded-full bg-[#f0c94a] text-base text-[#1a0a00] shadow-glow">
+          <span className="grid h-9 w-9 place-items-center rounded-full bg-[#0b6b43] text-base text-[#022c22] shadow-glow">
             TT
           </span>
-          Tamil Trails
+          South Trails
         </Link>
 
         <nav className="hidden items-center gap-11 text-[0.72rem] font-bold uppercase tracking-[0.22em] text-white/75 lg:flex">
@@ -199,7 +199,7 @@ const TamilNaduExplore = () => {
             transition={{ duration: 0.55, ease: "easeOut" }}
             className="max-w-4xl"
           >
-            <p className="mb-5 font-mono text-xs font-bold uppercase tracking-[0.34em] text-[#f0c94a]">
+            <p className="mb-5 font-mono text-xs font-bold uppercase tracking-[0.34em] text-[#0b6b43]">
               {activeDestination.label}
             </p>
             <h1 className="max-w-[820px] font-display text-[clamp(4.2rem,9vw,8.4rem)] uppercase leading-[0.84] tracking-normal text-white drop-shadow-2xl">
@@ -212,7 +212,7 @@ const TamilNaduExplore = () => {
             <div className="mt-9 flex flex-wrap items-center gap-5">
               <Link
                 to="/tamil-nadu-packages"
-                className="group inline-flex min-h-14 items-center gap-6 rounded-md bg-[#2f7dd3] px-8 text-lg font-black text-white shadow-luxury transition hover:-translate-y-1 hover:bg-[#3d8ee9]"
+                className="group inline-flex min-h-14 items-center gap-6 rounded-md bg-[#0b6b43] px-8 text-lg font-black text-white shadow-luxury transition hover:-translate-y-1 hover:bg-[#064e3b]"
               >
                 Explore
                 <span className="text-xl transition group-hover:translate-x-1">-&gt;</span>
@@ -231,7 +231,7 @@ const TamilNaduExplore = () => {
                 type="button"
                 key={card.id}
                 onClick={() => goToSlide(card.destinationIndex)}
-                className={`group relative shrink-0 overflow-hidden rounded-md border border-white/14 bg-white/10 text-left shadow-luxury outline-none transition hover:-translate-y-3 hover:border-white/50 focus-visible:ring-2 focus-visible:ring-[#f0c94a] ${
+                className={`group relative shrink-0 overflow-hidden rounded-md border border-white/14 bg-white/10 text-left shadow-luxury outline-none transition hover:-translate-y-3 hover:border-white/50 focus-visible:ring-2 focus-visible:ring-[#0b6b43] ${
                   index === 0 ? "h-[390px] w-[255px]" : "h-[330px] w-[250px]"
                 }`}
                 initial={{ opacity: 0, x: 60 }}
@@ -253,7 +253,7 @@ const TamilNaduExplore = () => {
                   +
                 </span>
                 <div className="absolute bottom-0 p-4">
-                  <p className="font-mono text-[0.65rem] font-bold uppercase tracking-[0.18em] text-[#f0c94a]">
+                  <p className="font-mono text-[0.65rem] font-bold uppercase tracking-[0.18em] text-[#0b6b43]">
                     {card.label}
                   </p>
                   <p className="mt-2 line-clamp-2 text-sm font-semibold leading-5 text-white/88">
@@ -269,7 +269,7 @@ const TamilNaduExplore = () => {
           <button
             type="button"
             onClick={() => moveSlide(-1)}
-            className="grid h-11 w-11 place-items-center rounded-full border border-white/15 bg-white/20 text-xl text-white backdrop-blur-xl transition hover:bg-white hover:text-[#12302d]"
+            className="grid h-11 w-11 place-items-center rounded-full border border-white/15 bg-white/20 text-xl text-white backdrop-blur-xl transition hover:bg-white hover:text-[#0f766e]"
             aria-label="Previous destination"
           >
             &lt;
@@ -277,7 +277,7 @@ const TamilNaduExplore = () => {
           <button
             type="button"
             onClick={() => moveSlide(1)}
-            className="grid h-11 w-11 place-items-center rounded-full border border-white/15 bg-white/20 text-xl text-white backdrop-blur-xl transition hover:bg-white hover:text-[#12302d]"
+            className="grid h-11 w-11 place-items-center rounded-full border border-white/15 bg-white/20 text-xl text-white backdrop-blur-xl transition hover:bg-white hover:text-[#0f766e]"
             aria-label="Next destination"
           >
             &gt;

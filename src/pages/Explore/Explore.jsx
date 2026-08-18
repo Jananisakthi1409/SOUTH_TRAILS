@@ -37,14 +37,14 @@ const Explore = () => {
   };
 
   return (
-    <main className="min-h-screen bg-[#07110f] font-sans text-white">
+    <main className="travel-explore min-h-screen bg-[#064e3b] font-sans text-white">
       <section className="relative overflow-hidden px-5 py-24 sm:px-8 lg:px-12">
         <img src={rameswaramImg} alt="Rameswaram Temple Corridor" className="absolute inset-0 h-full w-full object-cover opacity-35" />
         <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(7,17,15,0.98),rgba(7,17,15,0.78),rgba(7,17,15,0.4))]" />
         <div className="relative mx-auto grid max-w-7xl gap-10 lg:grid-cols-[1fr_0.55fr] lg:items-end">
           <div>
-            <p className="font-mono text-xs font-bold uppercase tracking-[0.28em] text-[#f0c94a]">Explore Tamil Nadu</p>
-            <h1 className="mt-5 max-w-4xl font-display text-[clamp(4rem,10vw,9rem)] uppercase leading-[0.82]">
+            <p className="font-mono text-xs font-bold uppercase tracking-[0.28em] text-emerald-400">Explore Tamil Nadu</p>
+            <h1 className="mt-3 max-w-3xl font-display text-[clamp(2.5rem,5vw,4.2rem)] uppercase leading-[0.95] tracking-tight">
               Choose your route.
             </h1>
             <p className="mt-7 max-w-2xl text-base leading-8 text-white/70">
@@ -56,7 +56,7 @@ const Explore = () => {
             <p className="font-mono text-xs font-bold uppercase tracking-[0.22em] text-white/60">Route finder</p>
             <h2 className="mt-3 text-3xl font-black">Let the site pick a destination.</h2>
             <button
-              className="mt-6 min-h-14 rounded-md bg-[#f0c94a] px-7 font-black text-[#1a0a00]"
+              className="mt-6 min-h-14 rounded-md bg-[#0b6b43] px-7 font-black text-[#022c22]"
               type="button"
               onClick={handleSurpriseMe}
             >
@@ -66,9 +66,9 @@ const Explore = () => {
         </div>
       </section>
 
-      <section className="bg-[#f5efe6] px-5 py-20 text-[#1a0a00] sm:px-8 lg:px-12">
+      <section className="bg-[#07110f] px-5 py-20 text-white sm:px-8 lg:px-12">
         <div className="mx-auto max-w-7xl">
-          <p className="font-mono text-xs font-bold uppercase tracking-[0.28em] text-[#c8440a]">Travel categories</p>
+          <p className="font-mono text-xs font-bold uppercase tracking-[0.28em] text-emerald-400">Travel categories</p>
           <h2 className="mt-4 max-w-4xl font-display text-[clamp(2.8rem,6vw,5.8rem)] leading-[0.9]">
             Start with the Tamil Nadu experience you want.
           </h2>
@@ -91,7 +91,7 @@ const Explore = () => {
         <div className="mx-auto max-w-7xl">
           <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
             <div>
-              <p className="font-mono text-xs font-bold uppercase tracking-[0.28em] text-[#f0c94a]">Featured destinations</p>
+              <p className="font-mono text-xs font-bold uppercase tracking-[0.28em] text-emerald-400">Featured destinations</p>
               <h2 className="mt-4 font-display text-[clamp(2.8rem,6vw,5.8rem)] leading-[0.9]">Major tourism hubs.</h2>
             </div>
             <Link to="/packages" className="w-fit rounded-md bg-white px-7 py-4 font-black text-[#10201e]">View packages</Link>
@@ -107,7 +107,7 @@ const Explore = () => {
                 <Link to={to}>
                   <img src={image} alt={title} loading="lazy" className="h-64 w-full object-cover" />
                   <div className="p-6">
-                    <p className="font-mono text-[0.68rem] font-bold uppercase tracking-[0.2em] text-[#f0c94a]">
+                    <p className="font-mono text-[0.68rem] font-bold uppercase tracking-[0.2em] text-emerald-400">
                       0{index + 1} / Best {season}
                     </p>
                     <h3 className="mt-3 text-2xl font-black">{title}</h3>

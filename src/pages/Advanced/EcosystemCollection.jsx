@@ -116,7 +116,7 @@ const EcosystemCollection = ({ type }) => {
           <div className="advanced-panel advanced-hero-copy">
             <p className="eyebrow">{config.eyebrow}</p>
             <h1>{config.title}</h1>
-            <p style={{ color: "#64748b", lineHeight: 1.65 }}>{config.copy}</p>
+            <p style={{ color: "#35705c", lineHeight: 1.65 }}>{config.copy}</p>
             <div style={{ display: "flex", gap: "0.75rem", flexWrap: "wrap", marginTop: "1rem" }}>
               <Link className="button button-primary" to="/packages">Browse Packages</Link>
               <Link className="button button-secondary" to="/trip-builder">Build Trip</Link>
@@ -125,12 +125,12 @@ const EcosystemCollection = ({ type }) => {
           <aside className="advanced-panel advanced-hero-copy">
             <p className="eyebrow">MVP Status</p>
             <h2>{stats} active signals</h2>
-            <p style={{ color: "#64748b" }}>Built on the existing package catalog, ratings, wishlist, reviews, and booking flow.</p>
+            <p style={{ color: "#35705c" }}>Built on the existing package catalog, ratings, wishlist, reviews, and booking flow.</p>
           </aside>
         </section>
 
         {error && (
-          <div className="advanced-panel personal-card" style={{ marginBottom: "1rem", borderColor: "#fecaca", color: "#991b1b" }}>
+          <div className="advanced-panel personal-card" style={{ marginBottom: "1rem", borderColor: "#d8efe5", color: "#064e3b" }}>
             {error}
           </div>
         )}
@@ -212,7 +212,7 @@ const Meta = ({ item }) => {
   return (
     <div style={{ display: "grid", gap: "0.35rem", marginTop: "0.9rem" }}>
       {rows.map((row) => (
-        <span key={row} style={{ color: "#334155", fontWeight: 700, fontSize: "0.9rem" }}>{row}</span>
+        <span key={row} style={{ color: "#164e36", fontWeight: 700, fontSize: "0.9rem" }}>{row}</span>
       ))}
     </div>
   );

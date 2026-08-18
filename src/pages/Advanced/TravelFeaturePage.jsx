@@ -121,7 +121,7 @@ const featureConfigs = {
     image: rameswaramImg,
     cta: ["Ask AI chatbot", "/oracle"],
     cards: [
-      ["AI Chatbot", "Use the Tamil Trails oracle for routes, packages, and travel guidance."],
+      ["AI Chatbot", "Use the South Trails oracle for routes, packages, and travel guidance."],
       ["Virtual Tour", "360 preview pages for temples, coast, and hills."],
       ["Interactive Tamil Nadu Map", "Map explorer connects pins with packages and destination guides."],
       ["Voice, Language, Dark Mode", "Frontend-ready premium controls for future platform integration."],
@@ -133,24 +133,24 @@ const TravelFeaturePage = ({ type = "premium" }) => {
   const config = featureConfigs[type] || featureConfigs.premium;
 
   return (
-    <main className="min-h-screen bg-[#07110f] font-sans text-white">
+    <main className="min-h-screen bg-[#064e3b] font-sans text-white">
       <section className="relative overflow-hidden px-5 py-24 sm:px-8 lg:px-12">
         <img src={config.image} alt="" className="absolute inset-0 h-full w-full object-cover opacity-45" />
         <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(7,17,15,0.98),rgba(7,17,15,0.78),rgba(7,17,15,0.34))]" />
         <div className="relative mx-auto max-w-7xl">
-          <p className="font-mono text-xs font-bold uppercase tracking-[0.28em] text-[#f0c94a]">{config.eyebrow}</p>
+          <p className="font-mono text-xs font-bold uppercase tracking-[0.28em] text-[#0b6b43]">{config.eyebrow}</p>
           <h1 className="mt-5 max-w-5xl font-display text-[clamp(3.8rem,9vw,8rem)] uppercase leading-[0.82]">
             {config.title}
           </h1>
           <p className="mt-7 max-w-2xl text-base leading-8 text-white/70">{config.copy}</p>
-          <Link to={config.cta[1]} className="mt-8 inline-flex rounded-md bg-[#f0c94a] px-7 py-4 font-black text-[#1a0a00]">
+          <Link to={config.cta[1]} className="mt-8 inline-flex rounded-md bg-[#0b6b43] px-7 py-4 font-black text-[#022c22]">
             {config.cta[0]}
           </Link>
         </div>
       </section>
 
       {config.gallery && (
-        <section className="bg-[#f5efe6] px-5 py-16 sm:px-8 lg:px-12">
+        <section className="bg-[#ffffff] px-5 py-16 sm:px-8 lg:px-12">
           <div className="mx-auto grid max-w-7xl gap-4 md:grid-cols-3 xl:grid-cols-4">
             {config.gallery.map((src, index) => (
               <img key={src} src={src} alt="" className={`h-72 w-full rounded-md object-cover shadow-luxury ${index === 0 ? "md:col-span-2" : ""}`} />
@@ -163,7 +163,7 @@ const TravelFeaturePage = ({ type = "premium" }) => {
         <div className="mx-auto grid max-w-7xl gap-5 md:grid-cols-2 xl:grid-cols-4">
           {config.cards.map(([title, text]) => (
             <article key={title} className="rounded-md border border-white/10 bg-white/5 p-6 shadow-luxury">
-              <p className="font-mono text-[0.68rem] font-bold uppercase tracking-[0.2em] text-[#f0c94a]">Tamil Trails</p>
+              <p className="font-mono text-[0.68rem] font-bold uppercase tracking-[0.2em] text-[#0b6b43]">South Trails</p>
               <h2 className="mt-3 text-2xl font-black">{title}</h2>
               <p className="mt-4 text-sm leading-6 text-white/65">{text}</p>
             </article>

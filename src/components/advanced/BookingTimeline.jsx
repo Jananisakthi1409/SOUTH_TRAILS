@@ -18,7 +18,7 @@ const BookingTimeline = ({ status = "Pending" }) => {
           <div className="timeline-dot">{index + 1}</div>
           <div className="timeline-copy">
             <strong>{step}</strong>
-            <p style={{ margin: "0.2rem 0 0", color: "#64748b" }}>
+            <p style={{ margin: "0.2rem 0 0", color: "#35705c" }}>
               {index <= activeIndex ? "Completed or active" : "Upcoming"}
             </p>
           </div>

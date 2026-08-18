@@ -100,37 +100,39 @@ const AdminDashboard = () => {
       return { backgroundColor: "#dcfce7", color: "#15803d" };
     }
     if (formattedStatus === "cancelled" || formattedStatus === "red") {
-      return { backgroundColor: "#fee2e2", color: "#dc2626" };
+      return { backgroundColor: "#f0fdf4", color: "#064e3b" };
     }
-    return { backgroundColor: "#fef3c7", color: "#b45309" }; // Amber/Pending
+    return { backgroundColor: "#f0fdf4", color: "#064e3b" }; // Amber/Pending
   };
 
   return (
-    <div style={{ display: "flex", backgroundColor: "#f8fafc", minHeight: "100vh", fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" }}>
+    <div style={{ display: "flex", backgroundColor: "#ffffff", minHeight: "100vh", fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" }}>
       
       {/* Fixed Sidebar */}
-      <aside style={{ width: "260px", backgroundColor: "#ffffff", borderRight: "1px solid #e2e8f0", position: "fixed", top: 0, bottom: 0, left: 0, display: "flex", flexDirection: "column", justifyContent: "space-between", padding: "32px 24px", zIndex: 100 }}>
+      <aside style={{ width: "260px", backgroundColor: "#ffffff", borderRight: "1px solid #d8efe5", position: "fixed", top: 0, bottom: 0, left: 0, display: "flex", flexDirection: "column", justifyContent: "space-between", padding: "32px 24px", zIndex: 100 }}>
         <div>
-          <div style={{ paddingBottom: "32px", borderBottom: "1px solid #f1f5f9" }}>
+          <div style={{ paddingBottom: "32px", borderBottom: "1px solid #f0fdf4" }}>
             <h2 style={{ fontSize: "20px", fontWeight: "700", color: "#0f766e", margin: 0, letterSpacing: "-0.025em" }}>SOUTH TRAILS</h2>
-            <p style={{ fontSize: "12px", color: "#64748b", margin: "4px 0 0 0", fontWeight: "500", letterSpacing: "0.05em", textTransform: "uppercase" }}>Premium Travel Admin</p>
+            <p style={{ fontSize: "12px", color: "#35705c", margin: "4px 0 0 0", fontWeight: "500", letterSpacing: "0.05em", textTransform: "uppercase" }}>Premium Travel Admin</p>
           </div>
 
           <nav style={{ display: "flex", flexDirection: "column", gap: "8px", marginTop: "32px" }}>
             <Link to="/admin/dashboard" style={{ display: "flex", alignItems: "center", padding: "12px 16px", borderRadius: "8px", textDecoration: "none", backgroundColor: "#f0fdfa", color: "#0f766e", fontWeight: "600", fontSize: "14px" }}>Dashboard</Link>
-            <Link to="/admin/packages" style={{ display: "flex", alignItems: "center", padding: "12px 16px", borderRadius: "8px", textDecoration: "none", color: "#64748b", fontWeight: "500", fontSize: "14px" }}>Packages</Link>
-            <Link to="/admin/customers" style={{ display: "flex", alignItems: "center", padding: "12px 16px", borderRadius: "8px", textDecoration: "none", color: "#64748b", fontWeight: "500", fontSize: "14px" }}>Customers</Link>
-            <Link to="/admin/bookings" style={{ display: "flex", alignItems: "center", padding: "12px 16px", borderRadius: "8px", textDecoration: "none", color: "#64748b", fontWeight: "500", fontSize: "14px" }}>Bookings</Link>
-            <Link to="/admin/kanban" style={{ display: "flex", alignItems: "center", padding: "12px 16px", borderRadius: "8px", textDecoration: "none", color: "#64748b", fontWeight: "500", fontSize: "14px" }}>Kanban Board</Link>
-            <Link to="/admin/reviews" style={{ display: "flex", alignItems: "center", padding: "12px 16px", borderRadius: "8px", textDecoration: "none", color: "#64748b", fontWeight: "500", fontSize: "14px" }}>Reviews</Link>
-            <Link to="/admin/analytics" style={{ display: "flex", alignItems: "center", padding: "12px 16px", borderRadius: "8px", textDecoration: "none", color: "#64748b", fontWeight: "500", fontSize: "14px" }}>Analytics</Link>
+            <Link to="/admin/packages" style={{ display: "flex", alignItems: "center", padding: "12px 16px", borderRadius: "8px", textDecoration: "none", color: "#35705c", fontWeight: "500", fontSize: "14px" }}>Packages</Link>
+            <Link to="/admin/customers" style={{ display: "flex", alignItems: "center", padding: "12px 16px", borderRadius: "8px", textDecoration: "none", color: "#35705c", fontWeight: "500", fontSize: "14px" }}>Customers</Link>
+            <Link to="/admin/bookings" style={{ display: "flex", alignItems: "center", padding: "12px 16px", borderRadius: "8px", textDecoration: "none", color: "#35705c", fontWeight: "500", fontSize: "14px" }}>Bookings</Link>
+            <Link to="/admin/users" style={{ display: "flex", alignItems: "center", padding: "12px 16px", borderRadius: "8px", textDecoration: "none", color: "#35705c", fontWeight: "500", fontSize: "14px" }}>Users</Link>
+            <Link to="/admin/ecosystem" style={{ display: "flex", alignItems: "center", padding: "12px 16px", borderRadius: "8px", textDecoration: "none", color: "#35705c", fontWeight: "500", fontSize: "14px" }}>Ecosystem</Link>
+            <Link to="/admin/kanban" style={{ display: "flex", alignItems: "center", padding: "12px 16px", borderRadius: "8px", textDecoration: "none", color: "#35705c", fontWeight: "500", fontSize: "14px" }}>Kanban Board</Link>
+            <Link to="/admin/reviews" style={{ display: "flex", alignItems: "center", padding: "12px 16px", borderRadius: "8px", textDecoration: "none", color: "#35705c", fontWeight: "500", fontSize: "14px" }}>Reviews</Link>
+            <Link to="/admin/analytics" style={{ display: "flex", alignItems: "center", padding: "12px 16px", borderRadius: "8px", textDecoration: "none", color: "#35705c", fontWeight: "500", fontSize: "14px" }}>Analytics</Link>
           </nav>
         </div>
 
-        <div style={{ borderTop: "1px solid #f1f5f9", paddingTop: "24px" }}>
+        <div style={{ borderTop: "1px solid #f0fdf4", paddingTop: "24px" }}>
           <button 
             onClick={() => { logout(); navigate("/admin/login"); }}
-            style={{ width: "100%", display: "flex", alignItems: "center", justifyContent: "center", padding: "12px", borderRadius: "8px", border: "1px solid #e2e8f0", backgroundColor: "#ffffff", color: "#dc2626", fontWeight: "600", fontSize: "14px", cursor: "pointer", transition: "all 0.2s" }}
+            style={{ width: "100%", display: "flex", alignItems: "center", justifyContent: "center", padding: "12px", borderRadius: "8px", border: "1px solid #d8efe5", backgroundColor: "#ffffff", color: "#064e3b", fontWeight: "600", fontSize: "14px", cursor: "pointer", transition: "all 0.2s" }}
           >
             Logout
           </button>
@@ -142,8 +144,8 @@ const AdminDashboard = () => {
         
         {/* Section 1: Welcome Header */}
         <div style={{ marginBottom: "32px" }}>
-          <h1 style={{ fontSize: "28px", fontWeight: "700", color: "#0f172a", margin: 0, letterSpacing: "-0.025em" }}>{getGreeting()}</h1>
-          <p style={{ fontSize: "15px", color: "#64748b", margin: "6px 0 0 0" }}>Manage South Trails from one place.</p>
+          <h1 style={{ fontSize: "28px", fontWeight: "700", color: "#022c22", margin: 0, letterSpacing: "-0.025em" }}>{getGreeting()}</h1>
+          <p style={{ fontSize: "15px", color: "#35705c", margin: "6px 0 0 0" }}>Manage South Trails from one place.</p>
         </div>
 
         {/* Section 2: KPI Cards */}
@@ -157,14 +159,14 @@ const AdminDashboard = () => {
                 backgroundColor: "#ffffff",
                 borderRadius: "12px",
                 padding: "24px",
-                border: "1px solid #e2e8f0",
-                borderLeft: `4px solid #14b8a6`,
+                border: "1px solid #d8efe5",
+                borderLeft: `4px solid #0b6b43`,
                 boxShadow: hoveredKpi === index ? "0 10px 15px -3px rgba(20, 184, 166, 0.1), 0 4px 6px -4px rgba(20, 184, 166, 0.1)" : "0 1px 3px 0 rgba(0, 0, 0, 0.05)",
                 transform: hoveredKpi === index ? "translateY(-2px)" : "none",
                 transition: "all 0.2s ease-in-out"
               }}
             >
-              <p style={{ fontSize: "14px", fontWeight: "500", color: "#64748b", margin: "0 0 8px 0" }}>{stat.label}</p>
+              <p style={{ fontSize: "14px", fontWeight: "500", color: "#35705c", margin: "0 0 8px 0" }}>{stat.label}</p>
               <h3 style={{ fontSize: "26px", fontWeight: "700", color: "#0f766e", margin: 0 }}>{stat.value}</h3>
             </div>
           ))}
@@ -174,39 +176,39 @@ const AdminDashboard = () => {
         <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr", gap: "32px", marginBottom: "40px", alignItems: "start" }}>
           
           {/* Left Column: Recent Bookings Table */}
-          <div style={{ backgroundColor: "#ffffff", borderRadius: "12px", border: "1px solid #e2e8f0", padding: "24px", boxShadow: "0 1px 3px 0 rgba(0, 0, 0, 0.05)" }}>
+          <div style={{ backgroundColor: "#ffffff", borderRadius: "12px", border: "1px solid #d8efe5", padding: "24px", boxShadow: "0 1px 3px 0 rgba(0, 0, 0, 0.05)" }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px" }}>
-              <h3 style={{ fontSize: "18px", fontWeight: "600", color: "#0f172a", margin: 0 }}>Recent Bookings</h3>
-              <Link to="/admin/bookings" style={{ color: "#14b8a6", fontSize: "14px", fontWeight: "600", textDecoration: "none" }}>View All</Link>
+              <h3 style={{ fontSize: "18px", fontWeight: "600", color: "#022c22", margin: 0 }}>Recent Bookings</h3>
+              <Link to="/admin/bookings" style={{ color: "#0b6b43", fontSize: "14px", fontWeight: "600", textDecoration: "none" }}>View All</Link>
             </div>
             
             <div style={{ overflowX: "auto" }}>
               <table style={{ width: "100%", borderCollapse: "collapse", textAlign: "left" }}>
                 <thead>
-                  <tr style={{ borderBottom: "1px solid #f1f5f9" }}>
-                    <th style={{ padding: "12px 16px", fontSize: "13px", fontWeight: "600", color: "#64748b", textTransform: "uppercase", letterSpacing: "0.05em" }}>Customer</th>
-                    <th style={{ padding: "12px 16px", fontSize: "13px", fontWeight: "600", color: "#64748b", textTransform: "uppercase", letterSpacing: "0.05em" }}>Package</th>
-                    <th style={{ padding: "12px 16px", fontSize: "13px", fontWeight: "600", color: "#64748b", textTransform: "uppercase", letterSpacing: "0.05em" }}>Status</th>
-                    <th style={{ padding: "12px 16px", fontSize: "13px", fontWeight: "600", color: "#64748b", textTransform: "uppercase", letterSpacing: "0.05em" }}>Date</th>
+                  <tr style={{ borderBottom: "1px solid #f0fdf4" }}>
+                    <th style={{ padding: "12px 16px", fontSize: "13px", fontWeight: "600", color: "#35705c", textTransform: "uppercase", letterSpacing: "0.05em" }}>Customer</th>
+                    <th style={{ padding: "12px 16px", fontSize: "13px", fontWeight: "600", color: "#35705c", textTransform: "uppercase", letterSpacing: "0.05em" }}>Package</th>
+                    <th style={{ padding: "12px 16px", fontSize: "13px", fontWeight: "600", color: "#35705c", textTransform: "uppercase", letterSpacing: "0.05em" }}>Status</th>
+                    <th style={{ padding: "12px 16px", fontSize: "13px", fontWeight: "600", color: "#35705c", textTransform: "uppercase", letterSpacing: "0.05em" }}>Date</th>
                   </tr>
                 </thead>
                 <tbody>
                   {recentBookings.length > 0 ? (
                     recentBookings.map((booking) => (
-                      <tr key={booking.id} style={{ borderBottom: "1px solid #f1f5f9" }}>
-                        <td style={{ padding: "16px", fontSize: "14px", color: "#0f172a", fontWeight: "500" }}>{booking.customer}</td>
-                        <td style={{ padding: "16px", fontSize: "14px", color: "#475569" }}>{booking.package}</td>
+                      <tr key={booking.id} style={{ borderBottom: "1px solid #f0fdf4" }}>
+                        <td style={{ padding: "16px", fontSize: "14px", color: "#022c22", fontWeight: "500" }}>{booking.customer}</td>
+                        <td style={{ padding: "16px", fontSize: "14px", color: "#2f6b52" }}>{booking.package}</td>
                         <td style={{ padding: "16px" }}>
                           <span style={{ display: "inline-block", padding: "4px 10px", borderRadius: "9999px", fontSize: "12px", fontWeight: "600", ...getStatusBadgeStyle(booking.status) }}>
                             {booking.status}
                           </span>
                         </td>
-                        <td style={{ padding: "16px", fontSize: "14px", color: "#64748b" }}>{booking.date}</td>
+                        <td style={{ padding: "16px", fontSize: "14px", color: "#35705c" }}>{booking.date}</td>
                       </tr>
                     ))
                   ) : (
                     <tr>
-                      <td colSpan="4" style={{ padding: "24px", textAlignment: "center", color: "#64748b", fontSize: "14px" }}>No recent bookings found.</td>
+                      <td colSpan="4" style={{ padding: "24px", textAlignment: "center", color: "#35705c", fontSize: "14px" }}>No recent bookings found.</td>
                     </tr>
                   )}
                 </tbody>
@@ -215,20 +217,20 @@ const AdminDashboard = () => {
           </div>
 
           {/* Right Column: Recent Activity Timeline */}
-          <div style={{ backgroundColor: "#ffffff", borderRadius: "12px", border: "1px solid #e2e8f0", padding: "24px", boxShadow: "0 1px 3px 0 rgba(0, 0, 0, 0.05)" }}>
-            <h3 style={{ fontSize: "18px", fontWeight: "600", color: "#0f172a", margin: "0 0 24px 0" }}>Recent Activity</h3>
+          <div style={{ backgroundColor: "#ffffff", borderRadius: "12px", border: "1px solid #d8efe5", padding: "24px", boxShadow: "0 1px 3px 0 rgba(0, 0, 0, 0.05)" }}>
+            <h3 style={{ fontSize: "18px", fontWeight: "600", color: "#022c22", margin: "0 0 24px 0" }}>Recent Activity</h3>
             <div style={{ display: "flex", flexDirection: "column", gap: "20px", position: "relative" }}>
               {activityTimeline.map((item, index) => (
                 <div key={item.id} style={{ display: "flex", gap: "16px", position: "relative" }}>
                   <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-                    <div style={{ width: "10px", height: "10px", borderRadius: "50%", backgroundColor: "#14b8a6", border: "2px solid #ffffff", boxShadow: "0 0 0 2px #14b8a6", zIndex: 2 }} />
+                    <div style={{ width: "10px", height: "10px", borderRadius: "50%", backgroundColor: "#0b6b43", border: "2px solid #ffffff", boxShadow: "0 0 0 2px #0b6b43", zIndex: 2 }} />
                     {index !== activityTimeline.length - 1 && (
-                      <div style={{ width: "2px", flexGrow: 1, backgroundColor: "#e2e8f0", marginTop: "4px", marginBottom: "-12px" }} />
+                      <div style={{ width: "2px", flexGrow: 1, backgroundColor: "#d8efe5", marginTop: "4px", marginBottom: "-12px" }} />
                     )}
                   </div>
                   <div style={{ paddingBottom: "4px" }}>
-                    <p style={{ fontSize: "14px", color: "#334155", margin: 0, fontWeight: "500" }}>{item.text}</p>
-                    <span style={{ fontSize: "12px", color: "#94a3b8", display: "block", marginTop: "2px" }}>{item.time}</span>
+                    <p style={{ fontSize: "14px", color: "#164e36", margin: 0, fontWeight: "500" }}>{item.text}</p>
+                    <span style={{ fontSize: "12px", color: "#6f9986", display: "block", marginTop: "2px" }}>{item.time}</span>
                   </div>
                 </div>
               ))}
@@ -238,21 +240,21 @@ const AdminDashboard = () => {
 
         {/* Section 4: Latest Reviews Section */}
         <div style={{ marginBottom: "40px" }}>
-          <h3 style={{ fontSize: "18px", fontWeight: "600", color: "#0f172a", margin: "0 0 20px 0" }}>Latest Customer Reviews</h3>
+          <h3 style={{ fontSize: "18px", fontWeight: "600", color: "#022c22", margin: "0 0 20px 0" }}>Latest Customer Reviews</h3>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))", gap: "24px" }}>
             {reviews.map((rev, idx) => (
-              <div key={idx} style={{ backgroundColor: "#ffffff", borderRadius: "12px", border: "1px solid #e2e8f0", padding: "24px", boxShadow: "0 1px 3px 0 rgba(0, 0, 0, 0.05)" }}>
+              <div key={idx} style={{ backgroundColor: "#ffffff", borderRadius: "12px", border: "1px solid #d8efe5", padding: "24px", boxShadow: "0 1px 3px 0 rgba(0, 0, 0, 0.05)" }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "12px" }}>
                   <div>
-                    <h4 style={{ fontSize: "15px", fontWeight: "600", color: "#0f172a", margin: 0 }}>{rev.userName || rev.name || "Anonymous"}</h4>
-                    <p style={{ fontSize: "13px", color: "#14b8a6", margin: "2px 0 0 0", fontWeight: "500" }}>{rev.packageName || rev.package}</p>
+                    <h4 style={{ fontSize: "15px", fontWeight: "600", color: "#022c22", margin: 0 }}>{rev.userName || rev.name || "Anonymous"}</h4>
+                    <p style={{ fontSize: "13px", color: "#0b6b43", margin: "2px 0 0 0", fontWeight: "500" }}>{rev.packageName || rev.package}</p>
                   </div>
                   <div style={{ display: "flex", gap: "2px", backgroundColor: "#f0fdfa", padding: "4px 8px", borderRadius: "6px" }}>
                     <span style={{ fontSize: "13px", fontWeight: "700", color: "#0f766e" }}>{rev.rating || rev.stars || 5}</span>
                     <span style={{ color: "#0f766e", fontSize: "12px" }}>★</span>
                   </div>
                 </div>
-                <p style={{ fontSize: "14px", color: "#475569", margin: 0, lineHeight: "1.5", fontStyle: "italic" }}>
+                <p style={{ fontSize: "14px", color: "#2f6b52", margin: 0, lineHeight: "1.5", fontStyle: "italic" }}>
                   "{rev.review || rev.comment}"
                 </p>
               </div>
@@ -262,7 +264,7 @@ const AdminDashboard = () => {
 
         {/* Section 6: Quick Actions */}
         <div>
-          <h3 style={{ fontSize: "18px", fontWeight: "600", color: "#0f172a", margin: "0 0 20px 0" }}>Quick Actions</h3>
+          <h3 style={{ fontSize: "18px", fontWeight: "600", color: "#022c22", margin: "0 0 20px 0" }}>Quick Actions</h3>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "20px" }}>
             {[
               { label: "Add New Package", path: "/admin/packages/new" },
@@ -270,6 +272,7 @@ const AdminDashboard = () => {
               { label: "View Customers", path: "/admin/customers" },
               { label: "View Bookings", path: "/admin/bookings" },
               { label: "Booking Kanban", path: "/admin/kanban" },
+              { label: "Manage Ecosystem", path: "/admin/ecosystem" },
               { label: "View Reviews", path: "/admin/reviews" }
             ].map((action, idx) => (
               <Link
@@ -280,7 +283,7 @@ const AdminDashboard = () => {
                 style={{
                   display: "block",
                   backgroundColor: "#ffffff",
-                  border: hoveredAction === idx ? "1px solid #14b8a6" : "1px solid #e2e8f0",
+                  border: hoveredAction === idx ? "1px solid #0b6b43" : "1px solid #d8efe5",
                   borderRadius: "10px",
                   padding: "20px",
                   textAlign: "center",
@@ -290,7 +293,7 @@ const AdminDashboard = () => {
                   transition: "all 0.2s ease-in-out"
                 }}
               >
-                <span style={{ fontSize: "15px", fontWeight: "600", color: hoveredAction === idx ? "#0f766e" : "#334155" }}>
+                <span style={{ fontSize: "15px", fontWeight: "600", color: hoveredAction === idx ? "#0f766e" : "#164e36" }}>
                   {action.label}
                 </span>
               </Link>

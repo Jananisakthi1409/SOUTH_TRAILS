@@ -1,8 +1,6 @@
 .trip-builder-page {
-  background:
-    radial-gradient(circle at 14% 0%, rgba(240, 201, 74, 0.16), transparent 28rem),
-    radial-gradient(circle at 86% 8%, rgba(45, 106, 79, 0.22), transparent 32rem),
-    linear-gradient(180deg, #120806 0%, #1a0a00 48%, #100604 100%);
+  background: #f8fafc;
+  color: #1f2937;
 }
 
 .trip-builder-hero {
@@ -31,7 +29,7 @@
 }
 
 .trip-builder-eyebrow {
-  color: #f0c94a;
+  color: #0b6b43;
 }
 
 .trip-brief-card {
@@ -85,9 +83,7 @@
 
 .trip-builder-workspace {
   position: relative;
-  background:
-    radial-gradient(circle at 8% 0%, rgba(200, 68, 10, 0.12), transparent 28rem),
-    linear-gradient(180deg, #f5efe6 0%, #fffaf3 100%) !important;
+  background: #f8fafc !important;
 }
 
 .trip-builder-workspace::before {
@@ -106,16 +102,15 @@
 }
 
 .trip-builder-form {
-  border: 1px solid rgba(90, 49, 25, 0.16);
-  border-radius: 0 !important;
-  background:
-    linear-gradient(180deg, rgba(255, 250, 243, 0.98), rgba(245, 239, 230, 0.92)),
-    #fffaf3 !important;
-  box-shadow: 0 30px 100px rgba(54, 30, 16, 0.14) !important;
+  border: 1px solid #e5e7eb !important;
+  border-radius: 16px !important;
+  background: #ffffff !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05) !important;
+  color: #1f2937 !important;
 }
 
 .trip-field {
-  color: #432315 !important;
+  color: #15803d !important;
   font-family: "Space Mono", ui-monospace, monospace;
   font-size: 0.72rem !important;
   letter-spacing: 0.12em;
@@ -126,34 +121,35 @@
 .trip-field select,
 .trip-field input[type="date"],
 .trip-field input[type="number"] {
-  border-color: rgba(90, 49, 25, 0.16) !important;
-  border-radius: 0 !important;
-  background: rgba(255, 255, 255, 0.7) !important;
-  color: #1a0a00 !important;
-  font-weight: 850;
+  border-color: #e5e7eb !important;
+  border-radius: 8px !important;
+  background: #ffffff !important;
+  color: #1f2937 !important;
+  font-weight: 600;
 }
 
 .trip-builder-input:focus,
 .trip-field select:focus,
 .trip-field input[type="date"]:focus,
 .trip-field input[type="number"]:focus {
-  border-color: #c8440a !important;
-  box-shadow: 0 0 0 4px rgba(200, 68, 10, 0.12);
+  border-color: #15803d !important;
+  box-shadow: 0 0 0 3px rgba(21, 128, 61, 0.15);
 }
 
 .trip-field input[type="range"] {
   width: 100%;
-  accent-color: #c8440a;
+  accent-color: #0b6b43;
 }
 
 .trip-generate-btn {
-  border-radius: 999px !important;
-  background: #1a0a00 !important;
-  color: #f0c94a !important;
-  box-shadow: 0 22px 56px rgba(26, 10, 0, 0.2);
-  letter-spacing: 0.12em;
+  border-radius: 12px !important;
+  background: #15803d !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 12px rgba(21, 128, 61, 0.2);
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  font-weight: 700;
+  transition: transform 0.25s ease, background 0.25s ease;
 }
 
 .trip-generate-btn:hover:not(:disabled) {
@@ -162,16 +158,16 @@
 }
 
 .trip-builder-preview {
-  border: 1px solid rgba(240, 201, 74, 0.24);
-  border-radius: 0 !important;
-  box-shadow: 0 34px 110px rgba(54, 30, 16, 0.22) !important;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05) !important;
 }
 
 .trip-builder-preview h2 {
-  color: #ffffff;
+  color: #1f2937;
   font-family: "Yatra One", serif;
-  font-size: clamp(2.8rem, 5vw, 4.8rem);
-  line-height: 0.92;
+  font-size: clamp(2rem, 3.5vw, 3rem);
+  line-height: 1.05;
   letter-spacing: 0;
   text-transform: uppercase;
 }
@@ -179,7 +175,7 @@
 .trip-builder-results {
   background:
     radial-gradient(circle at 8% 0%, rgba(240, 201, 74, 0.12), transparent 28rem),
-    linear-gradient(180deg, #120806, #1a0a00);
+    linear-gradient(180deg, #064e3b, #022c22);
 }
 
 .trip-plan-card,
@@ -229,15 +225,15 @@
 .trip-match-card a {
   position: relative;
   z-index: 1;
-  min-height: 2.8rem;
+  min-height: 2.5rem;
   align-items: center;
-  border-radius: 999px;
+  border-radius: 8px;
   padding: 0 1rem;
-  background: #f0c94a;
-  color: #1a0a00 !important;
+  background: #15803d;
+  color: #ffffff !important;
   font-size: 0.8rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 700;
 }
 
 @media (max-width: 900px) {

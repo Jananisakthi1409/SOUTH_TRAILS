@@ -38,11 +38,11 @@ const AdminAnalytics = () => {
   ];
 
   return (
-    <div style={{ display: "flex", backgroundColor: "#f8fafc", minHeight: "100vh", fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" }}>
-      <aside style={{ width: "260px", backgroundColor: "#ffffff", borderRight: "1px solid #e2e8f0", position: "fixed", top: 0, bottom: 0, left: 0, padding: "32px 24px", zIndex: 100 }}>
-        <div style={{ paddingBottom: "32px", borderBottom: "1px solid #f1f5f9" }}>
+    <div style={{ display: "flex", backgroundColor: "#ffffff", minHeight: "100vh", fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" }}>
+      <aside style={{ width: "260px", backgroundColor: "#ffffff", borderRight: "1px solid #d8efe5", position: "fixed", top: 0, bottom: 0, left: 0, padding: "32px 24px", zIndex: 100 }}>
+        <div style={{ paddingBottom: "32px", borderBottom: "1px solid #f0fdf4" }}>
           <h2 style={{ fontSize: "20px", fontWeight: "700", color: "#0f766e", margin: 0 }}>SOUTH TRAILS</h2>
-          <p style={{ fontSize: "12px", color: "#64748b", margin: "4px 0 0 0", fontWeight: "500", letterSpacing: "0.05em", textTransform: "uppercase" }}>Live Analytics</p>
+          <p style={{ fontSize: "12px", color: "#35705c", margin: "4px 0 0 0", fontWeight: "500", letterSpacing: "0.05em", textTransform: "uppercase" }}>Live Analytics</p>
         </div>
 
         <nav style={{ display: "flex", flexDirection: "column", gap: "8px", marginTop: "32px" }}>
@@ -50,7 +50,11 @@ const AdminAnalytics = () => {
           <Link to="/admin/packages" style={navLink}>Packages</Link>
           <Link to="/admin/customers" style={navLink}>Customers</Link>
           <Link to="/admin/bookings" style={navLink}>Bookings</Link>
+          <Link to="/admin/users" style={navLink}>Users</Link>
+          <Link to="/admin/ecosystem" style={navLink}>Ecosystem</Link>
+          <Link to="/admin/reviews" style={navLink}>Reviews</Link>
           <Link to="/admin/analytics" style={{ ...navLink, backgroundColor: "#f0fdfa", color: "#0f766e", fontWeight: "700" }}>Analytics</Link>
+          <Link to="/admin/kanban" style={navLink}>Kanban Board</Link>
         </nav>
 
         <button type="button" onClick={() => navigate("/admin/login")} style={{ ...outlineButton, marginTop: "32px", width: "100%" }}>
@@ -61,8 +65,8 @@ const AdminAnalytics = () => {
       <main style={{ marginLeft: "260px", flex: 1, padding: "40px 48px", boxSizing: "border-box" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "24px", marginBottom: "32px" }}>
           <div>
-            <h1 style={{ fontSize: "28px", fontWeight: "800", color: "#0f172a", margin: 0 }}>Business Analytics</h1>
-            <p style={{ fontSize: "15px", color: "#64748b", margin: "6px 0 0 0" }}>Real-time metrics from Spring Boot bookings, customers, packages, and reviews.</p>
+            <h1 style={{ fontSize: "28px", fontWeight: "800", color: "#022c22", margin: 0 }}>Business Analytics</h1>
+            <p style={{ fontSize: "15px", color: "#35705c", margin: "6px 0 0 0" }}>Real-time metrics from Spring Boot bookings, customers, packages, and reviews.</p>
           </div>
           <button type="button" onClick={() => window.location.reload()} style={primaryButton}>Refresh</button>
         </div>
@@ -74,8 +78,8 @@ const AdminAnalytics = () => {
             <section style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: "18px", marginBottom: "28px" }}>
               {kpiData.map((kpi) => (
                 <article key={kpi.title} style={panel}>
-                  <span style={{ fontSize: "12px", color: "#64748b", fontWeight: "700", textTransform: "uppercase" }}>{kpi.title}</span>
-                  <p style={{ margin: "10px 0 0", fontSize: "26px", fontWeight: "800", color: "#0f172a" }}>{kpi.value}</p>
+                  <span style={{ fontSize: "12px", color: "#35705c", fontWeight: "700", textTransform: "uppercase" }}>{kpi.title}</span>
+                  <p style={{ margin: "10px 0 0", fontSize: "26px", fontWeight: "800", color: "#022c22" }}>{kpi.value}</p>
                 </article>
               ))}
             </section>
@@ -139,8 +143,8 @@ const AdminAnalytics = () => {
                   <div key={pkg.id} style={listRow}>
                     <span style={rank}>{index + 1}</span>
                     <div>
-                      <strong style={{ color: "#0f172a" }}>{pkg.title}</strong>
-                      <p style={{ margin: "4px 0 0", color: "#64748b", fontSize: "13px" }}>{pkg.state} · {pkg.bookings} bookings</p>
+                      <strong style={{ color: "#022c22" }}>{pkg.title}</strong>
+                      <p style={{ margin: "4px 0 0", color: "#35705c", fontSize: "13px" }}>{pkg.state} · {pkg.bookings} bookings</p>
                     </div>
                   </div>
                 )) : <EmptyState text="No package ranking yet." />}
@@ -152,8 +156,8 @@ const AdminAnalytics = () => {
                   <div key={booking.id} style={listRow}>
                     <span style={rank}>{booking.status?.slice(0, 1) || "B"}</span>
                     <div>
-                      <strong style={{ color: "#0f172a" }}>{booking.id}</strong>
-                      <p style={{ margin: "4px 0 0", color: "#64748b", fontSize: "13px" }}>
+                      <strong style={{ color: "#022c22" }}>{booking.id}</strong>
+                      <p style={{ margin: "4px 0 0", color: "#35705c", fontSize: "13px" }}>
                         {booking.package_id || booking.packageId} · {formatMoney(booking.total_amount || booking.totalAmount)}
                       </p>
                     </div>
@@ -171,20 +175,20 @@ const AdminAnalytics = () => {
 const MetricRow = ({ label, value, count, max }) => (
   <div style={{ marginBottom: "16px" }}>
     <div style={{ display: "flex", justifyContent: "space-between", fontSize: "14px", marginBottom: "8px" }}>
-      <strong style={{ color: "#0f172a" }}>{label}</strong>
-      <span style={{ color: "#64748b" }}>{value}</span>
+      <strong style={{ color: "#022c22" }}>{label}</strong>
+      <span style={{ color: "#35705c" }}>{value}</span>
     </div>
-    <div style={{ height: "8px", background: "#f1f5f9", borderRadius: 999, overflow: "hidden" }}>
-      <div style={{ width: `${Math.max(6, (Number(count) / Number(max || 1)) * 100)}%`, height: "100%", background: "#14b8a6" }} />
+    <div style={{ height: "8px", background: "#f0fdf4", borderRadius: 999, overflow: "hidden" }}>
+      <div style={{ width: `${Math.max(6, (Number(count) / Number(max || 1)) * 100)}%`, height: "100%", background: "#0b6b43" }} />
     </div>
   </div>
 );
 
-const EmptyState = ({ text }) => <p style={{ color: "#64748b", margin: 0 }}>{text}</p>;
+const EmptyState = ({ text }) => <p style={{ color: "#35705c", margin: 0 }}>{text}</p>;
 
 const panel = {
   backgroundColor: "#ffffff",
-  border: "1px solid #e2e8f0",
+  border: "1px solid #d8efe5",
   borderRadius: "12px",
   padding: "22px",
   boxShadow: "0 1px 3px rgba(15,23,42,0.04)",
@@ -194,7 +198,7 @@ const panelTitle = {
   margin: "0 0 18px",
   fontSize: "18px",
   fontWeight: "800",
-  color: "#0f172a",
+  color: "#022c22",
 };
 
 const navLink = {
@@ -203,7 +207,7 @@ const navLink = {
   padding: "12px 16px",
   borderRadius: "8px",
   textDecoration: "none",
-  color: "#64748b",
+  color: "#35705c",
   fontWeight: "500",
   fontSize: "14px",
 };
@@ -221,9 +225,9 @@ const primaryButton = {
 const outlineButton = {
   padding: "10px 18px",
   borderRadius: "8px",
-  border: "1px solid #cbd5e1",
+  border: "1px solid #afd6c3",
   background: "#ffffff",
-  color: "#334155",
+  color: "#164e36",
   fontWeight: "700",
   cursor: "pointer",
 };
@@ -233,7 +237,7 @@ const listRow = {
   alignItems: "center",
   gap: "12px",
   padding: "12px 0",
-  borderBottom: "1px solid #f1f5f9",
+  borderBottom: "1px solid #f0fdf4",
 };
 
 const rank = {

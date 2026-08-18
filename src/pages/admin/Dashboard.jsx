@@ -38,7 +38,7 @@ const Dashboard = () => {
       <aside
         style={{
           width: "260px",
-          background: "#0f172a",
+          background: "#022c22",
           color: "white",
           padding: "30px 20px",
         }}
@@ -85,7 +85,7 @@ const Dashboard = () => {
         <h1
           style={{
             marginBottom: "10px",
-            color: "#1e293b",
+            color: "#064e3b",
           }}
         >
           Welcome Admin 👋
@@ -93,7 +93,7 @@ const Dashboard = () => {
 
         <p
           style={{
-            color: "#64748b",
+            color: "#35705c",
             marginBottom: "30px",
           }}
         >
@@ -123,7 +123,7 @@ const Dashboard = () => {
 
               <h3
                 style={{
-                  color: "#475569",
+                  color: "#2f6b52",
                 }}
               >
                 {item.title}
@@ -131,7 +131,7 @@ const Dashboard = () => {
 
               <h1
                 style={{
-                  color: "#0ea5e9",
+                  color: "#0b6b43",
                   marginTop: "10px",
                 }}
               >
@@ -207,7 +207,7 @@ const linkStyle = {
   textDecoration: "none",
   padding: "12px",
   borderRadius: "8px",
-  background: "#1e293b",
+  background: "#064e3b",
 };
 
 const tableHead = {

@@ -1,5 +1,5 @@
 export const SkeletonLoader = ({ type = "text", count = 1, className = "" }) => {
-  const baseClass = "animate-pulse bg-[#12302d] rounded-md";
+  const baseClass = "animate-pulse bg-[#0f766e] rounded-md";
 
   const renderSkeleton = () => {
     switch (type) {

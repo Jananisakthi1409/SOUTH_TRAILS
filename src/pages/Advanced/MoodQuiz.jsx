@@ -79,7 +79,7 @@ const MoodQuiz = () => {
               {questions[step].options.map((option) => (
                 <button key={option} type="button" className="itinerary-day" onClick={() => choose(option)}>
                   <strong>{option}</strong>
-                  <p style={{ color: "#64748b" }}>Choose this mood</p>
+                  <p style={{ color: "#35705c" }}>Choose this mood</p>
                 </button>
               ))}
             </div>
@@ -93,7 +93,7 @@ const MoodQuiz = () => {
                 <article key={pkg.id} className="itinerary-day">
                   <p className="eyebrow" style={{ margin: 0 }}>{pkg.state}</p>
                   <h3>{pkg.title}</h3>
-                  <p style={{ color: "#64748b" }}>{pkg.category} - {pkg.days} days</p>
+                  <p style={{ color: "#35705c" }}>{pkg.category} - {pkg.days} days</p>
                   <Link to={`/package/${pkg.id}`}>View package</Link>
                 </article>
               ))}

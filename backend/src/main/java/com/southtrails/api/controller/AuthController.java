@@ -1,10 +1,13 @@
 package com.southtrails.api.controller;
 
+import com.southtrails.api.dto.AdminSigninRequest;
 import com.southtrails.api.entity.AdminAccount;
 import com.southtrails.api.entity.Customer;
 import com.southtrails.api.repository.AdminAccountRepository;
 import com.southtrails.api.repository.CustomerRepository;
 import com.southtrails.api.security.JwtService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.Map;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/auth")
+@Tag(name = "Authentication", description = "User authentication endpoints - get JWT token here")
 public class AuthController {
 
     private final CustomerRepository customers;
@@ -36,6 +40,7 @@ public class AuthController {
     }
 
     @PostMapping("/customer/signup")
+    @Operation(summary = "Customer Sign Up", description = "Register a new customer account")
     ResponseEntity<?> signup(@RequestBody Map<String, String> payload) {
         String email = payload.getOrDefault("email", "").trim();
         String password = payload.getOrDefault("password", "");
@@ -58,6 +63,7 @@ public class AuthController {
     }
 
     @PostMapping("/customer/signin")
+    @Operation(summary = "Customer Login", description = "Login with customer email/password to get JWT token")
     ResponseEntity<?> customerSignin(@RequestBody Map<String, String> payload) {
         String password = payload.getOrDefault("password", "");
         return customers.findByEmailIgnoreCase(payload.getOrDefault("email", ""))
@@ -71,9 +77,10 @@ public class AuthController {
     }
 
     @PostMapping("/admin/signin")
-    ResponseEntity<?> adminSignin(@RequestBody Map<String, String> payload) {
-        String email = payload.getOrDefault("email", "");
-        String password = payload.getOrDefault("password", "");
+    @Operation(summary = "Admin Login", description = "Login with admin credentials to get JWT token. Use this token in the Authorize button to access protected endpoints.")
+    ResponseEntity<?> adminSignin(@RequestBody AdminSigninRequest request) {
+        String email = request.getEmail() == null ? "" : request.getEmail();
+        String password = request.getPassword() == null ? "" : request.getPassword();
         return admins.findByEmailIgnoreCase(email)
                 .filter(AdminAccount::isActive)
                 .filter(admin -> passwordEncoder.matches(password, admin.getPasswordHash()))

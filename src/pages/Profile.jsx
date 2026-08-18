@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
 import BookingTimeline from "../components/advanced/BookingTimeline";
 import { useToast } from "../components/ui/Toast";
 import { useAuthContext } from "../features/auth/AuthContext";
@@ -204,17 +203,17 @@ const Profile = () => {
   }
 
   return (
-    <main className="min-h-screen pt-32 pb-20 bg-[#07110f]">
+    <main className="profile-page min-h-screen pt-32 pb-20 bg-[#064e3b]">
       <div className="mx-auto max-w-7xl px-6">
         {/* Hero Section */}
-        <section className="mb-8 flex flex-col items-start justify-between gap-6 rounded-3xl border border-white/10 bg-[#030a0c] p-8 shadow-luxury md:flex-row md:items-center glass">
+        <section className="mb-8 flex flex-col items-start justify-between gap-6 rounded-3xl border border-white/10 bg-[#022c22] p-8 shadow-luxury md:flex-row md:items-center glass">
           <div>
-            <p className="mb-2 text-sm font-bold uppercase tracking-widest text-[#f0c94a]">Traveler Profile</p>
+            <p className="mb-2 text-sm font-bold uppercase tracking-widest text-[#0b6b43]">Traveler Profile</p>
             <h1 className="font-display text-3xl text-white md:text-5xl">Welcome back, {user?.fullName?.split(" ")[0] || "Traveler"}</h1>
-            <p className="mt-2 text-[#f5efe6]/70">Manage your account, booking history, and next adventure.</p>
+            <p className="mt-2 text-[#ffffff]/70">Manage your account, booking history, and next adventure.</p>
           </div>
           <div className="flex gap-4">
-            <button className="rounded-md bg-[#2f7dd3] px-6 py-3 text-sm font-bold text-white transition hover:bg-[#3d8ee9]" onClick={handleEdit}>
+            <button className="rounded-md bg-[#0b6b43] px-6 py-3 text-sm font-bold text-white transition hover:bg-[#064e3b]" onClick={handleEdit}>
               Edit Profile
             </button>
             <button className="rounded-md border border-white/20 bg-white/5 px-6 py-3 text-sm font-bold text-white transition hover:bg-white/10" onClick={handleLogout}>
@@ -227,7 +226,7 @@ const Profile = () => {
           {/* Left Column */}
           <div className="flex flex-col gap-8 lg:col-span-1">
             {/* Account Info */}
-            <div className="rounded-2xl border border-white/10 bg-[#12302d]/50 p-6 glass">
+            <div className="rounded-2xl border border-white/10 bg-[#0f766e]/50 p-6 glass">
               <h2 className="mb-6 font-display text-2xl text-white">My Profile</h2>
               {message && <div className="mb-4 rounded border border-[#059669]/20 bg-[#059669]/10 p-3 text-sm text-[#34d399]">{message}</div>}
               
@@ -235,18 +234,18 @@ const Profile = () => {
                 <div className="flex flex-col gap-4">
                   <div>
                     <label className="mb-1 block text-sm text-white/70">Full Name</label>
-                    <input type="text" value={form.fullName} onChange={handleChange("fullName")} className="w-full rounded-md border border-white/20 bg-[#030a0c] p-3 text-white focus:border-[#f0c94a] focus:outline-none" />
+                    <input type="text" value={form.fullName} onChange={handleChange("fullName")} className="w-full rounded-md border border-white/20 bg-[#022c22] p-3 text-white focus:border-[#0b6b43] focus:outline-none" />
                   </div>
                   <div>
                     <label className="mb-1 block text-sm text-white/70">Email</label>
-                    <input type="email" value={form.email} onChange={handleChange("email")} className="w-full rounded-md border border-white/20 bg-[#030a0c] p-3 text-white focus:border-[#f0c94a] focus:outline-none" />
+                    <input type="email" value={form.email} onChange={handleChange("email")} className="w-full rounded-md border border-white/20 bg-[#022c22] p-3 text-white focus:border-[#0b6b43] focus:outline-none" />
                   </div>
                   <div>
                     <label className="mb-1 block text-sm text-white/70">Phone</label>
-                    <input type="tel" value={form.phone} onChange={handleChange("phone")} className="w-full rounded-md border border-white/20 bg-[#030a0c] p-3 text-white focus:border-[#f0c94a] focus:outline-none" />
+                    <input type="tel" value={form.phone} onChange={handleChange("phone")} className="w-full rounded-md border border-white/20 bg-[#022c22] p-3 text-white focus:border-[#0b6b43] focus:outline-none" />
                   </div>
                   <div className="mt-2 flex gap-3">
-                    <button className="flex-1 rounded-md bg-[#f0c94a] p-3 text-sm font-bold text-[#1a0a00] transition hover:bg-white" onClick={handleSave}>Save</button>
+                    <button className="flex-1 rounded-md bg-[#0b6b43] p-3 text-sm font-bold text-[#022c22] transition hover:bg-white" onClick={handleSave}>Save</button>
                     <button className="flex-1 rounded-md border border-white/20 bg-transparent p-3 text-sm font-bold text-white transition hover:bg-white/10" onClick={handleCancel}>Cancel</button>
                   </div>
                 </div>
@@ -269,26 +268,26 @@ const Profile = () => {
             </div>
 
             {/* Wishlist */}
-            <div className="rounded-2xl border border-white/10 bg-[#12302d]/50 p-6 glass">
+            <div className="rounded-2xl border border-white/10 bg-[#0f766e]/50 p-6 glass">
               <h2 className="mb-6 font-display text-2xl text-white">My Wishlist</h2>
               {wishlist.length > 0 ? (
                 <div className="flex flex-col gap-4">
                   {wishlist.slice(0, 3).map((item) => (
-                    <div key={item.id} className="rounded-xl border border-white/5 bg-[#030a0c] p-4">
-                      <p className="text-xs font-bold uppercase text-[#f0c94a]">{item.state || "South India"}</p>
+                    <div key={item.id} className="rounded-xl border border-white/5 bg-[#022c22] p-4">
+                      <p className="text-xs font-bold uppercase text-[#0b6b43]">{item.state || "South India"}</p>
                       <strong className="mb-1 block text-white">{item.title}</strong>
                       <p className="mb-3 text-sm text-white/50">{item.destination}</p>
                       <div className="flex items-center justify-between">
                         <span className="text-sm font-bold text-white">Rs. {Number(item.price || 0).toLocaleString("en-IN")}</span>
                         <div className="flex gap-2">
-                          <button onClick={() => navigate(`/package/${item.id}`)} className="rounded bg-white/10 px-3 py-1 text-xs text-white hover:bg-[#2f7dd3]">View</button>
+                          <button onClick={() => navigate(`/package/${item.id}`)} className="rounded bg-white/10 px-3 py-1 text-xs text-white hover:bg-[#0b6b43]">View</button>
                           <button onClick={() => handleRemoveWishlist(item.id)} className="rounded border border-red-500/30 px-3 py-1 text-xs text-red-400 hover:bg-red-500/20">Remove</button>
                         </div>
                       </div>
                     </div>
                   ))}
                   {wishlist.length > 3 && (
-                    <button className="mt-2 w-full text-center text-sm text-[#f0c94a] hover:text-white transition">View all {wishlist.length} saved packages</button>
+                    <button className="mt-2 w-full text-center text-sm text-[#0b6b43] hover:text-white transition">View all {wishlist.length} saved packages</button>
                   )}
                 </div>
               ) : (
@@ -297,14 +296,14 @@ const Profile = () => {
             </div>
             
             {/* Reviews */}
-            <div className="rounded-2xl border border-white/10 bg-[#12302d]/50 p-6 glass">
+            <div className="rounded-2xl border border-white/10 bg-[#0f766e]/50 p-6 glass">
               <h2 className="mb-6 font-display text-2xl text-white">My Reviews</h2>
               {reviews.length > 0 ? (
                 <div className="flex flex-col gap-4">
                   {reviews.slice(0, 3).map((review) => (
-                    <div key={review.id} className="rounded-xl border border-white/5 bg-[#030a0c] p-4">
+                    <div key={review.id} className="rounded-xl border border-white/5 bg-[#022c22] p-4">
                       <strong className="mb-1 block text-white">{review.packageName}</strong>
-                      <div className="mb-2 text-[#f0c94a]">{"⭐".repeat(review.rating)}</div>
+                      <div className="mb-2 text-[#0b6b43]">{"⭐".repeat(review.rating)}</div>
                       <p className="mb-3 text-sm italic text-white/70">"{review.comment}"</p>
                       <button onClick={() => handleDeleteReview(review.id)} className="text-xs text-red-400 hover:text-red-300">Delete Review</button>
                     </div>
@@ -318,16 +317,16 @@ const Profile = () => {
 
           {/* Right Column - Bookings */}
           <div id="my-bookings" className="lg:col-span-2">
-            <div className="rounded-2xl border border-white/10 bg-[#12302d]/50 p-6 glass">
+            <div className="rounded-2xl border border-white/10 bg-[#0f766e]/50 p-6 glass">
               <div className="mb-8 border-b border-white/10 pb-4">
-                <p className="text-sm font-bold uppercase tracking-widest text-[#f0c94a]">Travel History</p>
+                <p className="text-sm font-bold uppercase tracking-widest text-[#0b6b43]">Travel History</p>
                 <h2 className="font-display text-3xl text-white">My Bookings</h2>
               </div>
               
               {bookings.length > 0 ? (
                 <div className="flex flex-col gap-8">
                   {bookings.map((booking) => (
-                    <div key={booking.id} className="rounded-2xl border border-white/10 bg-[#030a0c] p-6 shadow-md transition hover:border-white/20">
+                    <div key={booking.id} className="rounded-2xl border border-white/10 bg-[#022c22] p-6 shadow-md transition hover:border-white/20">
                       <div className="flex flex-col gap-6 md:flex-row">
                         {(booking.packageImage || getBookingSnapshot(booking).image) && (
                           <div className="h-40 w-full shrink-0 overflow-hidden rounded-xl md:w-48">
@@ -351,7 +350,7 @@ const Profile = () => {
                             </div>
                             <div>
                               <p className="text-white/50">Status</p>
-                              <strong className="text-[#f0c94a] uppercase tracking-wider text-xs">{booking.status}</strong>
+                              <strong className="text-[#0b6b43] uppercase tracking-wider text-xs">{booking.status}</strong>
                             </div>
                           </div>
                           
@@ -366,7 +365,7 @@ const Profile = () => {
                                 <select
                                   value={reviewRating[booking.id] || 5}
                                   onChange={(e) => setReviewRating(prev => ({ ...prev, [booking.id]: Number(e.target.value) }))}
-                                  className="w-full rounded-lg border border-white/20 bg-[#07110f] p-2 text-white outline-none"
+                                  className="w-full rounded-lg border border-white/20 bg-[#064e3b] p-2 text-white outline-none"
                                 >
                                   {[5,4,3,2,1].map(num => (
                                     <option key={num} value={num}>{"⭐".repeat(num)}</option>
@@ -377,12 +376,12 @@ const Profile = () => {
                                 placeholder="Share your experience..."
                                 value={reviewText[booking.id] || ""}
                                 onChange={(e) => setReviewText(prev => ({ ...prev, [booking.id]: e.target.value }))}
-                                className="mb-3 w-full rounded-lg border border-white/20 bg-[#07110f] p-3 text-white outline-none"
+                                className="mb-3 w-full rounded-lg border border-white/20 bg-[#064e3b] p-3 text-white outline-none"
                                 rows="3"
                               />
                               <button
                                 onClick={() => handleReviewSubmit(booking)}
-                                className="rounded bg-[#2f7dd3] px-4 py-2 text-xs font-bold text-white transition hover:bg-[#3d8ee9]"
+                                className="rounded bg-[#0b6b43] px-4 py-2 text-xs font-bold text-white transition hover:bg-[#064e3b]"
                               >
                                 Submit Review
                               </button>

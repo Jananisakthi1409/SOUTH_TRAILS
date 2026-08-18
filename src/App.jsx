@@ -1,7 +1,7 @@
 import { lazy, Suspense, useContext } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { BrowserRouter, Navigate, Routes, Route, useLocation, useParams } from "react-router-dom";
-
+//import { BrowserRouter, Navigate, Routes, Route, useLocation, useParams } from "react-router-dom";
+import { Navigate, Routes, Route, useLocation, useParams } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import ErrorBoundary from "./components/ErrorBoundary";
@@ -56,6 +56,7 @@ const AdminBookings = lazy(() => import("./pages/Booking/AdminBookings"));
 const AdminPackages = lazy(() => import("./pages/Booking/AdminPackages"));
 const AdminCustomers = lazy(() => import("./pages/Booking/AdminCustomers"));
 const AdminUsers = lazy(() => import("./pages/Booking/AdminUsers"));
+const AdminEcosystem = lazy(() => import("./pages/Booking/AdminEcosystem"));
 const AdminAnalytics = lazy(() => import("./pages/Booking/AdminAnalytics"));
 const AdminReviews = lazy(() => import("./pages/Booking/AdminReviews"));
 const AdminKanban = lazy(() => import("./pages/Advanced/AdminKanban"));
@@ -278,6 +279,10 @@ function AppContent() {
           element={<AdminRoute><AdminUsers /></AdminRoute>}
         />
         <Route
+          path="/admin/ecosystem"
+          element={<AdminRoute><AdminEcosystem /></AdminRoute>}
+        />
+        <Route
           path="/admin/reviews"
           element={<AdminRoute><AdminReviews /></AdminRoute>}
         />
@@ -302,16 +307,13 @@ function AppContent() {
     </>
   );
 }
-
 function App() {
   return (
     <ErrorBoundary>
       <AuthProvider>
         <ToastProvider>
           <AdminProvider>
-            <BrowserRouter>
-              <AppContent />
-            </BrowserRouter>
+            <AppContent />
           </AdminProvider>
         </ToastProvider>
       </AuthProvider>

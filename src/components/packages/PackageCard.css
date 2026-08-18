@@ -2,7 +2,7 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  border: 1px solid #e2e8f0;
+  border: 1px solid #d8efe5;
   border-radius: 8px;
   background: #ffffff;
   box-shadow: 0 1px 3px rgba(15, 23, 42, 0.05);
@@ -11,7 +11,7 @@
 .package-card-media {
   position: relative;
   height: 190px;
-  background: #e2e8f0;
+  background: #d8efe5;
 }
 
 .package-card-media img {
@@ -37,7 +37,7 @@
   height: 100%;
   display: grid;
   place-items: center;
-  color: #64748b;
+  color: #35705c;
   font-weight: 700;
 }
 
@@ -49,7 +49,7 @@
 
 .package-card-copy p {
   margin: 0;
-  color: #14b8a6;
+  color: #0b6b43;
   font-size: 12px;
   font-weight: 800;
   letter-spacing: 0.05em;
@@ -58,7 +58,7 @@
 
 .package-card-copy h3 {
   margin: 0;
-  color: #0f172a;
+  color: #022c22;
   font-size: 17px;
   line-height: 1.35;
 }
@@ -67,7 +67,7 @@
   display: flex;
   justify-content: space-between;
   gap: 0.8rem;
-  color: #64748b;
+  color: #35705c;
   font-size: 13px;
 }
 
@@ -77,6 +77,6 @@
 
 .package-card-actions {
   display: flex;
-  border-top: 1px solid #e2e8f0;
-  background: #f8fafc;
+  border-top: 1px solid #d8efe5;
+  background: #ffffff;
 }

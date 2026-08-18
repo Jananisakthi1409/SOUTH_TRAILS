@@ -6,8 +6,8 @@
   padding: 7rem 1rem 3rem;
   background:
     radial-gradient(circle at 12% 0%, rgba(240, 201, 74, 0.16), transparent 28rem),
-    linear-gradient(135deg, #120806, #1a0a00);
-  color: #f5efe6;
+    linear-gradient(135deg, #064e3b, #022c22);
+  color: #ffffff;
   text-align: center;
 }
 
@@ -24,8 +24,8 @@
   border-radius: 999px;
   margin-top: 1rem;
   padding: 0 1.25rem;
-  background: #f0c94a;
-  color: #1a0a00;
+  background: #0b6b43;
+  color: #022c22;
   font-weight: 950;
 }
 
@@ -35,13 +35,12 @@
 .kapd-page,
 .aapd-page,
 .apd-page,
-.state-package-page {
+.state-package-details-page {
   min-height: 100vh;
   background:
-    radial-gradient(circle at 12% 0%, rgba(240, 201, 74, 0.16), transparent 28rem),
-    radial-gradient(circle at 86% 10%, rgba(45, 106, 79, 0.18), transparent 30rem),
-    linear-gradient(180deg, #120806 0%, #1a0a00 46%, #f5efe6 46%, #fffaf3 100%);
-  color: #1a0a00;
+    radial-gradient(circle at 10% 0%, rgba(11, 107, 67, 0.16), transparent 26rem),
+    linear-gradient(180deg, #064e3b 0%, #022c22 46%, #07110f 46%, #07110f 100%);
+  color: #ffffff;
 }
 
 .package-detail-hero-gallery,
@@ -56,7 +55,7 @@
   display: grid;
   align-items: end;
   overflow: hidden;
-  background: #1a0a00;
+  background: #022c22;
 }
 
 .main-image {
@@ -117,7 +116,7 @@
 .thumbnail:hover,
 .thumbnail.active {
   transform: translateY(-4px);
-  border-color: #f0c94a;
+  border-color: #0b6b43;
   opacity: 1;
 }
 
@@ -187,7 +186,7 @@
   border: 1px solid rgba(90, 49, 25, 0.16);
   background:
     linear-gradient(180deg, rgba(255, 250, 243, 0.97), rgba(245, 239, 230, 0.92)),
-    #fffaf3;
+    #ffffff;
   box-shadow: 0 32px 100px rgba(54, 30, 16, 0.16);
   backdrop-filter: blur(22px);
 }
@@ -222,7 +221,7 @@
 
 .destination-label {
   margin: 0 0 0.7rem;
-  color: #c8440a;
+  color: #0b6b43;
   font-family: "Space Mono", ui-monospace, monospace;
   font-size: 0.74rem;
   font-weight: 950;
@@ -232,7 +231,7 @@
 
 .overview-header h1 {
   margin: 0;
-  color: #1a0a00;
+  color: #022c22;
   font-family: "Yatra One", serif;
   font-size: clamp(3.2rem, 7vw, 6.8rem);
   line-height: 0.82;
@@ -261,21 +260,21 @@
 }
 
 .rating {
-  background: #1a0a00;
-  color: #f0c94a;
+  background: #022c22;
+  color: #0b6b43;
 }
 
 .category-badge {
   border: 1px solid rgba(200, 68, 10, 0.18);
   background: rgba(200, 68, 10, 0.08);
-  color: #c8440a;
+  color: #0b6b43;
 }
 
 .price-card {
   border: 1px solid rgba(240, 201, 74, 0.28);
   background:
     linear-gradient(135deg, rgba(26, 10, 0, 0.96), rgba(61, 27, 12, 0.92)),
-    #1a0a00;
+    #022c22;
   padding: 1.2rem;
   color: #ffffff;
 }
@@ -292,7 +291,7 @@
 
 .price-value {
   margin: 0.35rem 0;
-  color: #f0c94a;
+  color: #0b6b43;
   font-family: "Yatra One", serif;
   font-size: clamp(2rem, 4vw, 3rem);
   line-height: 0.95;
@@ -301,7 +300,7 @@
 .package-description {
   max-width: 860px;
   margin: 1.5rem 0 0;
-  color: #65412c;
+  color: #35705c;
   font-size: 1.04rem;
   line-height: 1.82;
 }
@@ -322,7 +321,7 @@
 .info-label {
   display: block;
   margin-bottom: 0.35rem;
-  color: #8a6a55;
+  color: #35705c;
   font-size: 0.68rem;
   font-weight: 950;
   letter-spacing: 0.16em;
@@ -330,7 +329,7 @@
 }
 
 .info-value {
-  color: #1a0a00;
+  color: #022c22;
   font-weight: 950;
 }
 
@@ -343,7 +342,7 @@
 .state-package-section h2,
 .booking-card h3 {
   margin: 0 0 1rem;
-  color: #1a0a00;
+  color: #022c22;
   font-family: "Yatra One", serif;
   font-size: clamp(1.9rem, 4vw, 3rem);
   line-height: 0.95;
@@ -387,8 +386,8 @@
   display: grid;
   place-items: center;
   border-radius: 999px;
-  background: #1a0a00;
-  color: #f0c94a;
+  background: #022c22;
+  color: #0b6b43;
   font-weight: 950;
 }
 
@@ -396,7 +395,7 @@
 .highlight-card p,
 .included-item span:last-child {
   margin: 0;
-  color: #432315;
+  color: #164e36;
   font-weight: 850;
   line-height: 1.45;
 }
@@ -443,7 +442,7 @@
 
 .booking-card .form-group label,
 .booking-card .payment-section > label {
-  color: #432315;
+  color: #164e36;
   font-family: "Space Mono", ui-monospace, monospace;
   font-size: 0.7rem;
   font-weight: 950;
@@ -457,13 +456,13 @@
   border: 1px solid rgba(90, 49, 25, 0.16);
   border-radius: 0;
   background: rgba(255, 255, 255, 0.68);
-  color: #1a0a00;
+  color: #022c22;
   padding: 0 0.9rem;
   font-weight: 850;
 }
 
 .booking-card input:focus {
-  border-color: #c8440a;
+  border-color: #0b6b43;
   box-shadow: 0 0 0 4px rgba(200, 68, 10, 0.12);
   outline: none;
 }
@@ -480,14 +479,14 @@
   border: 1px solid rgba(90, 49, 25, 0.12);
   background: rgba(255, 255, 255, 0.54);
   padding: 0.75rem;
-  color: #432315;
+  color: #164e36;
   font-weight: 850;
 }
 
 .booking-card .payment-option input {
   width: 1rem;
   min-height: 1rem;
-  accent-color: #c8440a;
+  accent-color: #0b6b43;
 }
 
 .price-breakdown {
@@ -505,7 +504,7 @@
   display: flex;
   justify-content: space-between;
   gap: 1rem;
-  color: #65412c;
+  color: #35705c;
   font-size: 0.92rem;
   font-weight: 850;
 }
@@ -513,7 +512,7 @@
 .breakdown-total {
   border-top: 1px solid rgba(90, 49, 25, 0.16);
   padding-top: 0.75rem;
-  color: #c8440a;
+  color: #0b6b43;
   font-size: 1.08rem;
   font-weight: 950;
 }
@@ -530,15 +529,15 @@
 }
 
 .book-btn {
-  background: #1a0a00;
-  color: #f0c94a;
+  background: #022c22;
+  color: #0b6b43;
   box-shadow: 0 22px 56px rgba(26, 10, 0, 0.22);
 }
 
 .back-btn {
   border: 1px solid rgba(90, 49, 25, 0.16);
   background: rgba(255, 255, 255, 0.62);
-  color: #1a0a00;
+  color: #022c22;
 }
 
 .book-btn:hover:not(:disabled),
@@ -573,7 +572,7 @@
   gap: 0.45rem;
   align-items: flex-start;
   margin: 0;
-  color: #65412c;
+  color: #35705c;
   font-size: 0.9rem;
   font-weight: 800;
 }
@@ -652,5 +651,177 @@
   .breakdown-item,
   .breakdown-total {
     flex-direction: column;
+  }
+}
+
+/* Production green/white package detail pass */
+.package-loading,
+.package-not-found,
+.package-detail-page,
+.tnpd-page,
+.kpd-page,
+.kapd-page,
+.aapd-page,
+.apd-page,
+.state-package-page {
+  background: #f8fafc !important;
+  color: #1f2937 !important;
+}
+
+.package-detail-hero-gallery,
+.tnpd-hero-gallery,
+.kpd-hero-gallery,
+.kapd-hero-gallery,
+.aapd-hero-gallery,
+.apd-hero-gallery,
+.state-package-hero-gallery {
+  min-height: min(76vh, 700px) !important;
+  background: #166534 !important;
+}
+
+.main-image img,
+.no-image-placeholder {
+  min-height: min(76vh, 700px) !important;
+}
+
+.main-image::after {
+  background:
+    linear-gradient(90deg, rgba(20, 83, 45, 0.84), rgba(22, 101, 52, 0.36), rgba(20, 83, 45, 0.66)),
+    linear-gradient(180deg, rgba(0, 0, 0, 0.04), rgba(20, 83, 45, 0.72)) !important;
+}
+
+.package-detail-container,
+.tnpd-container,
+.kpd-container,
+.kapd-container,
+.aapd-container,
+.apd-container,
+.state-package-container {
+  margin-top: -4rem !important;
+}
+
+.package-detail-overview,
+.package-detail-section,
+.tnpd-overview,
+.tnpd-section,
+.kpd-overview,
+.kpd-section,
+.kapd-overview,
+.kapd-section,
+.aapd-overview,
+.aapd-section,
+.apd-overview,
+.apd-section,
+.state-package-overview,
+.state-package-section,
+.booking-card,
+.price-card,
+.info-item,
+.place-card,
+.included-item,
+.highlight-card,
+.price-breakdown {
+  border: 1px solid #e5e7eb !important;
+  border-radius: 8px !important;
+  background: #ffffff !important;
+  color: #1f2937 !important;
+  box-shadow: 0 8px 22px rgba(15, 23, 42, 0.06) !important;
+  backdrop-filter: none !important;
+}
+
+.overview-header h1,
+.package-detail-section h2,
+.tnpd-section h2,
+.kpd-section h2,
+.kapd-section h2,
+.aapd-section h2,
+.apd-section h2,
+.state-package-section h2,
+.booking-card h3,
+.package-not-found h1 {
+  color: #1f2937 !important;
+  font-family: var(--font-sans) !important;
+  font-weight: 850 !important;
+  line-height: 1.1 !important;
+  text-transform: none !important;
+}
+
+.overview-header h1 {
+  font-size: clamp(2.2rem, 5vw, 4.3rem) !important;
+}
+
+.package-detail-section h2,
+.tnpd-section h2,
+.kpd-section h2,
+.kapd-section h2,
+.aapd-section h2,
+.apd-section h2,
+.state-package-section h2,
+.booking-card h3 {
+  font-size: clamp(1.45rem, 3vw, 2.2rem) !important;
+}
+
+.destination-label,
+.price-value,
+.rating,
+.category-badge,
+.breakdown-total,
+.booking-info p::before {
+  color: #15803d !important;
+}
+
+.package-description,
+.price-label,
+.price-note,
+.info-label,
+.breakdown-item,
+.place-card p,
+.highlight-card p,
+.included-item span:last-child,
+.booking-info p {
+  color: #6b7280 !important;
+}
+
+.rating,
+.place-number,
+.highlight-icon,
+.book-btn,
+.package-not-found button {
+  background: #15803d !important;
+  color: #ffffff !important;
+}
+
+.category-badge,
+.checkmark {
+  border: 1px solid #bbf7d0 !important;
+  background: #f0fdf4 !important;
+  color: #166534 !important;
+}
+
+.booking-card input,
+.booking-card .payment-option {
+  border: 1px solid #e5e7eb !important;
+  border-radius: 8px !important;
+  background: #ffffff !important;
+  color: #1f2937 !important;
+}
+
+.back-btn {
+  border: 1px solid #e5e7eb !important;
+  background: #ffffff !important;
+  color: #166534 !important;
+}
+
+@media (max-width: 760px) {
+  .main-image img,
+  .no-image-placeholder,
+  .package-detail-hero-gallery,
+  .tnpd-hero-gallery,
+  .kpd-hero-gallery,
+  .kapd-hero-gallery,
+  .aapd-hero-gallery,
+  .apd-hero-gallery,
+  .state-package-hero-gallery {
+    min-height: 560px !important;
   }
 }

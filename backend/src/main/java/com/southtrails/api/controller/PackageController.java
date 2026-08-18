@@ -39,7 +39,7 @@ public class PackageController {
     ) {
         String q = search == null ? "" : search.toLowerCase();
         return packages.findAll().stream()
-                .filter(pkg -> "Tamil Nadu".equalsIgnoreCase(pkg.getState()))
+                .filter(pkg -> state == null || state.isBlank() || state.equalsIgnoreCase(pkg.getState()))
                 .filter(pkg -> category == null || category.isBlank() || category.equalsIgnoreCase(pkg.getCategory()))
                 .filter(pkg -> minPrice == null || (pkg.getPrice() != null && pkg.getPrice().intValue() >= minPrice))
                 .filter(pkg -> maxPrice == null || (pkg.getPrice() != null && pkg.getPrice().intValue() <= maxPrice))
@@ -59,14 +59,12 @@ public class PackageController {
     @GetMapping("/{id}")
     ResponseEntity<TravelPackage> byId(@PathVariable String id) {
         return packages.findById(id)
-                .filter(pkg -> "Tamil Nadu".equalsIgnoreCase(pkg.getState()))
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping
     TravelPackage create(@Valid @RequestBody TravelPackage payload) {
-        payload.setState("Tamil Nadu");
         return packages.save(payload);
     }
 
@@ -76,7 +74,6 @@ public class PackageController {
                 .map(existing -> {
                     payload.setId(existing.getId());
                     payload.setCreatedAt(existing.getCreatedAt());
-                    payload.setState("Tamil Nadu");
                     return ResponseEntity.ok(packages.save(payload));
                 })
                 .orElseGet(() -> ResponseEntity.notFound().build());

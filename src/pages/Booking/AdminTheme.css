@@ -1,27 +1,28 @@
-/* South Trails Admin Theme - White with Blue */
+/* South Trails Admin Theme - White with Royal Green */
 
 :root {
-  --admin-primary: #0ea5e9;        /* Sky Blue */
-  --admin-primary-dark: #0284c7;   /* Dark Blue */
-  --admin-primary-light: #38bdf8;  /* Light Blue */
+  --admin-primary: #0b6b43;        /* Royal Green */
+  --admin-primary-dark: #064e3b;   /* Deep Royal Green */
+  --admin-primary-light: #0f766e;  /* Light Royal Green */
   --admin-white: #ffffff;           /* White */
-  --admin-gray-50: #f9fafb;        /* Very Light Gray */
-  --admin-gray-100: #f3f4f6;       /* Light Gray */
-  --admin-gray-200: #e5e7eb;       /* Gray */
-  --admin-gray-300: #d1d5db;       /* Dark Gray */
-  --admin-gray-700: #374151;       /* Dark Text */
-  --admin-gray-900: #111827;       /* Very Dark Text */
-  --admin-success: #10b981;        /* Green */
-  --admin-warning: #f59e0b;        /* Amber */
-  --admin-danger: #ef4444;         /* Red */
-  --admin-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
-  --admin-shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06);
+  --admin-gray-50: #f7fffb;
+  --admin-gray-100: #f0fdf4;
+  --admin-gray-200: #d8efe5;
+  --admin-gray-300: #afd6c3;
+  --admin-gray-600: #35705c;
+  --admin-gray-700: #164e36;
+  --admin-gray-900: #022c22;
+  --admin-success: #0b6b43;
+  --admin-warning: #0f766e;
+  --admin-danger: #064e3b;
+  --admin-shadow: 0 10px 30px rgba(6, 78, 59, 0.08);
+  --admin-shadow-md: 0 18px 45px rgba(6, 78, 59, 0.12);
 }
 .dashboard-banner{
   background: linear-gradient(
     135deg,
-    #14b8a6,
-    #0f766e
+    #0b6b43,
+    #064e3b
   );
 
   width: 100%;
@@ -59,7 +60,7 @@
 .dashboard-card {
   background: white;
   text-decoration: none;
-  color: #111827;
+  color: #022c22;
   padding: 25px;
   border-radius: 18px;
   box-shadow: 0 4px 20px rgba(0,0,0,.08);
@@ -94,7 +95,7 @@
 }
 
 .state-box {
-  background: #f8fafc;
+  background: #ffffff;
   border-radius: 15px;
   padding: 25px;
   text-align: center;
@@ -121,7 +122,7 @@
 }
 
 .quick-action-btn {
-  background: #2563eb;
+  background: #0b6b43;
   color: white;
   text-decoration: none;
   padding: 12px 20px;
@@ -130,7 +131,7 @@
 }
 
 .quick-action-btn:hover {
-  background: #1d4ed8;
+  background: #064e3b;
 }
 
 @media(max-width:768px){
@@ -264,7 +265,7 @@ body {
 }
 
 .logout-btn:hover {
-  background-color: #dc2626;
+  background-color: #064e3b;
 }
 
 /* Main Content */
@@ -428,29 +429,14 @@ body {
   font-weight: 600;
 }
 
-.status-badge.status-pending {
-  background-color: #fef3c7;
-  color: #92400e;
-}
-
-.status-badge.status-approved {
-  background-color: #dcfce7;
-  color: #15803d;
-}
-
-.status-badge.status-rejected {
-  background-color: #fee2e2;
-  color: #991b1b;
-}
-
-.status-badge.status-active {
-  background-color: #dcfce7;
-  color: #15803d;
-}
-
+.status-badge.status-pending,
+.status-badge.status-approved,
+.status-badge.status-rejected,
+.status-badge.status-active,
 .status-badge.status-blocked {
-  background-color: #fee2e2;
-  color: #991b1b;
+  background-color: #f0fdf4;
+  color: #064e3b;
+  border: 1px solid #d8efe5;
 }
 
 /* Quick Actions */
@@ -478,7 +464,7 @@ body {
 
 .quick-action-btn:hover {
   transform: translateY(-4px);
-  box-shadow: 0 10px 15px rgba(14, 165, 233, 0.2);
+  box-shadow: 0 10px 15px rgba(6, 78, 59, 0.16);
 }
 
 .action-icon {
@@ -524,7 +510,7 @@ body {
 .form-grid textarea:focus {
   outline: none;
   border-color: var(--admin-primary);
-  box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.1);
+  box-shadow: 0 0 0 3px rgba(11, 107, 67, 0.12);
 }
 
 /* Buttons */
@@ -555,7 +541,7 @@ body {
 }
 
 .btn-success:hover {
-  background-color: #059669;
+  background-color: #064e3b;
 }
 
 .btn-danger {
@@ -570,7 +556,7 @@ body {
 }
 
 .btn-danger:hover {
-  background-color: #dc2626;
+  background-color: #064e3b;
 }
 
 .btn-info {
@@ -600,7 +586,7 @@ body {
 }
 
 .btn-warning:hover {
-  background-color: #d97706;
+  background-color: #064e3b;
 }
 
 /* Search Input */
@@ -616,7 +602,7 @@ body {
 .search-input:focus {
   outline: none;
   border-color: var(--admin-primary);
-  box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.1);
+  box-shadow: 0 0 0 3px rgba(11, 107, 67, 0.12);
 }
 
 .filter-select {

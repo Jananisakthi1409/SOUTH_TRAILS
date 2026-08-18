@@ -187,30 +187,33 @@ const AdminPackages = () => {
   const statesList = ["All", "Tamil Nadu"];
 
   return (
-    <div style={{ display: "flex", backgroundColor: "#f8fafc", minHeight: "100vh", fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" }}>
+    <div style={{ display: "flex", backgroundColor: "#ffffff", minHeight: "100vh", fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" }}>
       
       {/* Fixed Sidebar */}
-      <aside style={{ width: "260px", backgroundColor: "#ffffff", borderRight: "1px solid #e2e8f0", position: "fixed", top: 0, bottom: 0, left: 0, display: "flex", flexDirection: "column", justifyContent: "space-between", padding: "32px 24px", zIndex: 100 }}>
+      <aside style={{ width: "260px", backgroundColor: "#ffffff", borderRight: "1px solid #d8efe5", position: "fixed", top: 0, bottom: 0, left: 0, display: "flex", flexDirection: "column", justifyContent: "space-between", padding: "32px 24px", zIndex: 100 }}>
         <div>
-          <div style={{ paddingBottom: "32px", borderBottom: "1px solid #f1f5f9" }}>
-            <h2 style={{ fontSize: "20px", fontWeight: "700", color: "#0f766e", margin: 0, letterSpacing: "-0.025em" }}>TAMIL TRAILS</h2>
-            <p style={{ fontSize: "12px", color: "#64748b", margin: "4px 0 0 0", fontWeight: "500", letterSpacing: "0.05em", textTransform: "uppercase" }}>Tamil Nadu Travel Admin</p>
+          <div style={{ paddingBottom: "32px", borderBottom: "1px solid #f0fdf4" }}>
+            <h2 style={{ fontSize: "20px", fontWeight: "700", color: "#0f766e", margin: 0, letterSpacing: "-0.025em" }}>SOUTH TRAILS</h2>
+            <p style={{ fontSize: "12px", color: "#35705c", margin: "4px 0 0 0", fontWeight: "500", letterSpacing: "0.05em", textTransform: "uppercase" }}>Royal Green Travel Admin</p>
           </div>
 
           <nav style={{ display: "flex", flexDirection: "column", gap: "8px", marginTop: "32px" }}>
-            <Link to="/admin/dashboard" style={{ display: "flex", alignItems: "center", padding: "12px 16px", borderRadius: "8px", textDecoration: "none", color: "#64748b", fontWeight: "500", fontSize: "14px" }}>Dashboard</Link>
+            <Link to="/admin/dashboard" style={{ display: "flex", alignItems: "center", padding: "12px 16px", borderRadius: "8px", textDecoration: "none", color: "#35705c", fontWeight: "500", fontSize: "14px" }}>Dashboard</Link>
             <Link to="/admin/packages" style={{ display: "flex", alignItems: "center", padding: "12px 16px", borderRadius: "8px", textDecoration: "none", backgroundColor: "#f0fdfa", color: "#0f766e", fontWeight: "600", fontSize: "14px" }}>Packages</Link>
-            <Link to="/admin/customers" style={{ display: "flex", alignItems: "center", padding: "12px 16px", borderRadius: "8px", textDecoration: "none", color: "#64748b", fontWeight: "500", fontSize: "14px" }}>Customers</Link>
-            <Link to="/admin/bookings" style={{ display: "flex", alignItems: "center", padding: "12px 16px", borderRadius: "8px", textDecoration: "none", color: "#64748b", fontWeight: "500", fontSize: "14px" }}>Bookings</Link>
-            <Link to="/admin/reviews" style={{ display: "flex", alignItems: "center", padding: "12px 16px", borderRadius: "8px", textDecoration: "none", color: "#64748b", fontWeight: "500", fontSize: "14px" }}>Reviews</Link>
-            <Link to="/admin/analytics" style={{ display: "flex", alignItems: "center", padding: "12px 16px", borderRadius: "8px", textDecoration: "none", color: "#64748b", fontWeight: "500", fontSize: "14px" }}>Analytics</Link>
+            <Link to="/admin/customers" style={{ display: "flex", alignItems: "center", padding: "12px 16px", borderRadius: "8px", textDecoration: "none", color: "#35705c", fontWeight: "500", fontSize: "14px" }}>Customers</Link>
+            <Link to="/admin/bookings" style={{ display: "flex", alignItems: "center", padding: "12px 16px", borderRadius: "8px", textDecoration: "none", color: "#35705c", fontWeight: "500", fontSize: "14px" }}>Bookings</Link>
+            <Link to="/admin/users" style={{ display: "flex", alignItems: "center", padding: "12px 16px", borderRadius: "8px", textDecoration: "none", color: "#35705c", fontWeight: "500", fontSize: "14px" }}>Users</Link>
+            <Link to="/admin/ecosystem" style={{ display: "flex", alignItems: "center", padding: "12px 16px", borderRadius: "8px", textDecoration: "none", color: "#35705c", fontWeight: "500", fontSize: "14px" }}>Ecosystem</Link>
+            <Link to="/admin/reviews" style={{ display: "flex", alignItems: "center", padding: "12px 16px", borderRadius: "8px", textDecoration: "none", color: "#35705c", fontWeight: "500", fontSize: "14px" }}>Reviews</Link>
+            <Link to="/admin/analytics" style={{ display: "flex", alignItems: "center", padding: "12px 16px", borderRadius: "8px", textDecoration: "none", color: "#35705c", fontWeight: "500", fontSize: "14px" }}>Analytics</Link>
+            <Link to="/admin/kanban" style={{ display: "flex", alignItems: "center", padding: "12px 16px", borderRadius: "8px", textDecoration: "none", color: "#35705c", fontWeight: "500", fontSize: "14px" }}>Kanban Board</Link>
           </nav>
         </div>
 
-        <div style={{ borderTop: "1px solid #f1f5f9", paddingTop: "24px" }}>
+        <div style={{ borderTop: "1px solid #f0fdf4", paddingTop: "24px" }}>
           <button 
             onClick={() => { logout(); navigate("/admin/login"); }}
-            style={{ width: "100%", display: "flex", alignItems: "center", justifyContent: "center", padding: "12px", borderRadius: "8px", border: "1px solid #e2e8f0", backgroundColor: "#ffffff", color: "#dc2626", fontWeight: "600", fontSize: "14px", cursor: "pointer", transition: "all 0.2s" }}
+            style={{ width: "100%", display: "flex", alignItems: "center", justifyContent: "center", padding: "12px", borderRadius: "8px", border: "1px solid #d8efe5", backgroundColor: "#ffffff", color: "#064e3b", fontWeight: "600", fontSize: "14px", cursor: "pointer", transition: "all 0.2s" }}
           >
             Logout
           </button>
@@ -223,13 +226,13 @@ const AdminPackages = () => {
         {/* Header Section */}
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "32px", flexWrap: "wrap", gap: "16px" }}>
           <div>
-            <h1 style={{ fontSize: "28px", fontWeight: "700", color: "#0f172a", margin: 0, letterSpacing: "-0.025em" }}>Package Management</h1>
-            <p style={{ fontSize: "15px", color: "#64748b", margin: "6px 0 0 0" }}>Create, edit, and manage premium Tamil Nadu itineraries.</p>
+            <h1 style={{ fontSize: "28px", fontWeight: "700", color: "#022c22", margin: 0, letterSpacing: "-0.025em" }}>Package Management</h1>
+            <p style={{ fontSize: "15px", color: "#35705c", margin: "6px 0 0 0" }}>Create, edit, and manage premium Tamil Nadu itineraries.</p>
           </div>
           
           <button 
             onClick={() => { setShowForm(!showForm); clearForm(); }}
-            style={{ padding: "12px 24px", borderRadius: "8px", backgroundColor: showForm ? "#ffffff" : "#14b8a6", color: showForm ? "#475569" : "#ffffff", border: showForm ? "1px solid #cbd5e1" : "none", fontWeight: "600", fontSize: "14px", cursor: "pointer", boxShadow: "0 1px 2px 0 rgba(0, 0, 0, 0.05)", transition: "all 0.2s" }}
+            style={{ padding: "12px 24px", borderRadius: "8px", backgroundColor: showForm ? "#ffffff" : "#0b6b43", color: showForm ? "#2f6b52" : "#ffffff", border: showForm ? "1px solid #afd6c3" : "none", fontWeight: "600", fontSize: "14px", cursor: "pointer", boxShadow: "0 1px 2px 0 rgba(0, 0, 0, 0.05)", transition: "all 0.2s" }}
           >
             {showForm ? "Cancel Operation" : "Create New Package"}
           </button>
@@ -237,7 +240,7 @@ const AdminPackages = () => {
 
         {/* Error Announcement */}
         {errorMessage && (
-          <div style={{ padding: "16px", backgroundColor: "#fef2f2", borderLeft: "4px solid #ef4444", borderRadius: "6px", color: "#991b1b", fontSize: "14px", fontWeight: "500", marginBottom: "24px" }}>
+          <div style={{ padding: "16px", backgroundColor: "#f0fdf4", borderLeft: "4px solid #064e3b", borderRadius: "6px", color: "#064e3b", fontSize: "14px", fontWeight: "500", marginBottom: "24px" }}>
             {errorMessage}
           </div>
         )}
@@ -245,13 +248,13 @@ const AdminPackages = () => {
         {pendingDeleteId && (
           <div style={{ position: "fixed", inset: 0, zIndex: 1000, display: "grid", placeItems: "center", backgroundColor: "rgba(15, 23, 42, 0.36)", padding: "1rem" }}>
             <div style={{ width: "min(420px, 100%)", backgroundColor: "#ffffff", borderRadius: "12px", padding: "24px", boxShadow: "0 24px 80px rgba(15,23,42,0.24)" }}>
-              <h3 style={{ margin: "0 0 8px 0", fontSize: "18px", color: "#0f172a" }}>Delete package?</h3>
-              <p style={{ margin: "0 0 20px 0", color: "#64748b", lineHeight: 1.5 }}>This removes the package from the Spring Boot catalog.</p>
+              <h3 style={{ margin: "0 0 8px 0", fontSize: "18px", color: "#022c22" }}>Delete package?</h3>
+              <p style={{ margin: "0 0 20px 0", color: "#35705c", lineHeight: 1.5 }}>This removes the package from the Spring Boot catalog.</p>
               <div style={{ display: "flex", justifyContent: "flex-end", gap: "10px" }}>
-                <button type="button" onClick={() => setPendingDeleteId(null)} style={{ padding: "10px 16px", borderRadius: "8px", border: "1px solid #cbd5e1", background: "#ffffff", color: "#334155", fontWeight: 600 }}>
+                <button type="button" onClick={() => setPendingDeleteId(null)} style={{ padding: "10px 16px", borderRadius: "8px", border: "1px solid #afd6c3", background: "#ffffff", color: "#164e36", fontWeight: 600 }}>
                   Cancel
                 </button>
-                <button type="button" onClick={confirmDelete} style={{ padding: "10px 16px", borderRadius: "8px", border: "none", background: "#dc2626", color: "#ffffff", fontWeight: 700 }}>
+                <button type="button" onClick={confirmDelete} style={{ padding: "10px 16px", borderRadius: "8px", border: "none", background: "#064e3b", color: "#ffffff", fontWeight: 700 }}>
                   Delete
                 </button>
               </div>
@@ -261,64 +264,64 @@ const AdminPackages = () => {
 
         {/* Create / Edit Form Section */}
         {showForm && (
-          <div style={{ backgroundColor: "#ffffff", borderRadius: "12px", border: "1px solid #e2e8f0", padding: "32px", marginBottom: "40px", boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.05)" }}>
-            <h3 style={{ fontSize: "18px", fontWeight: "600", color: "#0f172a", margin: "0 0 24px 0", borderBottom: "1px solid #f1f5f9", paddingBottom: "12px" }}>
+          <div style={{ backgroundColor: "#ffffff", borderRadius: "12px", border: "1px solid #d8efe5", padding: "32px", marginBottom: "40px", boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.05)" }}>
+            <h3 style={{ fontSize: "18px", fontWeight: "600", color: "#022c22", margin: "0 0 24px 0", borderBottom: "1px solid #f0fdf4", paddingBottom: "12px" }}>
               {editingId ? "Modify Existing Experience" : "Design New Experience Package"}
             </h3>
             
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "24px", marginBottom: "24px" }}>
               
               <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
-                <label style={{ fontSize: "13px", fontWeight: "600", color: "#475569" }}>Package Title</label>
-                <input type="text" placeholder="e.g., Madurai Temple Trail" value={formData.title} onChange={(e) => setFormData({...formData, title: e.target.value})} style={{ padding: "11px 14px", borderRadius: "8px", border: "1px solid #cbd5e1", fontSize: "14px", color: "#0f172a", outline: "none" }} />
+                <label style={{ fontSize: "13px", fontWeight: "600", color: "#2f6b52" }}>Package Title</label>
+                <input type="text" placeholder="e.g., Madurai Temple Trail" value={formData.title} onChange={(e) => setFormData({...formData, title: e.target.value})} style={{ padding: "11px 14px", borderRadius: "8px", border: "1px solid #afd6c3", fontSize: "14px", color: "#022c22", outline: "none" }} />
               </div>
 
               <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
-                <label style={{ fontSize: "13px", fontWeight: "600", color: "#475569" }}>Destination Spotlight</label>
-                <input type="text" placeholder="e.g., Madurai, Rameswaram" value={formData.destination} onChange={(e) => setFormData({...formData, destination: e.target.value})} style={{ padding: "11px 14px", borderRadius: "8px", border: "1px solid #cbd5e1", fontSize: "14px", color: "#0f172a", outline: "none" }} />
+                <label style={{ fontSize: "13px", fontWeight: "600", color: "#2f6b52" }}>Destination Spotlight</label>
+                <input type="text" placeholder="e.g., Madurai, Rameswaram" value={formData.destination} onChange={(e) => setFormData({...formData, destination: e.target.value})} style={{ padding: "11px 14px", borderRadius: "8px", border: "1px solid #afd6c3", fontSize: "14px", color: "#022c22", outline: "none" }} />
               </div>
 
               <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
-                <label style={{ fontSize: "13px", fontWeight: "600", color: "#475569" }}>Price (₹)</label>
-                <input type="number" placeholder="e.g., 45000" value={formData.price} onChange={(e) => setFormData({...formData, price: e.target.value})} style={{ padding: "11px 14px", borderRadius: "8px", border: "1px solid #cbd5e1", fontSize: "14px", color: "#0f172a", outline: "none" }} />
+                <label style={{ fontSize: "13px", fontWeight: "600", color: "#2f6b52" }}>Price (₹)</label>
+                <input type="number" placeholder="e.g., 45000" value={formData.price} onChange={(e) => setFormData({...formData, price: e.target.value})} style={{ padding: "11px 14px", borderRadius: "8px", border: "1px solid #afd6c3", fontSize: "14px", color: "#022c22", outline: "none" }} />
               </div>
 
               <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
-                <label style={{ fontSize: "13px", fontWeight: "600", color: "#475569" }}>Duration Days</label>
-                <input type="number" placeholder="Days" value={formData.days} onChange={(e) => setFormData({...formData, days: e.target.value})} style={{ padding: "11px 14px", borderRadius: "8px", border: "1px solid #cbd5e1", fontSize: "14px", color: "#0f172a", outline: "none" }} />
+                <label style={{ fontSize: "13px", fontWeight: "600", color: "#2f6b52" }}>Duration Days</label>
+                <input type="number" placeholder="Days" value={formData.days} onChange={(e) => setFormData({...formData, days: e.target.value})} style={{ padding: "11px 14px", borderRadius: "8px", border: "1px solid #afd6c3", fontSize: "14px", color: "#022c22", outline: "none" }} />
               </div>
 
               <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
-                <label style={{ fontSize: "13px", fontWeight: "600", color: "#475569" }}>Duration Nights</label>
-                <input type="number" placeholder="Nights" value={formData.nights} onChange={(e) => setFormData({...formData, nights: e.target.value})} style={{ padding: "11px 14px", borderRadius: "8px", border: "1px solid #cbd5e1", fontSize: "14px", color: "#0f172a", outline: "none" }} />
+                <label style={{ fontSize: "13px", fontWeight: "600", color: "#2f6b52" }}>Duration Nights</label>
+                <input type="number" placeholder="Nights" value={formData.nights} onChange={(e) => setFormData({...formData, nights: e.target.value})} style={{ padding: "11px 14px", borderRadius: "8px", border: "1px solid #afd6c3", fontSize: "14px", color: "#022c22", outline: "none" }} />
               </div>
 
               <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
-                <label style={{ fontSize: "13px", fontWeight: "600", color: "#475569" }}>Category Classification</label>
-                <input type="text" placeholder="e.g., Honeymoon, Wildlife, Heritage" value={formData.category} onChange={(e) => setFormData({...formData, category: e.target.value})} style={{ padding: "11px 14px", borderRadius: "8px", border: "1px solid #cbd5e1", fontSize: "14px", color: "#0f172a", outline: "none" }} />
+                <label style={{ fontSize: "13px", fontWeight: "600", color: "#2f6b52" }}>Category Classification</label>
+                <input type="text" placeholder="e.g., Honeymoon, Wildlife, Heritage" value={formData.category} onChange={(e) => setFormData({...formData, category: e.target.value})} style={{ padding: "11px 14px", borderRadius: "8px", border: "1px solid #afd6c3", fontSize: "14px", color: "#022c22", outline: "none" }} />
               </div>
 
               <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
-                <label style={{ fontSize: "13px", fontWeight: "600", color: "#475569" }}>Region</label>
-                <select value={formData.state} onChange={(e) => setFormData({...formData, state: e.target.value})} style={{ padding: "11px 14px", borderRadius: "8px", border: "1px solid #cbd5e1", fontSize: "14px", color: "#0f172a", outline: "none", backgroundColor: "#fff" }}>
+                <label style={{ fontSize: "13px", fontWeight: "600", color: "#2f6b52" }}>Region</label>
+                <select value={formData.state} onChange={(e) => setFormData({...formData, state: e.target.value})} style={{ padding: "11px 14px", borderRadius: "8px", border: "1px solid #afd6c3", fontSize: "14px", color: "#022c22", outline: "none", backgroundColor: "#fff" }}>
                   <option value="Tamil Nadu">Tamil Nadu</option>
                 </select>
               </div>
             </div>
 
             <div style={{ display: "flex", flexDirection: "column", gap: "6px", marginBottom: "24px" }}>
-              <label style={{ fontSize: "13px", fontWeight: "600", color: "#475569" }}>Expedition Description & Narrative</label>
-              <textarea placeholder="Outline the experiential route, premium stays, inclusions and highlights..." value={formData.description} onChange={(e) => setFormData({...formData, description: e.target.value})} rows="4" style={{ padding: "12px 14px", borderRadius: "8px", border: "1px solid #cbd5e1", fontSize: "14px", color: "#0f172a", outline: "none", fontFamily: "inherit", resize: "vertical" }}></textarea>
+              <label style={{ fontSize: "13px", fontWeight: "600", color: "#2f6b52" }}>Expedition Description & Narrative</label>
+              <textarea placeholder="Outline the experiential route, premium stays, inclusions and highlights..." value={formData.description} onChange={(e) => setFormData({...formData, description: e.target.value})} rows="4" style={{ padding: "12px 14px", borderRadius: "8px", border: "1px solid #afd6c3", fontSize: "14px", color: "#022c22", outline: "none", fontFamily: "inherit", resize: "vertical" }}></textarea>
             </div>
 
-            <div style={{ marginBottom: "32px", padding: "20px", border: "1px dashed #cbd5e1", borderRadius: "8px", backgroundColor: "#f8fafc" }}>
-              <label style={{ display: "block", fontSize: "14px", fontWeight: "600", color: "#334155", marginBottom: "8px" }}>Media Gallery Assets (Max 3 Images)</label>
-              <input type="file" accept="image/*" multiple onChange={handleFileChange} style={{ fontSize: "14px", color: "#475569" }} />
+            <div style={{ marginBottom: "32px", padding: "20px", border: "1px dashed #afd6c3", borderRadius: "8px", backgroundColor: "#ffffff" }}>
+              <label style={{ display: "block", fontSize: "14px", fontWeight: "600", color: "#164e36", marginBottom: "8px" }}>Media Gallery Assets (Max 3 Images)</label>
+              <input type="file" accept="image/*" multiple onChange={handleFileChange} style={{ fontSize: "14px", color: "#2f6b52" }} />
               
               {formData.images && formData.images.length > 0 && (
                 <div style={{ display: "flex", gap: "12px", marginTop: "16px", flexWrap: "wrap" }}>
                   {formData.images.map((src, i) => (
-                    <div key={i} style={{ position: "relative", width: "100px", height: "75px", borderRadius: "6px", overflow: "hidden", border: "1px solid #e2e8f0" }}>
+                    <div key={i} style={{ position: "relative", width: "100px", height: "75px", borderRadius: "6px", overflow: "hidden", border: "1px solid #d8efe5" }}>
                       <img src={src} alt={`Upload Preview ${i + 1}`} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                     </div>
                   ))}
@@ -337,10 +340,10 @@ const AdminPackages = () => {
         )}
 
         {/* Dynamic Controls Bar: Tab Switching & Real-Time Searching */}
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "24px", marginBottom: "32px", flexWrap: "wrap", borderBottom: "1px solid #e2e8f0", paddingBottom: "16px" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "24px", marginBottom: "32px", flexWrap: "wrap", borderBottom: "1px solid #d8efe5", paddingBottom: "16px" }}>
           
           {/* Custom Clean Minimalist Tab Track Layout */}
-          <div style={{ display: "flex", gap: "4px", backgroundColor: "#f1f5f9", padding: "4px", borderRadius: "8px" }}>
+          <div style={{ display: "flex", gap: "4px", backgroundColor: "#f0fdf4", padding: "4px", borderRadius: "8px" }}>
             {statesList.map((st) => (
               <button
                 key={st}
@@ -352,7 +355,7 @@ const AdminPackages = () => {
                   fontSize: "14px",
                   fontWeight: filterState === st ? "600" : "500",
                   backgroundColor: filterState === st ? "#ffffff" : "transparent",
-                  color: filterState === st ? "#0f766e" : "#64748b",
+                  color: filterState === st ? "#0f766e" : "#35705c",
                   cursor: "pointer",
                   boxShadow: filterState === st ? "0 1px 3px rgba(0,0,0,0.05)" : "none",
                   transition: "all 0.15s ease"
@@ -370,14 +373,14 @@ const AdminPackages = () => {
               placeholder="Search catalog by title or keyword..." 
               value={searchTerm} 
               onChange={(e) => setSearchTerm(e.target.value)} 
-              style={{ width: "100%", padding: "10px 16px", paddingLeft: "16px", borderRadius: "8px", border: "1px solid #cbd5e1", fontSize: "14px", color: "#0f172a", backgroundColor: "#ffffff", outline: "none", boxSizing: "border-box" }}
+              style={{ width: "100%", padding: "10px 16px", paddingLeft: "16px", borderRadius: "8px", border: "1px solid #afd6c3", fontSize: "14px", color: "#022c22", backgroundColor: "#ffffff", outline: "none", boxSizing: "border-box" }}
             />
           </div>
         </div>
 
         {/* Production Level Grid Layout for Experiences Catalog */}
         {loading && packages.length === 0 ? (
-          <div style={{ textAlign: "center", padding: "64px 0", color: "#64748b", fontSize: "15px" }}>Synchronizing catalogs secure layer...</div>
+          <div style={{ textAlign: "center", padding: "64px 0", color: "#35705c", fontSize: "15px" }}>Synchronizing catalogs secure layer...</div>
         ) : (
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(310px, 1fr))", gap: "32px" }}>
             {packages
@@ -393,7 +396,7 @@ const AdminPackages = () => {
                     style={{
                       backgroundColor: "#ffffff",
                       borderRadius: "14px",
-                      border: "1px solid #e2e8f0",
+                      border: "1px solid #d8efe5",
                       overflow: "hidden",
                       display: "flex",
                       flexDirection: "column",
@@ -405,11 +408,11 @@ const AdminPackages = () => {
                   >
                     <div>
                       {/* Premium Card Header / Visual Area */}
-                      <div style={{ width: "100%", height: "190px", backgroundColor: "#f1f5f9", position: "relative" }}>
+                      <div style={{ width: "100%", height: "190px", backgroundColor: "#f0fdf4", position: "relative" }}>
                         {displayImg ? (
                           <img src={displayImg} alt={pkg.title} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                         ) : (
-                          <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center", color: "#94a3b8", fontSize: "14px", fontWeight: "500", backgroundColor: "#e2e8f0" }}>No Asset Media Uploaded</div>
+                          <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center", color: "#6f9986", fontSize: "14px", fontWeight: "500", backgroundColor: "#d8efe5" }}>No Asset Media Uploaded</div>
                         )}
                         <div style={{ position: "absolute", top: "12px", left: "12px", backgroundColor: "rgba(255, 255, 255, 0.95)", backdropFilter: "blur(4px)", padding: "4px 10px", borderRadius: "9999px", fontSize: "11px", fontWeight: "700", color: "#0f766e", letterSpacing: "0.02em", textTransform: "uppercase", boxShadow: "0 1px 2px rgba(0,0,0,0.05)" }}>
                           {pkg.state || "Tamil Nadu"}
@@ -421,17 +424,17 @@ const AdminPackages = () => {
 
                       {/* Package Meta Info Block */}
                       <div style={{ padding: "20px 24px" }}>
-                        <p style={{ margin: "0 0 6px 0", fontSize: "12px", fontWeight: "600", color: "#14b8a6", textTransform: "uppercase", letterSpacing: "0.05em" }}>{pkg.category || "General Experience"}</p>
-                        <h4 style={{ margin: 0, fontSize: "17px", fontWeight: "700", color: "#0f172a", lineHeight: "1.4", height: "48px", overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" }}>{pkg.title}</h4>
-                        <p style={{ margin: "8px 0 16px 0", fontSize: "13px", color: "#64748b", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>📍 {pkg.destination}</p>
+                        <p style={{ margin: "0 0 6px 0", fontSize: "12px", fontWeight: "600", color: "#0b6b43", textTransform: "uppercase", letterSpacing: "0.05em" }}>{pkg.category || "General Experience"}</p>
+                        <h4 style={{ margin: 0, fontSize: "17px", fontWeight: "700", color: "#022c22", lineHeight: "1.4", height: "48px", overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" }}>{pkg.title}</h4>
+                        <p style={{ margin: "8px 0 16px 0", fontSize: "13px", color: "#35705c", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>📍 {pkg.destination}</p>
                         
-                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "12px 0 0 0", borderTop: "1px solid #f1f5f9" }}>
+                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "12px 0 0 0", borderTop: "1px solid #f0fdf4" }}>
                           <div>
-                            <span style={{ display: "block", fontSize: "11px", color: "#94a3b8", textTransform: "uppercase", fontWeight: "600" }}>Duration Track</span>
-                            <span style={{ fontSize: "14px", fontWeight: "600", color: "#334155" }}>{pkg.days} Days / {pkg.nights || Number(pkg.days) - 1} Nights</span>
+                            <span style={{ display: "block", fontSize: "11px", color: "#6f9986", textTransform: "uppercase", fontWeight: "600" }}>Duration Track</span>
+                            <span style={{ fontSize: "14px", fontWeight: "600", color: "#164e36" }}>{pkg.days} Days / {pkg.nights || Number(pkg.days) - 1} Nights</span>
                           </div>
                           <div style={{ textAlign: "right" }}>
-                            <span style={{ display: "block", fontSize: "11px", color: "#94a3b8", textTransform: "uppercase", fontWeight: "600" }}>Tariff Matrix</span>
+                            <span style={{ display: "block", fontSize: "11px", color: "#6f9986", textTransform: "uppercase", fontWeight: "600" }}>Tariff Matrix</span>
                             <span style={{ fontSize: "16px", fontWeight: "700", color: "#0f766e" }}>₹{Number(pkg.price).toLocaleString()}</span>
                           </div>
                         </div>
@@ -439,12 +442,12 @@ const AdminPackages = () => {
                     </div>
 
                     {/* Operational Actions Context Bar */}
-                    <div style={{ display: "flex", borderTop: "1px solid #e2e8f0", backgroundColor: "#f8fafc" }}>
+                    <div style={{ display: "flex", borderTop: "1px solid #d8efe5", backgroundColor: "#ffffff" }}>
                       <button 
                         onClick={() => handleEdit(pkg)}
                         onMouseEnter={() => setHoveredBtn(`ed-${pkg.id}`)}
                         onMouseLeave={() => setHoveredBtn(null)}
-                        style={{ flex: 1, padding: "14px", border: "none", backgroundColor: hoveredBtn === `ed-${pkg.id}` ? "#f0fdfa" : "transparent", color: "#0f766e", fontSize: "13px", fontWeight: "600", cursor: "pointer", transition: "all 0.15s", borderRight: "1px solid #e2e8f0" }}
+                        style={{ flex: 1, padding: "14px", border: "none", backgroundColor: hoveredBtn === `ed-${pkg.id}` ? "#f0fdfa" : "transparent", color: "#0f766e", fontSize: "13px", fontWeight: "600", cursor: "pointer", transition: "all 0.15s", borderRight: "1px solid #d8efe5" }}
                       >
                         Modify Config
                       </button>
@@ -452,7 +455,7 @@ const AdminPackages = () => {
                         onClick={() => handleDelete(pkg.id)}
                         onMouseEnter={() => setHoveredBtn(`del-${pkg.id}`)}
                         onMouseLeave={() => setHoveredBtn(null)}
-                        style={{ flex: 1, padding: "14px", border: "none", backgroundColor: hoveredBtn === `del-${pkg.id}` ? "#fef2f2" : "transparent", color: "#dc2626", fontSize: "13px", fontWeight: "600", cursor: "pointer", transition: "all 0.15s" }}
+                        style={{ flex: 1, padding: "14px", border: "none", backgroundColor: hoveredBtn === `del-${pkg.id}` ? "#f0fdf4" : "transparent", color: "#064e3b", fontSize: "13px", fontWeight: "600", cursor: "pointer", transition: "all 0.15s" }}
                       >
                         Purge Catalog
                       </button>
@@ -466,8 +469,8 @@ const AdminPackages = () => {
 
         {/* Fallback Display State */}
         {!loading && packages.length === 0 && (
-          <div style={{ textAlign: "center", padding: "80px 0", backgroundColor: "#ffffff", borderRadius: "12px", border: "1px dashed #cbd5e1", marginTop: "24px" }}>
-            <p style={{ margin: 0, fontSize: "15px", color: "#64748b", fontWeight: "500" }}>No product configurations found matching current filtering settings.</p>
+          <div style={{ textAlign: "center", padding: "80px 0", backgroundColor: "#ffffff", borderRadius: "12px", border: "1px dashed #afd6c3", marginTop: "24px" }}>
+            <p style={{ margin: 0, fontSize: "15px", color: "#35705c", fontWeight: "500" }}>No product configurations found matching current filtering settings.</p>
           </div>
         )}
 

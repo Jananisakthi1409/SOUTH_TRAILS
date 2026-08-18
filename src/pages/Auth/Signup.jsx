@@ -134,7 +134,7 @@ const Signup = () => {
           <div className="signup-stack">
             <div className="pass-card">
               <div className="pass-card-header">
-                <span className="pass-brand">TAMIL TRAILS</span>
+                <span className="pass-brand">SOUTH TRAILS</span>
                 <h2>TRAVEL PASS</h2>
               </div>
               <div className="pass-row">
@@ -168,7 +168,7 @@ const Signup = () => {
             <div className="signup-card">
               {stage === "form" && (
                 <>
-                  <span className="signup-badge">Tamil Trails</span>
+                  <span className="signup-badge">South Trails</span>
                   <div className="signup-copy">
                     <h1>Get Your Travel Pass</h1>
                     <p>Join travelers exploring Tamil Nadu's temples, hills, coast, food, and festivals.</p>
@@ -246,7 +246,7 @@ const Signup = () => {
                 <div className="success-card">
                   <span className="success-label">Welcome Aboard!</span>
                   <div className="boarding-pass">
-                    <div className="boarding-header">TAMIL TRAILS</div>
+                    <div className="boarding-header">SOUTH TRAILS</div>
                     <div className="boarding-title">BOARDING PASS</div>
                     <div className="boarding-row">
                       <span>Traveler:</span>

@@ -1,55 +1,114 @@
+import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
+
+const sections = [
+  {
+    id: "collection",
+    title: "1. Information We Collect",
+    content: (
+      <>
+        <p className="mb-3 text-xs leading-relaxed text-[#6b7280]">
+          We collect information from you when you register on our platform, make a booking,
+          subscribe to our newsletter, respond to a survey, or interact with our services:
+        </p>
+        <ul className="space-y-2 text-xs text-[#6b7280]">
+          {[
+            "Personal identifiers: name, email address, phone number, mailing address",
+            "Payment information (processed securely through certified payment gateways)",
+            "Travel preferences, booking history, and trip feedback",
+            "Device and browser information collected through cookies",
+          ].map((item) => (
+            <li key={item} className="flex items-start gap-2">
+              <span className="text-[#15803d]">✓</span>
+              {item}
+            </li>
+          ))}
+        </ul>
+      </>
+    ),
+  },
+  {
+    id: "use",
+    title: "2. How We Use Your Information",
+    content: (
+      <p className="text-xs leading-relaxed text-[#6b7280]">
+        Information collected is used to personalize your travel recommendations, process bookings,
+        send confirmation updates, improve customer support, and comply with legal requirements.
+      </p>
+    ),
+  },
+  {
+    id: "security",
+    title: "3. Data Security",
+    content: (
+      <p className="text-xs leading-relaxed text-[#6b7280]">
+        We implement industry-standard SSL encryption for all data in transit and PCI-DSS compliant
+        payment processing. Sensitive data is stored securely with restricted access controls.
+      </p>
+    ),
+  },
+  {
+    id: "third-party",
+    title: "4. Third-Party Disclosure",
+    content: (
+      <p className="text-xs leading-relaxed text-[#6b7280]">
+        We do not sell or trade your personal data. We only share necessary details with trusted partners
+        (hotels, transport operators, guides) required to execute your booked itinerary.
+      </p>
+    ),
+  },
+  {
+    id: "rights",
+    title: "5. Your Rights",
+    content: (
+      <p className="text-xs leading-relaxed text-[#6b7280]">
+        You have the right to request access to your personal data, update your preferences, request deletion,
+        or opt out of marketing communications at any time by contacting our team.
+      </p>
+    ),
+  },
+];
+
 const Privacy = () => {
   return (
-    <main className="min-h-screen pt-32 pb-20">
-      <div className="mx-auto max-w-4xl px-6">
-        <div className="mb-12">
-          <h1 className="mb-4 font-display text-4xl text-white md:text-5xl">Privacy Policy</h1>
-          <p className="text-[#f5efe6]/50 text-sm">Last updated: {new Date().toLocaleDateString()}</p>
-        </div>
-
-        <div className="prose prose-invert max-w-none text-[#f5efe6]/70">
-          <p className="text-lg mb-8 text-white">
-            Tamil Trails ("we," "our," or "us") is committed to protecting your privacy. This Privacy Policy explains how your personal information is collected, used, and disclosed by Tamil Trails.
-          </p>
-
-          <h2 className="text-2xl font-display text-white mt-12 mb-4">1. Information We Collect</h2>
-          <p className="mb-6">
-            We collect information from you when you register on our site, place an order, subscribe to our newsletter, respond to a survey, or fill out a form.
-          </p>
-          <ul className="list-disc pl-6 mb-8 space-y-2">
-            <li>Name, email address, mailing address, phone number</li>
-            <li>Payment information (processed securely through our payment providers)</li>
-            <li>Travel preferences and booking history</li>
-            <li>Device and usage information through cookies</li>
-          </ul>
-
-          <h2 className="text-2xl font-display text-white mt-12 mb-4">2. How We Use Your Information</h2>
-          <p className="mb-6">
-            Any of the information we collect from you may be used in one of the following ways:
-          </p>
-          <ul className="list-disc pl-6 mb-8 space-y-2">
-            <li>To personalize your experience and deliver curated travel recommendations</li>
-            <li>To improve our website and customer service</li>
-            <li>To process transactions and manage your bookings</li>
-            <li>To send periodic emails regarding your order or other products and services</li>
-          </ul>
-
-          <h2 className="text-2xl font-display text-white mt-12 mb-4">3. Data Security</h2>
-          <p className="mb-8">
-            We implement a variety of security measures to maintain the safety of your personal information. All supplied sensitive/credit information is transmitted via Secure Socket Layer (SSL) technology and then encrypted into our Payment gateway providers database.
-          </p>
-
-          <h2 className="text-2xl font-display text-white mt-12 mb-4">4. Third-Party Disclosure</h2>
-          <p className="mb-8">
-            We do not sell, trade, or otherwise transfer to outside parties your personally identifiable information. This does not include trusted third parties who assist us in operating our website, conducting our business, or servicing you, so long as those parties agree to keep this information confidential.
-          </p>
-
-          <h2 className="text-2xl font-display text-white mt-12 mb-4">5. Contact Us</h2>
-          <p className="mb-8">
-            If there are any questions regarding this privacy policy, you may contact us using the information on our Contact page.
+    <main className="min-h-screen bg-[#f8fafc] text-[#1f2937]">
+      <section className="bg-gradient-to-b from-[#f0fdf4] to-[#f8fafc] px-6 pb-12 pt-28 border-b border-[#e5e7eb]">
+        <div className="mx-auto max-w-4xl">
+          <span className="mb-3 inline-block rounded-full border border-[#dcfce7] bg-[#dcfce7]/60 px-4 py-1 text-xs font-bold uppercase tracking-wider text-[#166534]">
+            Legal Document
+          </span>
+          <h1 className="mb-2 font-display text-3xl font-extrabold text-[#1f2937] md:text-4xl">Privacy Policy</h1>
+          <p className="text-xs text-[#6b7280]">
+            Last updated: {new Date().toLocaleDateString("en-IN", { day: "numeric", month: "long", year: "numeric" })}
           </p>
         </div>
-      </div>
+      </section>
+
+      <section className="px-6 py-12">
+        <div className="mx-auto max-w-4xl space-y-6">
+          {sections.map((section, i) => (
+            <motion.div
+              key={section.id}
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: i * 0.05, duration: 0.4 }}
+              className="rounded-xl border border-[#e5e7eb] bg-white p-6 shadow-sm"
+            >
+              <h2 className="mb-3 font-display text-base font-bold text-[#1f2937]">
+                {section.title}
+              </h2>
+              {section.content}
+            </motion.div>
+          ))}
+
+          <div className="rounded-xl border border-[#dcfce7] bg-[#f0fdf4] p-6 text-center text-xs text-[#166534]">
+            Have questions about your privacy?{" "}
+            <Link to="/contact" className="font-bold underline text-[#15803d]">
+              Contact our Privacy Team
+            </Link>
+          </div>
+        </div>
+      </section>
     </main>
   );
 };

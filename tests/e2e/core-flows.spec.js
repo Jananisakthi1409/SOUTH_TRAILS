@@ -19,6 +19,9 @@ test("admin workspace pages load", async ({ page }) => {
   await page.getByRole("button", { name: /sign into admin workspace/i }).click();
 
   await expect(page).toHaveURL(/\/admin\/dashboard/);
+  await page.goto("/admin/ecosystem");
+  await expect(page.getByRole("heading", { name: /ecosystem management/i })).toBeVisible();
+  await expect(page.getByRole("button", { name: /guides/i })).toBeVisible();
 });
 
 test("admin workspace redirects unauthenticated visitors", async ({ page }) => {

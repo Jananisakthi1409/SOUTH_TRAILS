@@ -36,15 +36,19 @@ const AdminKanban = () => {
   };
 
   return (
-    <div style={{ display: "flex", minHeight: "100vh", background: "#f8fafc" }}>
-      <aside style={{ width: 260, background: "#ffffff", borderRight: "1px solid #e2e8f0", padding: "32px 24px" }}>
+    <div style={{ display: "flex", minHeight: "100vh", background: "#ffffff" }}>
+      <aside style={{ width: 260, background: "#ffffff", borderRight: "1px solid #d8efe5", padding: "32px 24px" }}>
         <h2 style={{ color: "#0f766e", marginTop: 0 }}>SOUTH TRAILS</h2>
         <nav style={{ display: "grid", gap: 8 }}>
           <Link to="/admin/dashboard">Dashboard</Link>
-          <Link to="/admin/bookings">Bookings</Link>
-          <Link to="/admin/kanban">Kanban Board</Link>
           <Link to="/admin/packages">Packages</Link>
+          <Link to="/admin/customers">Customers</Link>
+          <Link to="/admin/bookings">Bookings</Link>
+          <Link to="/admin/users">Users</Link>
+          <Link to="/admin/ecosystem">Ecosystem</Link>
+          <Link to="/admin/reviews">Reviews</Link>
           <Link to="/admin/analytics">Analytics</Link>
+          <Link to="/admin/kanban">Kanban Board</Link>
         </nav>
         <button
           className="button button-secondary"
@@ -92,7 +96,7 @@ const AdminKanban = () => {
                     onDragEnd={() => setDraggingId(null)}
                   >
                     <strong>{getPackageName(booking)}</strong>
-                    <p style={{ margin: "0.35rem 0", color: "#64748b" }}>
+                    <p style={{ margin: "0.35rem 0", color: "#35705c" }}>
                       {booking.travelDate || booking.travel_date || "Flexible date"}
                     </p>
                     <p style={{ margin: 0, color: "#0f766e", fontWeight: 800 }}>

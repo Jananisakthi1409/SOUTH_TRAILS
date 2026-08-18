@@ -3,7 +3,6 @@ package com.southtrails.api.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.southtrails.api.entity.Booking;
 import com.southtrails.api.entity.ItineraryPlan;
-import com.southtrails.api.entity.NotificationItem;
 import com.southtrails.api.entity.Review;
 import com.southtrails.api.entity.TravelPackage;
 import com.southtrails.api.entity.WishlistItem;
@@ -65,7 +64,7 @@ public class AiTourismController {
 
     @PostMapping("/itinerary")
     Map<String, Object> itinerary(@RequestBody Map<String, Object> payload) {
-        String state = "Tamil Nadu";
+        String state = fallback(text(payload.get("state")), "");
         String travelStyle = fallback(text(payload.get("travelStyle")), "Balanced");
         String season = fallback(text(payload.get("season")), "Current season");
         int duration = Math.max(1, number(payload.get("duration"), number(payload.get("days"), 3)));
@@ -74,7 +73,7 @@ public class AiTourismController {
         List<String> interests = textList(payload.get("interests"));
 
         List<TravelPackage> ranked = packages.findAll().stream()
-                .filter(pkg -> equalsIgnoreCase(pkg.getState(), "Tamil Nadu"))
+                .filter(pkg -> state.isBlank() || equalsIgnoreCase(pkg.getState(), state))
                 .map(pkg -> Map.entry(pkg, itineraryScore(pkg, interests, budget, duration, travelStyle)))
                 .sorted(Map.Entry.<TravelPackage, Integer>comparingByValue().reversed())
                 .limit(6)
@@ -83,11 +82,14 @@ public class AiTourismController {
 
         List<Map<String, Object>> dayPlan = new ArrayList<>();
         List<TravelPackage> sourcePackages = ranked.isEmpty()
-                ? packages.findAll().stream().filter(pkg -> equalsIgnoreCase(pkg.getState(), "Tamil Nadu")).limit(3).toList()
+                ? packages.findAll().stream()
+                        .filter(pkg -> state.isBlank() || equalsIgnoreCase(pkg.getState(), state))
+                        .limit(3).toList()
                 : ranked;
         if (sourcePackages.isEmpty()) {
             Map<String, Object> emptyResponse = new LinkedHashMap<>();
-            emptyResponse.put("title", travelStyle + " Tamil Nadu plan");
+            String regionLabel = state.isBlank() ? "South India" : state;
+            emptyResponse.put("title", travelStyle + " " + regionLabel + " plan");
             emptyResponse.put("summary", "No package catalog data is available yet. Add packages from the existing admin workspace first.");
             emptyResponse.put("season", season);
             emptyResponse.put("travelStyle", travelStyle);
@@ -280,8 +282,8 @@ public class AiTourismController {
     private Map<String, Object> packageCard(TravelPackage pkg) {
         return Map.of(
                 "id", pkg.getId(),
-                "title", fallback(pkg.getTitle(), "Tamil Trails package"),
-                "state", fallback(pkg.getState(), "Tamil Nadu"),
+                "title", fallback(pkg.getTitle(), "South India package"),
+                "state", fallback(pkg.getState(), "South India"),
                 "destination", fallback(pkg.getDestination(), "Curated route"),
                 "category", fallback(pkg.getCategory(), "Experience"),
                 "days", pkg.getDays() == null ? 0 : pkg.getDays(),

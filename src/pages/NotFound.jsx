@@ -16,15 +16,15 @@ const NotFound = () => {
           </span>
         </div>
         <h1 className="mb-4 font-display text-5xl text-white md:text-6xl -mt-24 relative z-10">
-          Lost in the <span className="text-[#f0c94a]">Wilderness</span>
+          Lost in the <span className="text-[#0b6b43]">Wilderness</span>
         </h1>
-        <p className="mb-10 text-lg text-[#f5efe6]/70 max-w-md mx-auto">
+        <p className="mb-10 text-lg text-[#ffffff]/70 max-w-md mx-auto">
           The page you're looking for seems to have wandered off the trail. Let's get you back on the right path.
         </p>
         <div className="flex flex-wrap items-center justify-center gap-4">
           <Link
             to="/"
-            className="inline-flex h-14 items-center justify-center rounded-md bg-[#f0c94a] px-8 text-sm font-bold text-[#1a0a00] transition hover:bg-white"
+            className="inline-flex h-14 items-center justify-center rounded-md bg-[#0b6b43] px-8 text-sm font-bold text-[#022c22] transition hover:bg-white"
           >
             Return to Homepage
           </Link>

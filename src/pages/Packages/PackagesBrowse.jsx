@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { getPackages } from "../../services/packageService";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { categories, budgetFilters, durationFilters } from "./packages";
 import PackageCompareTray from "../../components/advanced/PackageCompareTray";
@@ -34,18 +34,22 @@ const PackagesBrowse = () => {
   const navigate = useNavigate();
   const { user, isAuthenticated } = useAuthContext();
   const { showToast } = useToast();
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const initialSearch = searchParams.get("search") || searchParams.get("q") || "";
+
   const [packagesData, setPackagesData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [selectedBudget, setSelectedBudget] = useState("All");
   const [selectedDuration, setSelectedDuration] = useState("All");
   const [selectedState, setSelectedState] = useState("All");
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState(initialSearch);
   const [isFilterDrawerOpen, setIsFilterDrawerOpen] = useState(false);
   const [selectedPackages, setSelectedPackages] = useState([]);
   const [savedPackageIds, setSavedPackageIds] = useState([]);
   const [minRating, setMinRating] = useState(0);
-  const [sortBy, setSortBy] = useState("rating");
+const [sortBy, setSortBy] = useState("rating");
 
   useEffect(() => {
     let active = true;

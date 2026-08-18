@@ -19,7 +19,7 @@ public class SecurityConfig {
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http, JwtAuthenticationFilter jwtFilter) throws Exception {
         http
-                .csrf(AbstractHttpConfigurer::disable)
+                .csrf((csrf) -> csrf.disable())
                 .cors(Customizer.withDefaults())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
@@ -35,7 +35,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/reviews").hasAnyRole("CUSTOMER", "ADMIN")
                         .requestMatchers(HttpMethod.GET, "/api/customers/*").hasAnyRole("CUSTOMER", "ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/api/customers/*").hasAnyRole("CUSTOMER", "ADMIN")
-                        .requestMatchers("/api/packages/**", "/api/uploads/**", "/api/customers/**", "/api/analytics/**", "/api/bookings/**").hasRole("ADMIN")
+                        .requestMatchers("/api/admin/**", "/api/packages/**", "/api/uploads/**", "/api/customers/**", "/api/analytics/**", "/api/bookings/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .headers(headers -> headers.frameOptions(frame -> frame.sameOrigin()))

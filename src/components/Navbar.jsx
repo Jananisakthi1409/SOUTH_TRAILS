@@ -12,8 +12,6 @@ const Navbar = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const isHome = location.pathname === "/";
-
   const navItems = [
     { label: "Destinations", to: "/explore" },
     { label: "Packages", to: "/packages" },
@@ -66,34 +64,35 @@ const Navbar = () => {
   return (
     <>
       <header
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ease-out ${
-          isScrolled || !isHome
-            ? "bg-[#07110f]/90 backdrop-blur-md shadow-md py-4 border-b border-white/5"
-            : "bg-transparent py-6"
+        className={`fixed left-0 right-0 top-0 z-50 border-b border-[#e5e7eb] bg-white/95 shadow-sm backdrop-blur-md transition-all duration-300 ${
+          isScrolled ? "py-2" : "py-3"
         }`}
       >
-        <div className="mx-auto flex max-w-[1400px] items-center justify-between px-6 md:px-12">
+        <div className="mx-auto flex max-w-[1320px] items-center justify-between gap-5 px-4 sm:px-6 lg:px-8">
           <Link
             to="/"
-            className="flex items-center gap-2 text-2xl font-black tracking-tight text-white focus-visible"
-            aria-label="Tamil Trails Home"
+            className="flex items-center gap-3 text-lg font-black tracking-tight text-[#166534] focus-visible"
+            aria-label="South Trails Home"
+            onClick={closeMenus}
           >
-            <span className="flex h-8 w-8 items-center justify-center rounded-md bg-[#f0c94a] font-display text-sm text-[#07110f]">
-              TT
+            <span className="flex h-9 w-9 items-center justify-center rounded-md bg-[#15803d] text-sm font-black text-white shadow-sm">
+              ST
             </span>
-            <span className="hidden sm:inline font-display">Tamil Trails</span>
+            <span className="hidden sm:inline">South Trails</span>
           </Link>
 
           {/* Desktop Nav */}
-          <nav className="hidden items-center gap-8 md:flex" aria-label="Main navigation">
+          <nav className="hidden items-center gap-1 md:flex" aria-label="Main navigation">
             {navItems.map((item) => {
-              const isActive = location.pathname.startsWith(item.to);
+              const isActive = item.to === "/explore"
+                ? ["/explore", "/destinations", "/experiences"].some((path) => location.pathname.startsWith(path))
+                : location.pathname.startsWith(item.to);
               return (
                 <Link
                   key={item.to}
                   to={item.to}
-                  className={`text-sm font-semibold transition focus-visible ${
-                    isActive ? "text-[#f0c94a]" : "text-white hover:text-[#f0c94a]"
+                  className={`rounded-md px-3 py-2 text-sm font-semibold transition focus-visible ${
+                    isActive ? "bg-[#f0fdf4] text-[#15803d]" : "text-[#1f2937] hover:bg-[#f8fafc] hover:text-[#15803d]"
                   }`}
                 >
                   {item.label}
@@ -108,7 +107,7 @@ const Navbar = () => {
               <div className="relative hidden md:block">
                 <button
                   type="button"
-                  className="flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-4 py-2 text-sm font-medium text-white transition hover:bg-white/10 focus-visible"
+                  className="flex items-center gap-2 rounded-md border border-[#e5e7eb] bg-white px-4 py-2 text-sm font-semibold text-[#166534] transition hover:border-[#bbf7d0] hover:bg-[#f0fdf4] focus-visible"
                   onClick={() => setMenuOpen((open) => !open)}
                   aria-expanded={menuOpen}
                   aria-haspopup="true"
@@ -125,27 +124,27 @@ const Navbar = () => {
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: 10 }}
-                      className="absolute right-0 mt-2 w-48 overflow-hidden rounded-xl border border-white/10 bg-[#0a1815] shadow-luxury"
+                      className="absolute right-0 mt-2 w-52 overflow-hidden rounded-lg border border-[#e5e7eb] bg-white shadow-lg"
                     >
                       <div className="flex flex-col py-2">
                         <Link
                           to="/profile"
-                          className="px-4 py-2 text-sm text-white hover:bg-white/10 focus-visible"
+                          className="px-4 py-2 text-sm font-medium text-[#1f2937] hover:bg-[#f0fdf4] focus-visible"
                           onClick={() => setMenuOpen(false)}
                         >
                           My Profile
                         </Link>
                         <Link
                           to="/profile/bookings"
-                          className="px-4 py-2 text-sm text-white hover:bg-white/10 focus-visible"
+                          className="px-4 py-2 text-sm font-medium text-[#1f2937] hover:bg-[#f0fdf4] focus-visible"
                           onClick={() => setMenuOpen(false)}
                         >
                           My Bookings
                         </Link>
-                        <div className="my-1 h-px bg-white/10" />
+                        <div className="my-1 h-px bg-[#e5e7eb]" />
                         <button
                           type="button"
-                          className="px-4 py-2 text-left text-sm text-red-400 hover:bg-white/10 focus-visible"
+                          className="px-4 py-2 text-left text-sm font-semibold text-[#166534] hover:bg-[#f0fdf4] focus-visible"
                           onClick={handleLogout}
                         >
                           Logout
@@ -158,7 +157,7 @@ const Navbar = () => {
             ) : (
               <Link
                 to="/login"
-                className="hidden md:inline-flex h-10 items-center justify-center rounded-md bg-[#2f7dd3] px-6 text-sm font-bold text-white transition hover:bg-[#3d8ee9] focus-visible"
+                className="hidden h-10 items-center justify-center rounded-md bg-[#15803d] px-5 text-sm font-bold text-white transition hover:bg-[#166534] focus-visible md:inline-flex"
               >
                 Sign In
               </Link>
@@ -167,23 +166,23 @@ const Navbar = () => {
             {/* Mobile Menu Toggle */}
             <button
               type="button"
-              className="group relative z-[60] flex h-10 w-10 flex-col items-center justify-center gap-[6px] md:hidden focus-visible"
+              className="group relative z-[60] flex h-10 w-10 flex-col items-center justify-center gap-[6px] rounded-md border border-[#e5e7eb] bg-white md:hidden focus-visible"
               onClick={() => setMobileOpen((open) => !open)}
               aria-label={mobileOpen ? "Close menu" : "Open menu"}
               aria-expanded={mobileOpen}
             >
               <span
-                className={`h-[2px] w-6 bg-white transition-transform duration-300 ${
+                className={`h-[2px] w-5 bg-[#166534] transition-transform duration-300 ${
                   mobileOpen ? "translate-y-[8px] rotate-45" : ""
                 }`}
               />
               <span
-                className={`h-[2px] w-6 bg-white transition-opacity duration-300 ${
+                className={`h-[2px] w-5 bg-[#166534] transition-opacity duration-300 ${
                   mobileOpen ? "opacity-0" : ""
                 }`}
               />
               <span
-                className={`h-[2px] w-6 bg-white transition-transform duration-300 ${
+                className={`h-[2px] w-5 bg-[#166534] transition-transform duration-300 ${
                   mobileOpen ? "-translate-y-[8px] -rotate-45" : ""
                 }`}
               />
@@ -199,7 +198,7 @@ const Navbar = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex flex-col justify-center bg-[#07110f]/95 p-8 backdrop-blur-xl md:hidden"
+            className="fixed inset-0 z-50 flex flex-col justify-center bg-white p-8 text-[#1f2937] shadow-xl md:hidden"
           >
             <nav className="flex flex-col gap-6 text-center" aria-label="Mobile navigation">
               {navItems.map((item) => (
@@ -207,27 +206,27 @@ const Navbar = () => {
                   key={item.to}
                   to={item.to}
                   onClick={closeMenus}
-                  className="font-display text-3xl text-white transition hover:text-[#f0c94a]"
+                  className="text-2xl font-black text-[#1f2937] transition hover:text-[#15803d]"
                 >
                   {item.label}
                 </Link>
               ))}
               
-              <div className="my-6 h-px bg-white/10 mx-auto w-16" />
+              <div className="mx-auto my-4 h-px w-16 bg-[#e5e7eb]" />
               
               {!isAuthenticated ? (
                 <div className="flex flex-col gap-4">
                   <Link
                     to="/login"
                     onClick={closeMenus}
-                    className="inline-flex h-12 items-center justify-center rounded-md bg-[#2f7dd3] px-8 text-base font-bold text-white transition hover:bg-[#3d8ee9]"
+                    className="inline-flex h-12 items-center justify-center rounded-md bg-[#15803d] px-8 text-base font-bold text-white transition hover:bg-[#166534]"
                   >
                     Sign In
                   </Link>
                   <Link
                     to="/signup"
                     onClick={closeMenus}
-                    className="text-white hover:text-[#f0c94a]"
+                    className="font-semibold text-[#166534] hover:text-[#15803d]"
                   >
                     Create Account
                   </Link>
@@ -237,21 +236,21 @@ const Navbar = () => {
                   <Link
                     to="/profile"
                     onClick={closeMenus}
-                    className="text-lg text-white hover:text-[#f0c94a]"
+                    className="text-lg font-semibold text-[#1f2937] hover:text-[#15803d]"
                   >
                     My Profile
                   </Link>
                   <Link
                     to="/profile/bookings"
                     onClick={closeMenus}
-                    className="text-lg text-white hover:text-[#f0c94a]"
+                    className="text-lg font-semibold text-[#1f2937] hover:text-[#15803d]"
                   >
                     My Bookings
                   </Link>
                   <button
                     type="button"
                     onClick={handleLogout}
-                    className="mt-4 text-red-400"
+                    className="mt-4 font-semibold text-[#166534]"
                   >
                     Logout
                   </button>

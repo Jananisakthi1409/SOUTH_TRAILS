@@ -46,24 +46,24 @@ const TamilDestinationPage = ({ name }) => {
   const gallery = [image, chettinadImg, valparaiImg, rameswaramImg].filter(Boolean);
 
   return (
-    <main className="min-h-screen bg-[#07110f] font-sans text-white">
+    <main className="destination-detail-page min-h-screen bg-[#064e3b] font-sans text-white">
       <section className="relative min-h-[78vh] overflow-hidden px-5 py-24 sm:px-8 lg:px-12">
         <img src={image} alt="" className="absolute inset-0 h-full w-full object-cover opacity-65" />
         <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(7,17,15,0.98),rgba(7,17,15,0.76),rgba(7,17,15,0.22))]" />
         <div className="relative mx-auto max-w-7xl">
-          <p className="font-mono text-xs font-bold uppercase tracking-[0.28em] text-[#f0c94a]">{destination[0]}</p>
+          <p className="font-mono text-xs font-bold uppercase tracking-[0.28em] text-[#0b6b43]">{destination[0]}</p>
           <h1 className="mt-5 max-w-5xl font-display text-[clamp(4rem,10vw,9rem)] uppercase leading-[0.82]">{name}</h1>
           <p className="mt-7 max-w-2xl text-base leading-8 text-white/72">{destination[1]}</p>
           <div className="mt-8 flex flex-wrap gap-4">
-            <Link to="/packages" className="rounded-md bg-[#f0c94a] px-7 py-4 font-black text-[#1a0a00]">View Packages</Link>
+            <Link to="/packages" className="rounded-md bg-[#0b6b43] px-7 py-4 font-black text-[#022c22]">View Packages</Link>
             <Link to="/trip-builder" className="rounded-md border border-white/15 bg-white/10 px-7 py-4 font-black text-white">Plan With AI</Link>
           </div>
         </div>
       </section>
 
-      <section className="bg-[#f5efe6] px-5 py-16 text-[#1a0a00] sm:px-8 lg:px-12">
+      <section className="bg-[#ffffff] px-5 py-16 text-[#022c22] sm:px-8 lg:px-12">
         <div className="mx-auto max-w-7xl">
-          <p className="font-mono text-xs font-bold uppercase tracking-[0.28em] text-[#c8440a]">Photos Gallery</p>
+          <p className="font-mono text-xs font-bold uppercase tracking-[0.28em] text-[#0b6b43]">Photos Gallery</p>
           <div className="mt-6 grid gap-4 md:grid-cols-4">
             {gallery.map((src, index) => (
               <img key={src} src={src} alt="" className={`h-72 w-full rounded-md object-cover shadow-luxury ${index === 0 ? "md:col-span-2" : ""}`} />
@@ -75,7 +75,7 @@ const TamilDestinationPage = ({ name }) => {
       <section className="px-5 py-16 sm:px-8 lg:px-12">
         <div className="mx-auto grid max-w-7xl gap-5 lg:grid-cols-[1.1fr_0.9fr]">
           <article className="rounded-md border border-white/10 bg-white/5 p-6 shadow-luxury">
-            <p className="font-mono text-xs font-bold uppercase tracking-[0.28em] text-[#f0c94a]">Overview & History</p>
+            <p className="font-mono text-xs font-bold uppercase tracking-[0.28em] text-[#0b6b43]">Overview & History</p>
             <h2 className="mt-3 text-4xl font-black">Why {name} matters</h2>
             <p className="mt-4 leading-8 text-white/70">
               {name} is one of Tamil Nadu's key travel anchors, combining local history,
@@ -91,7 +91,7 @@ const TamilDestinationPage = ({ name }) => {
               ["Rating", "4.9 / 5 traveler score"],
             ].map(([label, text]) => (
               <article key={label} className="rounded-md border border-white/10 bg-white/5 p-5 shadow-luxury">
-                <p className="font-mono text-[0.68rem] font-bold uppercase tracking-[0.2em] text-[#f0c94a]">{label}</p>
+                <p className="font-mono text-[0.68rem] font-bold uppercase tracking-[0.2em] text-[#0b6b43]">{label}</p>
                 <p className="mt-3 text-sm leading-6 text-white/70">{text}</p>
               </article>
             ))}
@@ -101,8 +101,8 @@ const TamilDestinationPage = ({ name }) => {
 
       <section className="bg-[#10201e] px-5 py-16 sm:px-8 lg:px-12">
         <div className="mx-auto grid max-w-7xl gap-5 lg:grid-cols-3">
-          <article className="min-h-[360px] rounded-md border border-white/10 bg-[radial-gradient(circle_at_center,rgba(240,201,74,0.2),transparent_34%),linear-gradient(135deg,#183d39,#07110f)] p-6 shadow-luxury">
-            <p className="font-mono text-xs font-bold uppercase tracking-[0.28em] text-[#f0c94a]">Google Map</p>
+          <article className="min-h-[360px] rounded-md border border-white/10 bg-[radial-gradient(circle_at_center,rgba(240,201,74,0.2),transparent_34%),linear-gradient(135deg,#183d39,#064e3b)] p-6 shadow-luxury">
+            <p className="font-mono text-xs font-bold uppercase tracking-[0.28em] text-[#0b6b43]">Google Map</p>
             <h2 className="mt-3 text-3xl font-black">{name} route map</h2>
             <p className="mt-4 text-sm leading-6 text-white/65">Map embed placeholder ready for Google Maps API key integration.</p>
           </article>
@@ -114,7 +114,7 @@ const TamilDestinationPage = ({ name }) => {
 
       <section className="px-5 py-16 sm:px-8 lg:px-12">
         <div className="mx-auto max-w-7xl">
-          <p className="font-mono text-xs font-bold uppercase tracking-[0.28em] text-[#f0c94a]">Reviews & Ratings</p>
+          <p className="font-mono text-xs font-bold uppercase tracking-[0.28em] text-[#0b6b43]">Reviews & Ratings</p>
           <div className="mt-6 grid gap-5 md:grid-cols-3">
             {reviewCards.map(([rating, text]) => (
               <article key={text} className="rounded-md border border-white/10 bg-white/5 p-6 shadow-luxury">
@@ -131,7 +131,7 @@ const TamilDestinationPage = ({ name }) => {
 
 const InfoList = ({ title, items }) => (
   <article className="rounded-md border border-white/10 bg-white/5 p-6 shadow-luxury">
-    <p className="font-mono text-xs font-bold uppercase tracking-[0.28em] text-[#f0c94a]">{title}</p>
+    <p className="font-mono text-xs font-bold uppercase tracking-[0.28em] text-[#0b6b43]">{title}</p>
     <div className="mt-5 grid gap-3">
       {items.map((item) => (
         <div key={item} className="rounded-md bg-white/10 p-4 text-sm font-bold text-white/80">{item}</div>

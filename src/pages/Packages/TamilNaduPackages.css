@@ -12,8 +12,9 @@
 }
 
 .tamil-nadu-packages-page {
-  background: #ffffff;
   min-height: 100vh;
+  background: #07110f;
+  color: #ffffff;
 }
 
 /* Hero Section */
