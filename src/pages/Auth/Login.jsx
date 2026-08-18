@@ -2,7 +2,11 @@
 import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuthContext } from "../../features/auth/AuthContext";
-import loginImage from "./loginimage.png";
+import { createBooking } from "../../services/bookingService";
+import { validateLoginForm } from "../../utils/validation";
+import loginImage from "./loginimage.webp";
+
+const BOOKING_STORAGE_KEY = "southTrailsBookings";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -17,18 +21,60 @@ const Login = () => {
     setError("");
   };
 
+  const saveFallbackBooking = (selected) => {
+    const stored = JSON.parse(window.localStorage.getItem(BOOKING_STORAGE_KEY) || "[]");
+    window.localStorage.setItem(BOOKING_STORAGE_KEY, JSON.stringify([...stored, selected]));
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
+    const validationError = validateLoginForm(form);
+    if (validationError) {
+      setError(validationError);
+      return;
+    }
+
     const result = await login(form);
     if (!result.success) {
       setError(result.error);
       return;
     }
+
     const selected = location.state?.selectedPackage;
+    let successBooking = null;
     if (selected) {
-      const stored = JSON.parse(window.localStorage.getItem("southTrailsBookings") || "[]");
-      window.localStorage.setItem("southTrailsBookings", JSON.stringify([...stored, selected]));
+      if (result.user?.id) {
+        const payload = {
+          customer_id: result.user.id,
+          package_id: selected.packageId,
+          package_snapshot: { id: selected.packageId, title: selected.packageName, state: "Tamil Nadu" },
+          travel_date: selected.travelDate || null,
+          travelers: selected.travelers || 1,
+          status: selected.status || "Pending",
+          total_amount: selected.totalAmount || Number(String(selected.price || "").replace(/[^0-9]/g, "")) || null,
+          special_request: selected.specialRequests || selected.special_request || null,
+        };
+
+        try {
+          const { data, error: bookingError } = await createBooking(payload);
+          if (bookingError) throw bookingError;
+          successBooking = data || selected;
+        } catch (bookingError) {
+          console.error("Booking fallback error:", bookingError);
+          saveFallbackBooking(selected);
+          successBooking = selected;
+        }
+      } else {
+        saveFallbackBooking(selected);
+        successBooking = selected;
+      }
     }
+
+    if (successBooking?.id) {
+      navigate(`/booking-success/${successBooking.id}`, { state: { booking: successBooking } });
+      return;
+    }
+
     navigate("/profile");
   };
 
@@ -37,16 +83,16 @@ const Login = () => {
       <div className="login-split">
         <aside className="login-side login-art">
           <div className="login-image-wrap">
-            <img src={loginImage} alt="South India travel map illustration" />
+            <img src={loginImage} alt="Tamil Nadu travel illustration" />
           </div>
         </aside>
 
         <section className="login-side login-form-side">
           <div className="login-card glass-card">
-            <span className="login-badge">South Trails</span>
+            <span className="login-badge">Tamil Trails</span>
             <div className="login-intro">
               <h1>Begin Your Journey</h1>
-              <p>Access curated experiences across South India.</p>
+              <p>Access curated experiences across Tamil Nadu.</p>
             </div>
 
             {info && <div className="auth-alert auth-alert-warning">{info}</div>}
@@ -94,10 +140,10 @@ const Login = () => {
             </p>
 
             <div className="login-tags">
-              Tamil Nadu • Kerala • Karnataka • Andhra Pradesh
+              Chennai / Madurai / Ooty / Rameswaram / Kanyakumari
             </div>
             <p className="login-caption">
-              500+ Curated Packages | Trusted by Travelers
+              Tamil Nadu packages | Trusted by travelers
             </p>
           </div>
         </section>

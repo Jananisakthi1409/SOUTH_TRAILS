@@ -2,10 +2,14 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuthContext } from "../../features/auth/AuthContext";
-import loginImage from "./loginimage.png";
+import { createBooking } from "../../services/bookingService";
+import { validateSignupForm } from "../../utils/validation";
+import loginImage from "./loginimage.webp";
+
+const BOOKING_STORAGE_KEY = "southTrailsBookings";
 
 const generatePassId = () => {
-  return `ST-${Math.floor(100000 + Math.random() * 900000)}`;
+  return `TT-${Math.floor(100000 + Math.random() * 900000)}`;
 };
 
 const Signup = () => {
@@ -25,6 +29,7 @@ const Signup = () => {
   const [count, setCount] = useState(3);
   const [passId, setPassId] = useState("");
   const [error, setError] = useState("");
+  const [successBooking, setSuccessBooking] = useState(null);
 
   const handleChange = (field) => (event) => {
     const value = event.target.type === "checkbox" ? event.target.checked : event.target.value;
@@ -32,20 +37,17 @@ const Signup = () => {
     setError("");
   };
 
-  const isReady = form.fullName.trim() && form.phone.trim();
-  const isValid =
-    isReady &&
-    form.email.trim() &&
-    form.address.trim() &&
-    form.password &&
-    form.confirmPassword &&
-    form.password === form.confirmPassword &&
-    form.agree;
+  const saveFallbackBooking = (selected) => {
+    const stored = JSON.parse(window.localStorage.getItem(BOOKING_STORAGE_KEY) || "[]");
+    window.localStorage.setItem(BOOKING_STORAGE_KEY, JSON.stringify([...stored, selected]));
+  };
 
+  const isReady = form.fullName.trim() && form.phone.trim();
   const handleSubmit = async (event) => {
     event.preventDefault();
-    if (!isValid) {
-      setError("Please fill out all fields and agree to the terms.");
+    const validationError = validateSignupForm(form);
+    if (validationError) {
+      setError(validationError);
       return;
     }
     const result = await signup({
@@ -58,31 +60,64 @@ const Signup = () => {
       setError(result.error);
       return;
     }
+
     const selected = location.state?.selectedPackage;
     if (selected) {
-      const stored = JSON.parse(window.localStorage.getItem("southTrailsBookings") || "[]");
-      window.localStorage.setItem("southTrailsBookings", JSON.stringify([...stored, selected]));
+      if (result.user?.id) {
+        const payload = {
+          customer_id: result.user.id,
+          package_id: selected.packageId,
+          package_snapshot: { id: selected.packageId, title: selected.packageName, state: "Tamil Nadu" },
+          travel_date: selected.travelDate || null,
+          travelers: selected.travelers || 1,
+          status: selected.status || "Pending",
+          total_amount: selected.totalAmount || Number(String(selected.price || "").replace(/[^0-9]/g, "")) || null,
+          special_request: selected.specialRequests || selected.special_request || null,
+        };
+
+        try {
+          const { data, error: bookingError } = await createBooking(payload);
+          if (bookingError) throw bookingError;
+          setSuccessBooking(data || selected);
+        } catch (bookingError) {
+          console.error("Booking fallback error:", bookingError);
+          saveFallbackBooking(selected);
+          setSuccessBooking(selected);
+        }
+      } else {
+        saveFallbackBooking(selected);
+        setSuccessBooking(selected);
+      }
     }
     setPassId(generatePassId());
+    setCount(3);
     setStage("creating");
     window.setTimeout(() => setStage("boarding"), 1200);
   };
 
   useEffect(() => {
-    if (stage !== "boarding") return;
-    setCount(3);
+    if (stage !== "boarding") return undefined;
     const interval = window.setInterval(() => {
       setCount((value) => {
         if (value <= 1) {
           clearInterval(interval);
-          navigate("/profile");
           return 0;
         }
         return value - 1;
       });
     }, 1000);
     return () => clearInterval(interval);
-  }, [stage, navigate]);
+  }, [stage]);
+
+  useEffect(() => {
+    if (stage === "boarding" && count === 0) {
+      if (successBooking?.id) {
+        navigate(`/booking-success/${successBooking.id}`, { state: { booking: successBooking } });
+        return;
+      }
+      navigate("/profile");
+    }
+  }, [count, navigate, stage, successBooking]);
 
   const info = location.state?.message || "";
 
@@ -91,7 +126,7 @@ const Signup = () => {
       <div className="login-split signup-split">
         <aside className="login-side login-art">
           <div className="login-image-wrap">
-            <img src={loginImage} alt="South India travel map illustration" />
+            <img src={loginImage} alt="Tamil Nadu travel illustration" />
           </div>
         </aside>
 
@@ -99,7 +134,7 @@ const Signup = () => {
           <div className="signup-stack">
             <div className="pass-card">
               <div className="pass-card-header">
-                <span className="pass-brand">SOUTH TRAILS</span>
+                <span className="pass-brand">TAMIL TRAILS</span>
                 <h2>TRAVEL PASS</h2>
               </div>
               <div className="pass-row">
@@ -112,31 +147,31 @@ const Signup = () => {
               </div>
               <div className={`pass-row pass-status-row ${isReady ? "ready" : "preparing"}`}>
                 <span>Status:</span>
-                <strong>{isReady ? "✓ Ready To Explore" : "Preparing Journey"}</strong>
+                <strong>{isReady ? "Ready To Explore" : "Preparing Journey"}</strong>
               </div>
               <div className="pass-row">
                 <span>Pass ID:</span>
-                <strong>{passId || "ST-XXXXXX"}</strong>
+                <strong>{passId || "TT-XXXXXX"}</strong>
               </div>
               <div className="pass-row">
                 <span>Destination:</span>
-                <strong>South India</strong>
+                <strong>Tamil Nadu</strong>
               </div>
               <div className="pass-tags">
-                <span>🏛 Tamil Nadu</span>
-                <span>🌴 Kerala</span>
-                <span>🏰 Karnataka</span>
-                <span>⛰ Andhra Pradesh</span>
+                <span>Chennai</span>
+                <span>Madurai</span>
+                <span>Ooty</span>
+                <span>Rameswaram</span>
               </div>
             </div>
 
             <div className="signup-card">
               {stage === "form" && (
                 <>
-                  <span className="signup-badge">South Trails</span>
+                  <span className="signup-badge">Tamil Trails</span>
                   <div className="signup-copy">
                     <h1>Get Your Travel Pass</h1>
-                    <p>Join thousands of travelers exploring South India's most beautiful destinations.</p>
+                    <p>Join travelers exploring Tamil Nadu's temples, hills, coast, food, and festivals.</p>
                   </div>
 
                   {info && <div className="auth-alert auth-alert-warning">{info}</div>}
@@ -144,79 +179,38 @@ const Signup = () => {
 
                   <form className="signup-form" onSubmit={handleSubmit}>
                     <div className="floating-field">
-                      <span className="input-icon">👤</span>
-                      <input
-                        id="fullName"
-                        type="text"
-                        value={form.fullName}
-                        onChange={handleChange("fullName")}
-                        placeholder=" "
-                        autoComplete="name"
-                      />
+                      <span className="input-icon">U</span>
+                      <input id="fullName" type="text" value={form.fullName} onChange={handleChange("fullName")} placeholder=" " autoComplete="name" />
                       <label htmlFor="fullName">Full Name</label>
                     </div>
 
                     <div className="floating-field">
-                      <span className="input-icon">📱</span>
-                      <input
-                        id="phone"
-                        type="tel"
-                        value={form.phone}
-                        onChange={handleChange("phone")}
-                        placeholder=" "
-                        autoComplete="tel"
-                      />
+                      <span className="input-icon">P</span>
+                      <input id="phone" type="tel" value={form.phone} onChange={handleChange("phone")} placeholder=" " autoComplete="tel" />
                       <label htmlFor="phone">Phone Number</label>
                     </div>
 
                     <div className="floating-field">
-                      <span className="input-icon">📧</span>
-                      <input
-                        id="email"
-                        type="email"
-                        value={form.email}
-                        onChange={handleChange("email")}
-                        placeholder=" "
-                        autoComplete="email"
-                      />
+                      <span className="input-icon">@</span>
+                      <input id="email" type="email" value={form.email} onChange={handleChange("email")} placeholder=" " autoComplete="email" />
                       <label htmlFor="email">Email Address</label>
                     </div>
 
                     <div className="floating-field textarea-field">
-                      <span className="input-icon">📍</span>
-                      <textarea
-                        id="address"
-                        value={form.address}
-                        onChange={handleChange("address")}
-                        placeholder=" "
-                        rows={2}
-                      />
+                      <span className="input-icon">IN</span>
+                      <textarea id="address" value={form.address} onChange={handleChange("address")} placeholder=" " rows={2} />
                       <label htmlFor="address">Address</label>
                     </div>
 
                     <div className="floating-field">
-                      <span className="input-icon">🔒</span>
-                      <input
-                        id="password"
-                        type="password"
-                        value={form.password}
-                        onChange={handleChange("password")}
-                        placeholder=" "
-                        autoComplete="new-password"
-                      />
+                      <span className="input-icon">L</span>
+                      <input id="password" type="password" value={form.password} onChange={handleChange("password")} placeholder=" " autoComplete="new-password" />
                       <label htmlFor="password">Password</label>
                     </div>
 
                     <div className="floating-field">
-                      <span className="input-icon">🔒</span>
-                      <input
-                        id="confirmPassword"
-                        type="password"
-                        value={form.confirmPassword}
-                        onChange={handleChange("confirmPassword")}
-                        placeholder=" "
-                        autoComplete="new-password"
-                      />
+                      <span className="input-icon">L</span>
+                      <input id="confirmPassword" type="password" value={form.confirmPassword} onChange={handleChange("confirmPassword")} placeholder=" " autoComplete="new-password" />
                       <label htmlFor="confirmPassword">Confirm Password</label>
                     </div>
 
@@ -226,7 +220,7 @@ const Signup = () => {
                     </label>
 
                     <button className="button button-primary action-button" type="submit">
-                      ✈ Get My Travel Pass
+                      Get My Travel Pass
                     </button>
 
                     <div className="secondary-text">
@@ -252,7 +246,7 @@ const Signup = () => {
                 <div className="success-card">
                   <span className="success-label">Welcome Aboard!</span>
                   <div className="boarding-pass">
-                    <div className="boarding-header">SOUTH TRAILS</div>
+                    <div className="boarding-header">TAMIL TRAILS</div>
                     <div className="boarding-title">BOARDING PASS</div>
                     <div className="boarding-row">
                       <span>Traveler:</span>
@@ -264,7 +258,7 @@ const Signup = () => {
                     </div>
                     <div className="boarding-row">
                       <span>Destination:</span>
-                      <strong>South India</strong>
+                      <strong>Tamil Nadu</strong>
                     </div>
                     <div className="boarding-row">
                       <span>Status:</span>

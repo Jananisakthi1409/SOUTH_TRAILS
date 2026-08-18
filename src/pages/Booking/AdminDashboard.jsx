@@ -5,6 +5,7 @@ import { AdminContext } from "./AdminContext";
 import { getPackages } from "../../services/packageService";
 import { getCustomers } from "../../services/customerService";
 import { getBookings } from "../../services/bookingService";
+import { getReviews } from "../../services/reviewService";
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
@@ -37,7 +38,10 @@ const AdminDashboard = () => {
           getBookings()
         ]);
 
-        const totalRevenue = bookings.reduce((sum, booking) => sum + Number(booking.amount || 0), 0);
+        const totalRevenue = bookings.reduce(
+          (sum, booking) => sum + Number(booking.totalAmount || booking.total_amount || booking.amount || 0),
+          0
+        );
 
         setStats([
           { label: "Total Packages", value: packages.length.toString() },
@@ -49,28 +53,32 @@ const AdminDashboard = () => {
         setRecentBookings(bookings.slice(0, 5).map((booking) => ({
           id: booking.id,
           customer: booking.customer?.name || booking.customer_name || booking.name || "Guest",
-          package: booking.packages?.title || booking.package || "Package Deal",
+          package: booking.packageName || booking.package_snapshot?.title || booking.packages?.title || booking.package || "Package Deal",
           status: booking.status || "Pending",
-          date: booking.created_at ? new Date(booking.created_at).toISOString().split("T")[0] : booking.date || "-"
+          date: booking.createdAt || booking.created_at
+            ? new Date(booking.createdAt || booking.created_at).toISOString().split("T")[0]
+            : booking.date || "-"
         })));
       } catch (error) {
         console.error("Error loading dashboard metrics:", error);
       }
 
-      // Load Reviews from localStorage
       try {
-        const storedReviews = localStorage.getItem("southTrailsReviews");
-        if (storedReviews) {
-          setReviews(JSON.parse(storedReviews).slice(0, 3));
+        const reviewsData = await getReviews();
+        if (reviewsData && reviewsData.length) {
+          setReviews(reviewsData.slice(0, 3));
         } else {
-          // Fallback elegant mock state if localStorage is empty initially
           setReviews([
             { userName: "Aravind Swamy", packageName: "Kerala Backwaters Premium Escape", rating: 5, review: "An exceptional and seamless luxury travel experience. Highly recommended!" },
             { userName: "Meera Nair", packageName: "Ooty Misty Hills Getaway", rating: 4, review: "Beautiful resort properties and great hospitality throughout the trails." }
           ]);
         }
       } catch (e) {
-        console.error("Error parsing reviews:", e);
+        console.error("Error loading reviews:", e);
+        setReviews([
+          { userName: "Aravind Swamy", packageName: "Kerala Backwaters Premium Escape", rating: 5, review: "An exceptional and seamless luxury travel experience. Highly recommended!" },
+          { userName: "Meera Nair", packageName: "Ooty Misty Hills Getaway", rating: 4, review: "Beautiful resort properties and great hospitality throughout the trails." }
+        ]);
       }
     };
 
@@ -113,6 +121,7 @@ const AdminDashboard = () => {
             <Link to="/admin/packages" style={{ display: "flex", alignItems: "center", padding: "12px 16px", borderRadius: "8px", textDecoration: "none", color: "#64748b", fontWeight: "500", fontSize: "14px" }}>Packages</Link>
             <Link to="/admin/customers" style={{ display: "flex", alignItems: "center", padding: "12px 16px", borderRadius: "8px", textDecoration: "none", color: "#64748b", fontWeight: "500", fontSize: "14px" }}>Customers</Link>
             <Link to="/admin/bookings" style={{ display: "flex", alignItems: "center", padding: "12px 16px", borderRadius: "8px", textDecoration: "none", color: "#64748b", fontWeight: "500", fontSize: "14px" }}>Bookings</Link>
+            <Link to="/admin/kanban" style={{ display: "flex", alignItems: "center", padding: "12px 16px", borderRadius: "8px", textDecoration: "none", color: "#64748b", fontWeight: "500", fontSize: "14px" }}>Kanban Board</Link>
             <Link to="/admin/reviews" style={{ display: "flex", alignItems: "center", padding: "12px 16px", borderRadius: "8px", textDecoration: "none", color: "#64748b", fontWeight: "500", fontSize: "14px" }}>Reviews</Link>
             <Link to="/admin/analytics" style={{ display: "flex", alignItems: "center", padding: "12px 16px", borderRadius: "8px", textDecoration: "none", color: "#64748b", fontWeight: "500", fontSize: "14px" }}>Analytics</Link>
           </nav>
@@ -260,6 +269,7 @@ const AdminDashboard = () => {
               { label: "Manage Packages", path: "/admin/packages" },
               { label: "View Customers", path: "/admin/customers" },
               { label: "View Bookings", path: "/admin/bookings" },
+              { label: "Booking Kanban", path: "/admin/kanban" },
               { label: "View Reviews", path: "/admin/reviews" }
             ].map((action, idx) => (
               <Link

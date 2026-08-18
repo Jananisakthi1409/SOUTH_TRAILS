@@ -12,6 +12,20 @@ export const getCustomers = async () => {
   return data;
 };
 
+export const getCustomerById = async (id) => {
+  if (!id || id === "undefined") {
+    return { data: null, error: { message: "Customer id is required" } };
+  }
+  if (!supabase) {
+    return { data: null, error: { message: "Supabase not configured" } };
+  }
+  const { data, error } = await supabase.from("customers").select("*").eq("id", id).single();
+  if (error) {
+    return { data: null, error };
+  }
+  return { data, error: null };
+};
+
 export const deleteCustomer = async (id) => {
   if (!supabase) {
     return { data: null, error: { message: "Supabase not configured" } };

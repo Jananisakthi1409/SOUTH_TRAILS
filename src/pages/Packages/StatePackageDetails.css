@@ -1,0 +1,656 @@
+.package-loading,
+.package-not-found {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 7rem 1rem 3rem;
+  background:
+    radial-gradient(circle at 12% 0%, rgba(240, 201, 74, 0.16), transparent 28rem),
+    linear-gradient(135deg, #120806, #1a0a00);
+  color: #f5efe6;
+  text-align: center;
+}
+
+.package-not-found h1 {
+  color: #ffffff;
+  font-family: "Yatra One", serif;
+  font-size: clamp(3rem, 7vw, 6rem);
+  letter-spacing: 0;
+}
+
+.package-not-found button {
+  min-height: 3rem;
+  border: 0;
+  border-radius: 999px;
+  margin-top: 1rem;
+  padding: 0 1.25rem;
+  background: #f0c94a;
+  color: #1a0a00;
+  font-weight: 950;
+}
+
+.package-detail-page,
+.tnpd-page,
+.kpd-page,
+.kapd-page,
+.aapd-page,
+.apd-page,
+.state-package-page {
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at 12% 0%, rgba(240, 201, 74, 0.16), transparent 28rem),
+    radial-gradient(circle at 86% 10%, rgba(45, 106, 79, 0.18), transparent 30rem),
+    linear-gradient(180deg, #120806 0%, #1a0a00 46%, #f5efe6 46%, #fffaf3 100%);
+  color: #1a0a00;
+}
+
+.package-detail-hero-gallery,
+.tnpd-hero-gallery,
+.kpd-hero-gallery,
+.kapd-hero-gallery,
+.aapd-hero-gallery,
+.apd-hero-gallery,
+.state-package-hero-gallery {
+  position: relative;
+  min-height: 82vh;
+  display: grid;
+  align-items: end;
+  overflow: hidden;
+  background: #1a0a00;
+}
+
+.main-image {
+  position: absolute;
+  inset: 0;
+  min-height: 100%;
+}
+
+.main-image::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(90deg, rgba(18, 8, 6, 0.92), rgba(18, 8, 6, 0.42), rgba(18, 8, 6, 0.82)),
+    linear-gradient(180deg, rgba(0, 0, 0, 0.02), rgba(18, 8, 6, 0.88));
+  pointer-events: none;
+}
+
+.main-image img {
+  width: 100%;
+  height: 100%;
+  min-height: 82vh;
+  object-fit: cover;
+  filter: saturate(1.12) contrast(1.08);
+  transform: scale(1.03);
+}
+
+.no-image-placeholder {
+  min-height: 82vh;
+  display: grid;
+  place-items: center;
+  color: rgba(255, 255, 255, 0.8);
+  font-weight: 900;
+}
+
+.gallery-thumbnails {
+  position: relative;
+  z-index: 2;
+  width: min(1320px, calc(100% - 2rem));
+  margin: 0 auto;
+  display: flex;
+  gap: 0.7rem;
+  overflow-x: auto;
+  padding: 0 0 2rem;
+}
+
+.thumbnail {
+  width: 116px;
+  height: 82px;
+  flex: 0 0 116px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  background: rgba(255, 255, 255, 0.08);
+  opacity: 0.72;
+  transition: transform 0.25s ease, opacity 0.25s ease, border-color 0.25s ease;
+}
+
+.thumbnail:hover,
+.thumbnail.active {
+  transform: translateY(-4px);
+  border-color: #f0c94a;
+  opacity: 1;
+}
+
+.thumbnail img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.thumbnail.more {
+  display: grid;
+  place-items: center;
+  color: #ffffff;
+  font-weight: 950;
+}
+
+.package-detail-container,
+.tnpd-container,
+.kpd-container,
+.kapd-container,
+.aapd-container,
+.apd-container,
+.state-package-container {
+  width: min(1320px, calc(100% - 2rem));
+  margin: -7rem auto 0;
+  position: relative;
+  z-index: 3;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(340px, 410px);
+  gap: clamp(1rem, 3vw, 1.5rem);
+  align-items: start;
+  padding-bottom: 4rem;
+}
+
+.package-detail-content,
+.tnpd-content,
+.kpd-content,
+.kapd-content,
+.aapd-content,
+.apd-content,
+.state-package-content,
+.package-detail-sidebar,
+.tnpd-sidebar,
+.kpd-sidebar,
+.kapd-sidebar,
+.aapd-sidebar,
+.apd-sidebar,
+.state-package-sidebar {
+  min-width: 0;
+}
+
+.package-detail-overview,
+.package-detail-section,
+.tnpd-overview,
+.tnpd-section,
+.kpd-overview,
+.kpd-section,
+.kapd-overview,
+.kapd-section,
+.aapd-overview,
+.aapd-section,
+.apd-overview,
+.apd-section,
+.state-package-overview,
+.state-package-section,
+.booking-card {
+  border: 1px solid rgba(90, 49, 25, 0.16);
+  background:
+    linear-gradient(180deg, rgba(255, 250, 243, 0.97), rgba(245, 239, 230, 0.92)),
+    #fffaf3;
+  box-shadow: 0 32px 100px rgba(54, 30, 16, 0.16);
+  backdrop-filter: blur(22px);
+}
+
+.package-detail-overview,
+.tnpd-overview,
+.kpd-overview,
+.kapd-overview,
+.aapd-overview,
+.apd-overview,
+.state-package-overview {
+  padding: clamp(1.35rem, 3vw, 2rem);
+}
+
+.package-detail-section,
+.tnpd-section,
+.kpd-section,
+.kapd-section,
+.aapd-section,
+.apd-section,
+.state-package-section {
+  margin-top: 1rem;
+  padding: clamp(1.25rem, 3vw, 1.8rem);
+}
+
+.overview-header {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(190px, 250px);
+  gap: 1.25rem;
+  align-items: start;
+}
+
+.destination-label {
+  margin: 0 0 0.7rem;
+  color: #c8440a;
+  font-family: "Space Mono", ui-monospace, monospace;
+  font-size: 0.74rem;
+  font-weight: 950;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.overview-header h1 {
+  margin: 0;
+  color: #1a0a00;
+  font-family: "Yatra One", serif;
+  font-size: clamp(3.2rem, 7vw, 6.8rem);
+  line-height: 0.82;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.rating-line {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  margin-top: 1.15rem;
+}
+
+.rating,
+.category-badge {
+  min-height: 2.35rem;
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  padding: 0 0.9rem;
+  font-size: 0.76rem;
+  font-weight: 950;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.rating {
+  background: #1a0a00;
+  color: #f0c94a;
+}
+
+.category-badge {
+  border: 1px solid rgba(200, 68, 10, 0.18);
+  background: rgba(200, 68, 10, 0.08);
+  color: #c8440a;
+}
+
+.price-card {
+  border: 1px solid rgba(240, 201, 74, 0.28);
+  background:
+    linear-gradient(135deg, rgba(26, 10, 0, 0.96), rgba(61, 27, 12, 0.92)),
+    #1a0a00;
+  padding: 1.2rem;
+  color: #ffffff;
+}
+
+.price-label,
+.price-note {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.72rem;
+  font-weight: 950;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.price-value {
+  margin: 0.35rem 0;
+  color: #f0c94a;
+  font-family: "Yatra One", serif;
+  font-size: clamp(2rem, 4vw, 3rem);
+  line-height: 0.95;
+}
+
+.package-description {
+  max-width: 860px;
+  margin: 1.5rem 0 0;
+  color: #65412c;
+  font-size: 1.04rem;
+  line-height: 1.82;
+}
+
+.quick-info {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.8rem;
+  margin-top: 1.5rem;
+}
+
+.info-item {
+  border: 1px solid rgba(90, 49, 25, 0.12);
+  background: rgba(255, 255, 255, 0.56);
+  padding: 1rem;
+}
+
+.info-label {
+  display: block;
+  margin-bottom: 0.35rem;
+  color: #8a6a55;
+  font-size: 0.68rem;
+  font-weight: 950;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.info-value {
+  color: #1a0a00;
+  font-weight: 950;
+}
+
+.package-detail-section h2,
+.tnpd-section h2,
+.kpd-section h2,
+.kapd-section h2,
+.aapd-section h2,
+.apd-section h2,
+.state-package-section h2,
+.booking-card h3 {
+  margin: 0 0 1rem;
+  color: #1a0a00;
+  font-family: "Yatra One", serif;
+  font-size: clamp(1.9rem, 4vw, 3rem);
+  line-height: 0.95;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.places-grid,
+.included-list,
+.highlights-grid {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.places-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.included-list,
+.highlights-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.place-card,
+.included-item,
+.highlight-card {
+  min-height: 86px;
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  border: 1px solid rgba(90, 49, 25, 0.12);
+  background: rgba(255, 255, 255, 0.56);
+  padding: 1rem;
+}
+
+.place-number,
+.highlight-icon {
+  width: 2.35rem;
+  height: 2.35rem;
+  flex: 0 0 2.35rem;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  background: #1a0a00;
+  color: #f0c94a;
+  font-weight: 950;
+}
+
+.place-card p,
+.highlight-card p,
+.included-item span:last-child {
+  margin: 0;
+  color: #432315;
+  font-weight: 850;
+  line-height: 1.45;
+}
+
+.checkmark {
+  min-height: 2rem;
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  padding: 0 0.72rem;
+  background: rgba(45, 106, 79, 0.12);
+  color: #2d6a4f;
+  font-size: 0.68rem;
+  font-weight: 950;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.package-detail-sidebar,
+.tnpd-sidebar,
+.kpd-sidebar,
+.kapd-sidebar,
+.aapd-sidebar,
+.apd-sidebar,
+.state-package-sidebar {
+  position: sticky;
+  top: 108px;
+}
+
+.booking-card {
+  padding: clamp(1.1rem, 2vw, 1.5rem);
+}
+
+.booking-card .booking-form-shared {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.booking-card .form-group,
+.booking-card .payment-section {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.booking-card .form-group label,
+.booking-card .payment-section > label {
+  color: #432315;
+  font-family: "Space Mono", ui-monospace, monospace;
+  font-size: 0.7rem;
+  font-weight: 950;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.booking-card input {
+  width: 100%;
+  min-height: 3rem;
+  border: 1px solid rgba(90, 49, 25, 0.16);
+  border-radius: 0;
+  background: rgba(255, 255, 255, 0.68);
+  color: #1a0a00;
+  padding: 0 0.9rem;
+  font-weight: 850;
+}
+
+.booking-card input:focus {
+  border-color: #c8440a;
+  box-shadow: 0 0 0 4px rgba(200, 68, 10, 0.12);
+  outline: none;
+}
+
+.booking-card .payment-options {
+  display: grid;
+  gap: 0.55rem;
+}
+
+.booking-card .payment-option {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  border: 1px solid rgba(90, 49, 25, 0.12);
+  background: rgba(255, 255, 255, 0.54);
+  padding: 0.75rem;
+  color: #432315;
+  font-weight: 850;
+}
+
+.booking-card .payment-option input {
+  width: 1rem;
+  min-height: 1rem;
+  accent-color: #c8440a;
+}
+
+.price-breakdown {
+  display: grid;
+  gap: 0.75rem;
+  border: 1px solid rgba(90, 49, 25, 0.14);
+  background:
+    linear-gradient(135deg, rgba(240, 201, 74, 0.16), rgba(200, 68, 10, 0.08)),
+    rgba(255, 255, 255, 0.58);
+  padding: 1rem;
+}
+
+.breakdown-item,
+.breakdown-total {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  color: #65412c;
+  font-size: 0.92rem;
+  font-weight: 850;
+}
+
+.breakdown-total {
+  border-top: 1px solid rgba(90, 49, 25, 0.16);
+  padding-top: 0.75rem;
+  color: #c8440a;
+  font-size: 1.08rem;
+  font-weight: 950;
+}
+
+.book-btn,
+.back-btn {
+  min-height: 3.25rem;
+  border-radius: 999px;
+  border: 0;
+  font-weight: 950;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.book-btn {
+  background: #1a0a00;
+  color: #f0c94a;
+  box-shadow: 0 22px 56px rgba(26, 10, 0, 0.22);
+}
+
+.back-btn {
+  border: 1px solid rgba(90, 49, 25, 0.16);
+  background: rgba(255, 255, 255, 0.62);
+  color: #1a0a00;
+}
+
+.book-btn:hover:not(:disabled),
+.back-btn:hover {
+  transform: translateY(-2px);
+}
+
+.book-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.7;
+  transform: none;
+}
+
+.booking-error {
+  margin: 0;
+  border: 1px solid rgba(220, 38, 38, 0.22);
+  background: #fff1f1;
+  color: #9b1c1c;
+  padding: 0.75rem;
+  font-size: 0.86rem;
+  font-weight: 850;
+}
+
+.booking-info {
+  display: grid;
+  gap: 0.55rem;
+  margin-top: 1rem;
+}
+
+.booking-info p {
+  display: flex;
+  gap: 0.45rem;
+  align-items: flex-start;
+  margin: 0;
+  color: #65412c;
+  font-size: 0.9rem;
+  font-weight: 800;
+}
+
+.booking-info p::before {
+  content: "Included";
+  color: #2d6a4f;
+  font-size: 0.68rem;
+  font-weight: 950;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+@media (max-width: 1040px) {
+  .package-detail-container,
+  .tnpd-container,
+  .kpd-container,
+  .kapd-container,
+  .aapd-container,
+  .apd-container,
+  .state-package-container {
+    grid-template-columns: 1fr;
+  }
+
+  .package-detail-sidebar,
+  .tnpd-sidebar,
+  .kpd-sidebar,
+  .kapd-sidebar,
+  .aapd-sidebar,
+  .apd-sidebar,
+  .state-package-sidebar {
+    position: static;
+  }
+}
+
+@media (max-width: 760px) {
+  .package-detail-container,
+  .tnpd-container,
+  .kpd-container,
+  .kapd-container,
+  .aapd-container,
+  .apd-container,
+  .state-package-container {
+    width: min(100% - 1rem, 1320px);
+    margin-top: -4rem;
+  }
+
+  .overview-header,
+  .quick-info,
+  .places-grid,
+  .included-list,
+  .highlights-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .main-image img,
+  .no-image-placeholder,
+  .package-detail-hero-gallery,
+  .tnpd-hero-gallery,
+  .kpd-hero-gallery,
+  .kapd-hero-gallery,
+  .aapd-hero-gallery,
+  .apd-hero-gallery,
+  .state-package-hero-gallery {
+    min-height: 680px;
+  }
+
+  .gallery-thumbnails {
+    width: min(100% - 1rem, 1320px);
+  }
+
+  .price-card {
+    max-width: none;
+  }
+
+  .breakdown-item,
+  .breakdown-total {
+    flex-direction: column;
+  }
+}

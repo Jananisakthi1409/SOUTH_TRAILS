@@ -1,395 +1,445 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
-import Footer from "../../components/Footer";
-import heroVideo from "../../assets/videos/homeherosection.mp4";
-import tamilnaduImg from "../../assets/images/tamilnadu.png";
-import keralaImg from "../../assets/images/kerala.png";
-import karnatakaImg from "../../assets/images/karnataka.png";
-import andhraImg from "../../assets/images/andhra.png";
+import { useEffect, useMemo, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { AnimatePresence, motion } from "framer-motion";
 
-const stateCards = [
+import ootyImage from "../state/tamilnadu/ooty/pexels-renjith-tomy-pkm-138432405-34327034.webp";
+import kodaikanalImage from "../state/tamilnadu/kodaikanal/pexels-rohit-george-1141376880-32236721.webp";
+import mahabalipuramImage from "../state/tamilnadu/tamilnadubanner.webp";
+import meenakshiImage from "../state/tamilnadu/madurai/pexels-thilina-alagiyawanna-3266092-36609003.webp";
+import rameswaramImage from "../state/tamilnadu/rameswaram/pexels-animesh-paul-150064-35620983.webp";
+import kanyakumariImage from "../state/tamilnadu/kanyakumari/pexels-prasang-yadav-2151662075-37512272.webp";
+import chettinadImage from "../state/tamilnadu/chettinad/pexels-logalongwithme-28668658.webp";
+import valparaiImage from "../state/tamilnadu/valparai/pexels-sreejith-m-u-322740174-13724240.webp";
+
+const destinations = [
   {
-    name: "Tamil Nadu",
-    description: "Heritage temples, hill stations, and coastal luxury.",
+    id: "ooty",
+    title: "Ooty",
+    label: "Nilgiris",
+    image: ootyImage,
+    summary: "Blue hills, tea estates, misty lakes, and slow mountain mornings in the Queen of Hill Stations.",
+    meta: "23 C / 2 nights",
+    to: "/destinations/ooty",
+  },
+  {
+    id: "kodaikanal",
+    title: "Kodaikanal",
+    label: "Western Ghats",
+    image: kodaikanalImage,
+    summary: "Cloud forests, quiet lake roads, waterfall trails, and monsoon light over the Palani hills.",
+    meta: "21 C / 3 nights",
+    to: "/destinations/kodaikanal",
+  },
+  {
+    id: "mahabalipuram",
+    title: "Mahabalipuram",
+    label: "Pallava Coast",
+    image: mahabalipuramImage,
+    summary: "Shore temples, stone chariots, sea breeze, and ancient sculpture beside the Bay of Bengal.",
+    meta: "31 C / 1 night",
     to: "/states/tamil-nadu",
-    image: tamilnaduImg,
   },
   {
-    name: "Kerala",
-    description: "Backwaters, spice trails, and serene luxury escapes.",
-    to: "/states/kerala",
-    image: keralaImg,
+    id: "meenakshi-temple",
+    title: "Meenakshi Temple",
+    label: "Madurai",
+    image: meenakshiImage,
+    summary: "A sacred city of carved towers, lamp-lit corridors, jasmine markets, and evening rituals.",
+    meta: "32 C / heritage walk",
+    to: "/destinations/madurai",
   },
   {
-    name: "Karnataka",
-    description: "Coffee estates, heritage forts, and scenic adventures.",
-    to: "/states/karnataka",
-    image: karnatakaImg,
+    id: "rameswaram",
+    title: "Rameswaram",
+    label: "Island Pilgrimage",
+    image: rameswaramImage,
+    summary: "Pamban blues, temple corridors, coral sands, and a luminous coastline shaped by devotion.",
+    meta: "30 C / 2 nights",
+    to: "/destinations/rameswaram",
   },
   {
-    name: "Andhra Pradesh",
-    description: "Temple routes, coastal flavors, and premium local stays.",
-    to: "/states/andhra-pradesh",
-    image: andhraImg,
+    id: "kanyakumari",
+    title: "Kanyakumari",
+    label: "Land's End",
+    image: kanyakumariImage,
+    summary: "Where three seas meet: sunrise ferries, coastal shrines, and golden evenings at India's edge.",
+    meta: "29 C / sunset stay",
+    to: "/destinations/kanyakumari",
   },
 ];
 
-const stats = [
-  { label: "Destinations Managed", value: "120+" },
-  { label: "Happy Travelers", value: "5000+" },
-  { label: "Curated Packages", value: "200+" },
-  { label: "Global Quality Awards", value: "15+" },
+const collections = [
+  ["Temple Circuits", "Madurai, Rameswaram, Thanjavur, Kanchipuram", meenakshiImage, "/heritage"],
+  ["Hill Escapes", "Ooty, Kodaikanal, Yercaud, Valparai", kodaikanalImage, "/explore"],
+  ["Coastal Tamil Nadu", "Mahabalipuram, Rameswaram, Kanyakumari", rameswaramImage, "/explore"],
+  ["Food & Craft Trails", "Chettinad kitchens, Madurai nights, artisan streets", chettinadImage, "/food-trails"],
 ];
 
-const whyItems = [
-  { title: "Premium Curated Itineraries", desc: "Bespoke journey pacing designed by specialized local route architects." },
-  { title: "Verified Luxury Guides", desc: "Certified, highly knowledgeable companions deep-rooted in native history." },
-  { title: "Elite Hospitality Matrix", desc: "Hand-picked high-end boutique properties, villas, and premium transport logistics." },
-  { title: "24/7 White-Glove Support", desc: "A proactive, dedicated concierge squad tracking your route live for instant help." },
+const packages = [
+  ["Temple Trail", "4 days / Madurai, Rameswaram, Thanjavur", "From Rs. 12,999", meenakshiImage],
+  ["Nilgiri Luxe Escape", "3 days / Ooty, Coonoor, tea country", "From Rs. 10,999", ootyImage],
+  ["Chettinad Heritage Stay", "2 days / Mansions, craft, cuisine", "From Rs. 9,999", chettinadImage],
 ];
 
 const testimonials = [
-  {
-    quote: "A beautifully crafted South India journey with every single micro-detail completely taken care of.",
-    author: "Priya S.",
-    city: "Mumbai",
-  },
-  {
-    quote: "From custom booking modifications to real-time travel support, the whole experience felt premium and effortless.",
-    author: "Aarav K.",
-    city: "Delhi",
-  },
-  {
-    quote: "The itinerary introduced us to stunning hidden temples, private coffee estates, and world-class luxury stays.",
-    author: "Nandini R.",
-    city: "Bangalore",
-  },
+  ["Priya S.", "Madurai, Rameswaram, and Chettinad felt connected instead of rushed."],
+  ["Arun K.", "The package filters helped us pick a realistic Ooty and Coonoor weekend."],
+  ["Meera R.", "The AI planner balanced temples, food, and family travel beautifully."],
 ];
 
-const trendingPackages = [
-  { name: "Mysore Palace Experience", price: "₹8,999", rating: "4.9", days: "3 Days", tag: "💎 Heritage" },
-  { name: "Backwater Houseboat Kerala", price: "₹12,999", rating: "5.0", days: "2 Days", tag: "🔥 Bestseller" },
-  { name: "Coorg Coffee Trail", price: "₹9,499", rating: "4.8", days: "4 Days", tag: "🌿 Relaxing" },
-  { name: "Tirupati Temple Tour", price: "₹7,999", rating: "4.9", days: "2 Days", tag: "🏛️ Spiritual" },
+const seasonal = [
+  ["Monsoon", "Kodaikanal, Courtallam, Valparai", kodaikanalImage],
+  ["Winter", "Madurai, Rameswaram, Kanyakumari", rameswaramImage],
+  ["Festival", "Pongal, Margazhi, Chithirai routes", meenakshiImage],
 ];
 
-const travelCategories = [
-  { icon: "🌿", label: "Peace & Calms", count: "45 Places" },
-  { icon: "🏔️", label: "Adventure Trails", count: "32 Places" },
-  { icon: "📸", label: "Hidden Gems", count: "28 Places" },
-  { icon: "🍜", label: "Food & Spice Trails", count: "50 Places" },
-  { icon: "🚗", label: "Scenic Road Trips", count: "18 Places" },
-  { icon: "💕", label: "Romantic Escapes", count: "24 Places" }
+const navItems = [
+  ["Destinations", "/explore"],
+  ["Packages", "/packages"],
+  ["Planner", "/trip-builder"],
+  ["Contact", "/contact"],
 ];
 
-const inspirationItems = [
-  { title: "Misty Mornings in Munnar", type: "Hill Station", readTime: "4 min read", bg: "https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?auto=format&fit=cover&w=600&q=80" },
-  { title: "Architecture Masterclass of Hampi", type: "Heritage Guide", readTime: "7 min read", bg: "https://images.unsplash.com/photo-1600100397990-a4783a03eb65?auto=format&fit=cover&w=600&q=80" },
-  { title: "Unwinding on Varkala Cliffside", type: "Coastal Luxury", readTime: "5 min read", bg: "https://images.unsplash.com/photo-1589308078059-be1415eab4c3?auto=format&fit=cover&w=600&q=80" }
-];
+const slideVariants = {
+  enter: { opacity: 0, scale: 1.05 },
+  center: { opacity: 1, scale: 1 },
+  exit: { opacity: 0, scale: 1.02 },
+};
+
+const contentVariants = {
+  enter: { opacity: 0, y: 28 },
+  center: { opacity: 1, y: 0 },
+  exit: { opacity: 0, y: -18 },
+};
 
 const Home = () => {
-  const [searchQuery, setSearchQuery] = useState("");
-  
-  // Interactive Simulation states for the customized Oracle AI component module
-  const [aiPrompt, setAiPrompt] = useState("");
-  const [aiOutput, setAiOutput] = useState("");
-  const [isAiLoading, setIsAiLoading] = useState(false);
+  const navigate = useNavigate();
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [lead, setLead] = useState({ name: "", phone: "", interest: "Luxury Tamil Nadu itinerary" });
+  const [searchTerm, setSearchTerm] = useState("");
+  const activeDestination = destinations[activeIndex];
 
-  // Dynamic evaluation of custom user-generated feedback from localStorage matrix array
-  const localReviews = JSON.parse(localStorage.getItem("southTrailsReviews") || "[]");
-  const consolidatedReviews = [...testimonials, ...localReviews.map(r => ({
-    quote: r.text || r.comment || "Incredible personalized travel support throughout the South India tour.",
-    author: r.name || "Verified Guest",
-    city: r.location || "India"
-  }))];
+  const floatingCards = useMemo(
+    () =>
+      Array.from({ length: 3 }, (_, index) => {
+        const destinationIndex = (activeIndex + index + 1) % destinations.length;
+        return { ...destinations[destinationIndex], destinationIndex };
+      }),
+    [activeIndex]
+  );
 
-  const handleAiConsultation = (e) => {
-    e.preventDefault();
-    if (!aiPrompt.trim()) return;
-    setIsAiLoading(true);
-    setTimeout(() => {
-      const answers = [
-        "Based on your profile, I recommend a 4-Day Slow Heritage trail through Tamil Nadu (Madurai & Chettinad) staying in ancestral boutique villas, combined with private culinary sessions.",
-        "Perfect match found: The Coorg-Kabab Trail. Enjoy 3 Days nestled in a premium coffee estate bungalow accompanied by a private guided spice-plantation walkthrough.",
-        "Your ideal getaway points to a luxurious private houseboat escape across the Alleppey Backwaters in Kerala, coupled with wellness Ayurveda therapy blocks at Kovalam."
-      ];
-      setAiOutput(answers[Math.floor(Math.random() * answers.length)]);
-      setIsAiLoading(false);
-    }, 900);
+  useEffect(() => {
+    const interval = window.setInterval(() => {
+      setActiveIndex((current) => (current + 1) % destinations.length);
+    }, 7000);
+
+    return () => window.clearInterval(interval);
+  }, []);
+
+  const goToSlide = (index) => setActiveIndex((index + destinations.length) % destinations.length);
+  const moveSlide = (direction) => setActiveIndex((current) => (current + direction + destinations.length) % destinations.length);
+  const searchDestinations = (event) => {
+    event.preventDefault();
+    const query = searchTerm.trim().toLowerCase();
+    if (!query) {
+      navigate("/explore");
+      return;
+    }
+
+    const match = destinations.find((item) =>
+      [item.id, item.title, item.label, item.summary].join(" ").toLowerCase().includes(query)
+    );
+    navigate(match?.to || "/explore");
   };
 
   return (
-    <>
-      <main className="app-shell landing-page" style={{ backgroundColor: "#ffffff", overflowX: "hidden" }}>
-        
-        {/* ========================================== */}
-        {/* 1. HERO VIDEO SECTION                      */}
-        {/* ========================================== */}
-        <section className="section landing-hero landing-hero-video" style={{ position: "relative", minHeight: "85vh", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden" }}>
-          <video className="hero-video" src={heroVideo} autoPlay muted loop playsInline style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", objectFit: "cover", zIndex: 1 }} />
-          <div className="hero-overlay landing-hero-overlay" style={{ position: "absolute", inset: 0, backgroundColor: "rgba(15, 23, 42, 0.65)", backdropFilter: "blur(2px)", zIndex: 2 }} />
-          
-          <div className="hero-text" style={{ position: "relative", zIndex: 3, textAlign: "center", maxWidth: "850px", padding: "0 1.5rem", color: "#ffffff" }}>
-            <p className="eyebrow accent-light" style={{ color: "#2dd4bf", fontWeight: "700", textTransform: "uppercase", letterSpacing: "0.15em", marginBottom: "1rem" }}>South Trails</p>
-            <h1 style={{ fontSize: "3.5rem", fontWeight: "900", lineHeight: "1.15", letterSpacing: "-0.03em", marginBottom: "1.5rem", color: "#ffffff" }}>Discover South India Like Never Before</h1>
-            <p style={{ fontSize: "1.2rem", lineHeight: "1.6", color: "#f1f5f9", marginBottom: "2.5rem", fontWeight: "400" }}>
-              Luxury travel across Tamil Nadu, Kerala, Karnataka, Andhra Pradesh, Telangana and Puducherry with curated routes, authentic heritage stays, and premium service infrastructure.
-            </p>
-            
-            {/* Integrated, clean responsive Search Overlay inside the Hero content layout context */}
-            {/* <div style={{ maxWidth: "600px", margin: "0 auto", backgroundColor: "rgba(255, 255, 255, 0.15)", padding: "0.5rem", borderRadius: "12px", backdropFilter: "blur(12px)", border: "1px solid rgba(255,255,255,0.2)", display: "flex", gap: "0.5rem" }}> */}
-              {/* <input
-                type="text"
-                placeholder="Search destinations, luxury experiences, packages..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                style={{ flex: 1, border: "none", padding: "0.75rem 1.25rem", borderRadius: "8px", fontSize: "0.95rem", outline: "none", backgroundColor: "#ffffff" }}
-              /> */}
-              <Link to="/" style={{ backgroundColor: "#0f766e", color: "#ffffff", textDecoration: "none", padding: "0.75rem 1.5rem", borderRadius: "8px", fontWeight: "700", display: "inline-flex", alignItems: "center", gap: "0.25rem", transition: "background 0.2s" }}>
-                <span>🔍</span> Explore
-              </Link>
-            {/* </div> */}
-          </div>
-        </section>
+    <main className="min-h-screen bg-[#07110f] font-sans text-white">
+      <section className="relative min-h-screen overflow-hidden">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={activeDestination.id}
+            className="absolute inset-0"
+            variants={slideVariants}
+            initial="enter"
+            animate="center"
+            exit="exit"
+            transition={{ duration: 1.15, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <img src={activeDestination.image} alt={activeDestination.title} className="h-full w-full object-cover" />
+          </motion.div>
+        </AnimatePresence>
 
-        {/* ========================================== */}
-        {/* 2. TRUST BAR SECTION                      */}
-        {/* ========================================== */}
-        <section className="section stats-section" style={{ padding: "2.5rem 1.5rem", backgroundColor: "#f8fafc", borderBottom: "1px solid #e2e8f0" }}>
-          <div className="stats-container" style={{ maxWidth: "1200px", margin: "0 auto", display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "2rem" }}>
-            {stats.map((stat) => (
-              <div key={stat.label} className="stat-card" style={{ textAlign: "center", padding: "1rem" }}>
-                <p className="stat-value" style={{ fontSize: "2.5rem", fontWeight: "900", color: "#0f766e", margin: 0 }}>{stat.value}</p>
-                <p className="stat-label" style={{ fontSize: "0.9rem", color: "#64748b", fontWeight: "600", textTransform: "uppercase", letterSpacing: "0.05em", marginTop: "0.25rem" }}>{stat.label}</p>
+        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(3,10,12,0.96)_0%,rgba(3,12,16,0.78)_35%,rgba(4,18,20,0.2)_64%,rgba(4,12,15,0.86)_100%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_64%_48%,rgba(240,201,74,0.14),transparent_30%),linear-gradient(180deg,rgba(0,0,0,0.18)_0%,rgba(0,0,0,0.76)_100%)]" />
+        <div className="absolute inset-x-0 top-0 h-2 bg-[#2a9d8f]" />
+
+        <div className="absolute inset-x-0 top-0 h-2 bg-[#2a9d8f]" />
+
+        <aside className="absolute bottom-24 left-5 top-28 z-20 hidden w-10 flex-col items-center justify-between md:flex">
+          <div className="relative h-[58vh] w-px bg-white/20">
+            <motion.div
+              key={activeDestination.id}
+              className="absolute left-1/2 top-0 w-px -translate-x-1/2 bg-white"
+              style={{ height: `${((activeIndex + 1) / destinations.length) * 100}%` }}
+              initial={{ scaleY: 0 }}
+              animate={{ scaleY: 1 }}
+              transition={{ duration: 0.65, ease: "easeOut" }}
+            />
+            {destinations.map((destination, index) => (
+              <button
+                type="button"
+                key={destination.id}
+                onClick={() => goToSlide(index)}
+                aria-label={`View ${destination.title}`}
+                className={`absolute left-1/2 h-3 w-3 -translate-x-1/2 rounded-full border transition ${
+                  index === activeIndex ? "scale-[2.25] border-white bg-white/90" : "border-white/45 bg-white/35 hover:bg-white"
+                }`}
+                style={{ top: `${(index / (destinations.length - 1)) * 100}%` }}
+              />
+            ))}
+          </div>
+          <span className="-rotate-90 font-mono text-[0.68rem] font-bold uppercase tracking-[0.24em] text-white/70">
+            Tamil Nadu
+          </span>
+        </aside>
+
+        <section className="relative z-10 grid min-h-screen grid-cols-1 items-end gap-8 px-5 pb-10 pt-28 sm:px-8 md:pl-24 lg:grid-cols-[minmax(0,1fr)_minmax(420px,0.86fr)] lg:px-12 lg:pb-16 lg:pt-32">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={activeDestination.id}
+              variants={contentVariants}
+              initial="enter"
+              animate="center"
+              exit="exit"
+              transition={{ duration: 0.55, ease: "easeOut" }}
+              className="max-w-4xl"
+            >
+              <p className="mb-5 font-mono text-xs font-bold uppercase tracking-[0.34em] text-[#f0c94a]">
+                {activeDestination.label}
+              </p>
+              <h1 className="max-w-[820px] font-display text-[clamp(4.2rem,9vw,8.4rem)] uppercase leading-[0.84] tracking-normal text-white drop-shadow-2xl">
+                {activeDestination.title}
+              </h1>
+              <p className="mt-7 max-w-2xl text-sm font-medium leading-7 text-white/78 sm:text-base">
+                {activeDestination.summary}
+              </p>
+
+              <form onSubmit={searchDestinations} className="mt-7 flex max-w-xl flex-col gap-3 rounded-md border border-white/15 bg-white/10 p-2 shadow-luxury backdrop-blur-xl sm:flex-row">
+                <input
+                  value={searchTerm}
+                  onChange={(event) => setSearchTerm(event.target.value)}
+                  className="min-h-12 flex-1 rounded-md border border-white/10 bg-white/95 px-4 font-bold text-[#10201e] outline-none"
+                  placeholder="Search Ooty, Madurai, Rameswaram..."
+                  aria-label="Search destinations"
+                />
+                <button type="submit" className="min-h-12 rounded-md bg-[#f0c94a] px-6 font-black text-[#1a0a00]">
+                  Search
+                </button>
+              </form>
+
+              <div className="mt-9 flex flex-wrap items-center gap-5">
+                <Link to="/explore" className="group inline-flex min-h-14 items-center gap-6 rounded-md bg-[#2f7dd3] px-8 text-lg font-black text-white shadow-luxury transition hover:-translate-y-1 hover:bg-[#3d8ee9]">
+                  Explore <span className="text-xl transition group-hover:translate-x-1">-&gt;</span>
+                </Link>
+                <Link to="/trip-builder" className="inline-flex min-h-14 items-center rounded-md border border-white/20 bg-white/10 px-8 text-sm font-black uppercase tracking-[0.18em] text-white backdrop-blur-xl transition hover:bg-white hover:text-[#10201e]">
+                  Plan Trip
+                </Link>
+                <span className="font-mono text-xs font-bold uppercase tracking-[0.22em] text-white/65">{activeDestination.meta}</span>
               </div>
-            ))}
-          </div>
-        </section>
+            </motion.div>
+          </AnimatePresence>
 
-        {/* ========================================== */}
-        {/* 3. EXPLORE STATES SECTION                  */}
-        {/* ========================================== */}
-        <section  className="section popular-destinations" style={{ padding: "5rem 1.5rem", maxWidth: "1200px", margin: "0 auto" }}>
-          <div className="section-heading" style={{ marginBottom: "3rem", textAlign: "center" }}>
-            <p className="eyebrow" style={{ color: "#0f766e", fontWeight: "700", textTransform: "uppercase", letterSpacing: "0.1em", margin: 0 }}>Popular States</p>
-            <h2 style={{ fontSize: "2.25rem", fontWeight: "800", color: "#0f172a", marginTop: "0.5rem" }}>Choose from premium South India gateways</h2>
-          </div>
-          
-          <div className="state-card-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: "2rem" }}>
-            {stateCards.map((state) => (
-              <Link key={state.name} to={state.to} className="state-card-link" style={{ textDecoration: "none" }}>
-                <article className="state-home-card glass-card" style={{ backgroundColor: "#ffffff", borderRadius: "16px", overflow: "hidden", border: "1px solid #e2e8f0", boxShadow: "0 4px 6px -1px rgba(0,0,0,0.02), 0 2px 4px -1px rgba(0,0,0,0.01)", height: "100%", display: "flex", flexDirection: "column", transition: "transform 0.3s, box-shadow 0.3s" }}>
-                  <div className="state-card-media" style={{ height: "220px", position: "relative", overflow: "hidden" }}>
-                    <div className="state-card-image" style={{ backgroundImage: `url(${state.image})`, width: "100%", height: "100%", backgroundSize: "cover", backgroundPosition: "center" }} />
-                    <div className="state-card-badge" style={{ position: "absolute", bottom: "12px", right: "12px", backgroundColor: "rgba(15, 118, 110, 0.95)", color: "#ffffff", padding: "4px 12px", borderRadius: "20px", fontSize: "0.75rem", fontWeight: "700", backdropFilter: "blur(4px)" }}>Explore now</div>
-                  </div>
-                  <div className="state-card-body" style={{ padding: "1.5rem", flex: 1, display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
-                    <div>
-                      <h3 style={{ fontSize: "1.3rem", fontWeight: "800", color: "#0f172a", margin: "0 0 0.5rem 0" }}>{state.name}</h3>
-                      <p style={{ fontSize: "0.925rem", color: "#475569", lineHeight: "1.5", margin: 0 }}>{state.description}</p>
+          <div id="cards" className="relative hidden min-h-[460px] items-end lg:flex">
+            <div className="flex w-full translate-x-4 items-end gap-5 overflow-hidden pb-12">
+              {floatingCards.map((card, index) => (
+                <motion.button
+                  type="button"
+                  key={card.id}
+                  onClick={() => goToSlide(card.destinationIndex)}
+                  className={`group relative shrink-0 overflow-hidden rounded-md border border-white/14 bg-white/10 text-left shadow-luxury outline-none transition hover:-translate-y-3 hover:border-white/50 focus-visible:ring-2 focus-visible:ring-[#f0c94a] ${
+                    index === 0 ? "h-[390px] w-[255px]" : "h-[330px] w-[250px]"
+                  }`}
+                  initial={{ opacity: 0, x: 60 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: index * 0.08, duration: 0.55, ease: "easeOut" }}
+                >
+                  <img src={card.image} alt={card.title} loading="lazy" className="h-full w-full object-cover transition duration-700 group-hover:scale-110" />
+                  <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.08),rgba(0,0,0,0.72))]" />
+                  <div className="absolute left-0 right-0 top-0 p-4">
+                    <h2 className="text-sm font-black text-white">{card.title}</h2>
+                    <div className="mt-2 flex gap-1">
+                      {Array.from({ length: 5 }).map((_, dotIndex) => (
+                        <span key={dotIndex} className="h-1.5 w-1.5 rounded-full bg-white/85" />
+                      ))}
                     </div>
                   </div>
-                </article>
-              </Link>
-            ))}
-          </div>
-        </section>
-
-        {/* ========================================== */}
-        {/* 4. CURATED ESCAPES SECTION                 */}
-        {/* ========================================== */}
-        <section className="section trending-packages-section" style={{ padding: "5rem 1.5rem", backgroundColor: "#f8fafc", borderTop: "1px solid #f1f5f9", borderBottom: "1px solid #f1f5f9" }}>
-          <div className="max-width-wrapper" style={{ maxWidth: "1200px", margin: "0 auto" }}>
-            <div className="section-heading" style={{ marginBottom: "3rem" }}>
-              <p className="eyebrow" style={{ color: "#0f766e", fontWeight: "700", textTransform: "uppercase", letterSpacing: "0.1em", margin: 0 }}>Trending Now</p>
-              <h2 style={{ fontSize: "2.25rem", fontWeight: "800", color: "#0f172a", marginTop: "0.5rem" }}>Most popular packages this season</h2>
-            </div>
-            
-            <div className="trending-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(270px, 1fr))", gap: "2rem" }}>
-              {trendingPackages.map((pkg) => (
-                <article key={pkg.name} className="trending-card glass-card" style={{ backgroundColor: "#ffffff", borderRadius: "16px", padding: "1.5rem", border: "1px solid #e2e8f0", boxShadow: "0 4px 12px rgba(0,0,0,0.02)", display: "flex", flexDirection: "column", justifyContent: "space-between", position: "relative" }}>
-                  <div>
-                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1rem" }}>
-                      <span style={{ fontSize: "0.75rem", fontWeight: "700", color: "#0f766e", backgroundColor: "#f0fdfa", padding: "4px 10px", borderRadius: "6px" }}>{pkg.tag}</span>
-                      <span className="rating" style={{ fontSize: "0.9rem", fontWeight: "700", color: "#f59e0b" }}>⭐ {pkg.rating}</span>
-                    </div>
-                    <h3 style={{ fontSize: "1.25rem", fontWeight: "800", color: "#0f172a", margin: "0 0 0.25rem 0", lineHeight: "1.3" }}>{pkg.name}</h3>
-                    <p style={{ fontSize: "0.85rem", color: "#64748b", margin: "0 0 1.5rem 0" }}>⚡ Private Guided &bull; {pkg.days}</p>
+                  <span className="absolute right-4 top-5 grid h-12 w-12 place-items-center rounded-full bg-white text-[#19312e] shadow-xl">+</span>
+                  <div className="absolute bottom-0 p-4">
+                    <p className="font-mono text-[0.65rem] font-bold uppercase tracking-[0.18em] text-[#f0c94a]">{card.label}</p>
+                    <p className="mt-2 line-clamp-2 text-sm font-semibold leading-5 text-white/88">{card.summary}</p>
                   </div>
-                  <div>
-                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", borderTop: "1px solid #f1f5f9", paddingTop: "1rem", marginTop: "1rem" }}>
-                      <span style={{ fontSize: "0.8rem", color: "#64748b" }}>Package Rate</span>
-                      <strong className="trending-price" style={{ fontSize: "1.4rem", fontWeight: "900", color: "#0f766e" }}>{pkg.price}</strong>
-                    </div>
-                    <Link to="/packages" className="trending-btn" style={{ display: "block", textAlign: "center", textDecoration: "none", backgroundColor: "#0f766e", color: "#ffffff", padding: "0.65rem", borderRadius: "8px", fontWeight: "700", fontSize: "0.9rem", marginTop: "1rem", transition: "opacity 0.2s" }}>View Details →</Link>
-                  </div>
-                </article>
+                </motion.button>
               ))}
             </div>
           </div>
-        </section>
 
-        {/* ========================================== */}
-        {/* 5. TRAVEL CATEGORIES SECTION               */}
-        {/* ========================================== */}
-        <section style={{ padding: "5rem 1.5rem", maxWidth: "1200px", margin: "0 auto" }}>
-          <div style={{ marginBottom: "3rem", textAlign: "center" }}>
-            <p style={{ color: "#0f766e", fontWeight: "700", textTransform: "uppercase", letterSpacing: "0.1em", margin: 0 }}>Filter by Feeling</p>
-            <h2 style={{ fontSize: "2.25rem", fontWeight: "800", color: "#0f172a", marginTop: "0.5rem" }}>Inspiration mapped straight to your mood</h2>
+          <div className="absolute bottom-9 left-1/2 z-20 flex -translate-x-1/2 items-center gap-3 lg:bottom-14">
+            <button type="button" onClick={() => moveSlide(-1)} className="grid h-11 w-11 place-items-center rounded-full border border-white/15 bg-white/20 text-xl text-white backdrop-blur-xl transition hover:bg-white hover:text-[#12302d]" aria-label="Previous destination">
+              &lt;
+            </button>
+            <button type="button" onClick={() => moveSlide(1)} className="grid h-11 w-11 place-items-center rounded-full border border-white/15 bg-white/20 text-xl text-white backdrop-blur-xl transition hover:bg-white hover:text-[#12302d]" aria-label="Next destination">
+              &gt;
+            </button>
           </div>
-          
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: "1.25rem" }}>
-            {travelCategories.map((cat, idx) => (
-              <Link key={idx} to="/explore" style={{ textDecoration: "none" }}>
-                <div style={{ backgroundColor: "#ffffff", border: "1px solid #e2e8f0", borderRadius: "14px", padding: "1.5rem", textAlign: "center", transition: "all 0.2s" }}
-                     onMouseEnter={(e) => { e.currentTarget.style.borderColor = "#0f766e"; e.currentTarget.style.backgroundColor = "#f0fdfa"; }}
-                     onMouseLeave={(e) => { e.currentTarget.style.borderColor = "#e2e8f0"; e.currentTarget.style.backgroundColor = "#ffffff"; }}>
-                  <span style={{ fontSize: "2rem", display: "block", marginBottom: "0.5rem" }}>{cat.icon}</span>
-                  <h4 style={{ margin: "0 0 0.25rem 0", fontSize: "1rem", fontWeight: "700", color: "#0f172a" }}>{cat.label}</h4>
-                  <span style={{ fontSize: "0.8rem", color: "#64748b" }}>{cat.count}</span>
+
+          <div className="absolute bottom-11 right-8 z-20 hidden items-center gap-4 font-mono text-[0.68rem] font-bold text-white/80 lg:flex">
+            <span>{String(activeIndex + 1).padStart(2, "0")}</span>
+            <div className="h-px w-16 bg-white/30">
+              <div className="h-px bg-white transition-all duration-500" style={{ width: `${((activeIndex + 1) / destinations.length) * 100}%` }} />
+            </div>
+            <span>{String(destinations.length).padStart(2, "0")}</span>
+          </div>
+        </section>
+      </section>
+
+      <section className="bg-[#f5efe6] px-5 py-20 text-[#1a0a00] sm:px-8 lg:px-12">
+        <div className="mx-auto max-w-7xl">
+          <div className="max-w-3xl">
+            <p className="font-mono text-xs font-bold uppercase tracking-[0.28em] text-[#c8440a]">Popular places</p>
+            <h2 className="mt-4 font-display text-[clamp(2.8rem,6vw,6rem)] leading-[0.9]">Travel Tamil Nadu by mood, season, and story.</h2>
+          </div>
+          <div className="mt-12 grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+            {collections.map(([title, text, image, to]) => (
+              <Link key={title} to={to} className="group relative min-h-[360px] overflow-hidden rounded-md bg-black shadow-luxury">
+                <img src={image} alt={title} loading="lazy" className="h-full w-full object-cover opacity-80 transition duration-700 group-hover:scale-110" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/86 via-black/20 to-transparent" />
+                <div className="absolute inset-x-0 bottom-0 p-5 text-white">
+                  <h3 className="text-2xl font-black">{title}</h3>
+                  <p className="mt-3 text-sm leading-6 text-white/75">{text}</p>
                 </div>
               </Link>
             ))}
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* ========================================== */}
-        {/* 6. ORACLE AI SECTION                       */}
-        {/* ========================================== */}
-        <section style={{ padding: "4.5rem 1.5rem", backgroundColor: "#0f172a", color: "#ffffff", position: "relative" }}>
-          <div style={{ maxWidth: "800px", margin: "0 auto", position: "relative", zIndex: 2 }}>
-            <div style={{ textAlign: "center", marginBottom: "2.5rem" }}>
-              <span style={{ backgroundColor: "#1e293b", color: "#2dd4bf", padding: "4px 12px", borderRadius: "20px", fontSize: "0.75rem", fontWeight: "700", textTransform: "uppercase", letterSpacing: "0.05em" }}>AI Route Generator</span>
-              <h3 style={{ fontSize: "2rem", fontWeight: "800", margin: "0.5rem 0 0.75rem 0" }}>Consult with Oracle AI</h3>
-              <p style={{ color: "#94a3b8", fontSize: "1rem", margin: 0 }}>Describe your ultimate trip context (e.g., "3 days of quiet beaches and seafood in Kerala") to auto-generate routes.</p>
-            </div>
-
-            <form onSubmit={handleAiConsultation} style={{ display: "flex", gap: "0.75rem", flexWrap: "wrap", backgroundColor: "#1e293b", padding: "0.75rem", borderRadius: "14px", border: "1px solid #334155" }}>
-              <input 
-                type="text" 
-                placeholder="Where do you want to travel, and what is your current travel mood?" 
-                value={aiPrompt}
-                onChange={(e) => setAiPrompt(e.target.value)}
-                style={{ flex: 1, minWidth: "260px", border: "none", padding: "0.85rem 1rem", borderRadius: "8px", backgroundColor: "#0f172a", color: "#ffffff", outline: "none", fontSize: "0.95rem" }}
-              />
-              <button 
-                type="submit" 
-                disabled={isAiLoading}
-                style={{ backgroundColor: "#0f766e", color: "#ffffff", border: "none", padding: "0.85rem 2rem", borderRadius: "8px", fontWeight: "700", fontSize: "0.95rem", cursor: "pointer", minWidth: "140px" }}
-              >
-                {isAiLoading ? "Analyzing..." : "Ask Oracle"}
-              </button>
-            </form>
-
-            {aiOutput && (
-              <div style={{ marginTop: "2rem", backgroundColor: "rgba(15, 118, 110, 0.15)", border: "1px solid #115e59", padding: "1.5rem", borderRadius: "12px", color: "#ccfbf1", lineHeight: "1.6", fontSize: "0.95rem" }}>
-                <strong style={{ display: "block", color: "#2dd4bf", marginBottom: "0.4rem" }}>✨ Recommended Oracle Strategy:</strong>
-                {aiOutput}
-              </div>
-            )}
-          </div>
-        </section>
-
-        {/* ========================================== */}
-        {/* 7. TRAVELER REVIEWS SECTION                */}
-        {/* ========================================== */}
-        <section className="section testimonials" style={{ padding: "5rem 1.5rem", maxWidth: "1200px", margin: "0 auto" }}>
-          <div className="section-heading" style={{ marginBottom: "3rem", textAlign: "center" }}>
-            <p className="eyebrow" style={{ color: "#0f766e", fontWeight: "700", textTransform: "uppercase", letterSpacing: "0.1em", margin: 0 }}>Traveler Stories</p>
-            <h2 style={{ fontSize: "2.25rem", fontWeight: "800", color: "#0f172a", marginTop: "0.5rem" }}>Real stories from real travelers</h2>
-          </div>
-          
-          <div className="testimonial-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "2rem" }}>
-            {consolidatedReviews.map((item, idx) => (
-              <article key={idx} className="testimonial-card glass-card" style={{ backgroundColor: "#ffffff", border: "1px solid #e2e8f0", borderRadius: "16px", padding: "1.75rem", boxShadow: "0 4px 6px -1px rgba(0,0,0,0.01)", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
-                <div>
-                  <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginBottom: "1.25rem" }}>
-                    <div className="testimonial-avatar" style={{ width: "42px", height: "42px", borderRadius: "50%", backgroundColor: "#f0fdfa", color: "#0f766e", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: "800", fontSize: "1.1rem" }}>
-                      {item.author.charAt(0)}
-                    </div>
-                    <div>
-                      <strong className="testimonial-author" style={{ display: "block", fontSize: "0.95rem", color: "#0f172a" }}>{item.author}</strong>
-                      <span className="testimonial-city" style={{ fontSize: "0.8rem", color: "#64748b" }}>{item.city}</span>
-                    </div>
-                  </div>
-                  <p className="testimonial-quote" style={{ fontSize: "0.95rem", lineHeight: "1.6", color: "#475569", italic: "true", margin: 0 }}>
-                    "{item.quote}"
-                  </p>
+      <section className="bg-[#fffaf4] px-5 py-20 text-[#1a0a00] sm:px-8 lg:px-12">
+        <div className="mx-auto max-w-7xl">
+          <p className="font-mono text-xs font-bold uppercase tracking-[0.28em] text-[#c8440a]">Seasonal recommendations</p>
+          <h2 className="mt-4 max-w-4xl font-display text-[clamp(2.8rem,6vw,5.8rem)] leading-[0.9]">Right place, right season.</h2>
+          <div className="mt-12 grid gap-5 md:grid-cols-3">
+            {seasonal.map(([title, text, image]) => (
+              <article key={title} className="overflow-hidden rounded-md bg-white shadow-luxury">
+                <img src={image} alt={title} loading="lazy" className="h-56 w-full object-cover" />
+                <div className="p-6">
+                  <h3 className="text-2xl font-black">{title}</h3>
+                  <p className="mt-3 text-sm leading-6 text-[#6b5f55]">{text}</p>
                 </div>
               </article>
             ))}
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* ========================================== */}
-        {/* 8. WHY CHOOSE US SECTION                   */}
-        {/* ========================================== */}
-        <section className="section why-choose-us section-surface" style={{ padding: "5rem 1.5rem", backgroundColor: "#f8fafc", borderTop: "1px solid #f1f5f9" }}>
-          <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
-            <div className="section-heading" style={{ marginBottom: "3.5rem", textAlign: "center" }}>
-              <p className="eyebrow" style={{ color: "#0f766e", fontWeight: "700", textTransform: "uppercase", letterSpacing: "0.1em", margin: 0 }}>Why Choose Us</p>
-              <h2 style={{ fontSize: "2.25rem", fontWeight: "800", color: "#0f172a", marginTop: "0.5rem" }}>Designed for travelers who want premium experiences</h2>
-            </div>
-            
-            <div className="feature-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: "2rem" }}>
-              {whyItems.map((item, idx) => (
-                <article key={idx} className="feature-card glass-card" style={{ backgroundColor: "#ffffff", border: "1px solid #e2e8f0", padding: "1.75rem", borderRadius: "14px", boxShadow: "0 4px 6px rgba(0,0,0,0.01)" }}>
-                  <div style={{ width: "36px", height: "36px", borderRadius: "8px", backgroundColor: "#f0fdfa", color: "#0f766e", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "1.1rem", fontWeight: "700", marginBottom: "1rem" }}>✓</div>
-                  <h3 style={{ fontSize: "1.15rem", fontWeight: "800", color: "#0f172a", margin: "0 0 0.5rem 0" }}>{item.title}</h3>
-                  <p style={{ margin: 0, fontSize: "0.875rem", color: "#64748b", lineHeight: "1.5" }}>{item.desc}</p>
-                </article>
-              ))}
-            </div>
+      <section className="bg-[#07110f] px-5 py-20 sm:px-8 lg:px-12">
+        <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[0.8fr_1.2fr]">
+          <div>
+            <p className="font-mono text-xs font-bold uppercase tracking-[0.28em] text-[#f0c94a]">Signature packages</p>
+            <h2 className="mt-4 font-display text-[clamp(2.8rem,6vw,5.6rem)] leading-[0.9]">Premium routes, ready to book.</h2>
+            <p className="mt-6 max-w-md leading-7 text-white/65">Temple circuits, tea country escapes, coastal pilgrimages, culinary routes, and custom luxury itineraries.</p>
+            <Link to="/packages" className="mt-8 inline-flex rounded-md bg-white px-7 py-4 font-black text-[#10201e]">View packages</Link>
           </div>
-        </section>
-
-        {/* ========================================== */}
-        {/* 9. TRAVEL INSPIRATION SECTION              */}
-        {/* ========================================== */}
-        <section style={{ padding: "5rem 1.5rem", maxWidth: "1200px", margin: "0 auto" }}>
-          <div style={{ marginBottom: "3rem" }}>
-            <p style={{ color: "#0f766e", fontWeight: "700", textTransform: "uppercase", letterSpacing: "0.1em", margin: 0 }}>Get Inspired</p>
-            <h2 style={{ fontSize: "2.25rem", fontWeight: "800", color: "#0f172a", marginTop: "0.5rem" }}>Insights from our regional field curators</h2>
-          </div>
-
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "2rem" }}>
-            {inspirationItems.map((blog, bIdx) => (
-              <div key={bIdx} style={{ backgroundColor: "#ffffff", borderRadius: "14px", overflow: "hidden", border: "1px solid #e2e8f0" }}>
-                <div style={{ height: "180px", backgroundImage: `url(${blog.bg})`, backgroundSize: "cover", backgroundPosition: "center" }} />
-                <div style={{ padding: "1.25rem" }}>
-                  <span style={{ color: "#0f766e", fontSize: "0.75rem", fontWeight: "700", textTransform: "uppercase" }}>{blog.type}</span>
-                  <h4 style={{ fontSize: "1.15rem", fontWeight: "800", color: "#0f172a", margin: "0.4rem 0 0.75rem 0" }}>{blog.title}</h4>
-                  <span style={{ fontSize: "0.8rem", color: "#64748b" }}>⏱️ {blog.readTime}</span>
+          <div className="grid gap-5 md:grid-cols-3">
+            {packages.map(([title, text, price, image]) => (
+              <article key={title} className="overflow-hidden rounded-md border border-white/10 bg-white/5 shadow-luxury">
+                <img src={image} alt={title} loading="lazy" className="h-56 w-full object-cover" />
+                <div className="p-5">
+                  <p className="font-mono text-[0.68rem] font-bold uppercase tracking-[0.18em] text-[#f0c94a]">{price}</p>
+                  <h3 className="mt-3 text-xl font-black">{title}</h3>
+                  <p className="mt-3 text-sm leading-6 text-white/65">{text}</p>
                 </div>
-              </div>
+              </article>
             ))}
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* ========================================== */}
-        {/* 10. FINAL CTA SECTION                      */}
-        {/* ========================================== */}
-        <section style={{ padding: "4.5rem 2rem", background: "linear-gradient(135deg, #115e59 0%, #0f766e 100%)", textAlign: "center", color: "#ffffff" }}>
-          <div style={{ maxWidth: "650px", margin: "0 auto" }}>
-            <h2 style={{ fontSize: "2.25rem", fontWeight: "900", marginBottom: "1rem", letterSpacing: "-0.02em" }}>Ready to Plan Your Escape?</h2>
-            <p style={{ color: "#ccfbf1", fontSize: "1.1rem", lineHeight: "1.6", marginBottom: "2rem" }}>
-              Connect with our dedicated destination owners for premium travel consulting and private customizable logistics mappings.
-            </p>
-            <div style={{ display: "flex", justifyContent: "center", gap: "1rem", flexWrap: "wrap" }}>
-              <Link to="/packages" style={{ backgroundColor: "#ffffff", color: "#0f766e", padding: "0.85rem 2rem", borderRadius: "8px", fontWeight: "700", textDecoration: "none", fontSize: "0.95rem" }}>
-                Explore All Packages
-              </Link>
-              <Link to="/contact" style={{ backgroundColor: "transparent", color: "#ffffff", padding: "0.85rem 2rem", borderRadius: "8px", fontWeight: "700", textDecoration: "none", fontSize: "0.95rem", border: "1px solid #ffffff" }}>
-                Talk to an Expert
-              </Link>
+      <section className="bg-[#12302d] px-5 py-20 sm:px-8 lg:px-12">
+        <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[1fr_0.8fr]">
+          <div className="relative min-h-[460px] overflow-hidden rounded-md shadow-luxury">
+            <img src={valparaiImage} alt="Valparai Hills" loading="lazy" className="h-full w-full object-cover" />
+            <div className="absolute inset-0 bg-gradient-to-r from-black/70 to-transparent" />
+            <div className="absolute bottom-0 max-w-xl p-8">
+              <p className="font-mono text-xs font-bold uppercase tracking-[0.28em] text-[#f0c94a]">Concierge form</p>
+              <h2 className="mt-4 font-display text-[clamp(2.6rem,6vw,5rem)] leading-[0.9]">Start a custom Tamil Nadu plan.</h2>
             </div>
           </div>
-        </section>
+          <form
+            className="rounded-md border border-white/12 bg-white/10 p-6 shadow-luxury backdrop-blur-xl"
+            onSubmit={(event) => event.preventDefault()}
+          >
+            <label className="block text-sm font-black">
+              Name
+              <input
+                value={lead.name}
+                onChange={(event) => setLead({ ...lead, name: event.target.value })}
+                className="mt-3 min-h-12 w-full rounded-md border border-white/15 bg-white/90 px-4 text-[#10201e] outline-none"
+                placeholder="Your name"
+              />
+            </label>
+            <label className="mt-5 block text-sm font-black">
+              Phone
+              <input
+                value={lead.phone}
+                onChange={(event) => setLead({ ...lead, phone: event.target.value })}
+                className="mt-3 min-h-12 w-full rounded-md border border-white/15 bg-white/90 px-4 text-[#10201e] outline-none"
+                placeholder="Phone number"
+              />
+            </label>
+            <label className="mt-5 block text-sm font-black">
+              Travel Interest
+              <select
+                value={lead.interest}
+                onChange={(event) => setLead({ ...lead, interest: event.target.value })}
+                className="mt-3 min-h-12 w-full rounded-md border border-white/15 bg-white/90 px-4 text-[#10201e] outline-none"
+              >
+                <option>Luxury Tamil Nadu itinerary</option>
+                <option>Temple and heritage circuit</option>
+                <option>Hills and nature escape</option>
+                <option>Food trail and culture</option>
+              </select>
+            </label>
+            <Link
+              to="/contact"
+              className="mt-7 inline-flex min-h-14 w-full items-center justify-center rounded-md bg-[#f0c94a] px-6 text-center font-black text-[#1a0a00]"
+            >
+              Continue to enquiry
+            </Link>
+            <p className="mt-4 text-sm leading-6 text-white/60">This quick form keeps the home page complete while the full enquiry workflow lives on Contact.</p>
+          </form>
+        </div>
+      </section>
 
-      </main>
-      <Footer />
-    </>
+      <section className="bg-[#f5efe6] px-5 py-20 text-[#1a0a00] sm:px-8 lg:px-12">
+        <div className="mx-auto max-w-7xl">
+          <p className="font-mono text-xs font-bold uppercase tracking-[0.28em] text-[#c8440a]">Testimonials</p>
+          <div className="mt-8 grid gap-5 md:grid-cols-3">
+            {testimonials.map(([name, quote]) => (
+              <article key={name} className="rounded-md bg-white p-6 shadow-luxury">
+                <p className="text-lg font-bold leading-8">"{quote}"</p>
+                <strong className="mt-6 block">{name}</strong>
+              </article>
+            ))}
+          </div>
+          <div className="mt-12 rounded-md bg-[#07110f] p-8 text-white shadow-luxury">
+            <h2 className="font-display text-[clamp(2.5rem,6vw,5rem)] leading-[0.9]">Ready to build your Tamil Nadu trip?</h2>
+            <Link to="/trip-builder" className="mt-7 inline-flex rounded-md bg-[#f0c94a] px-7 py-4 font-black text-[#1a0a00]">
+              Start planning
+            </Link>
+          </div>
+        </div>
+      </section>
+    </main>
   );
 };
 

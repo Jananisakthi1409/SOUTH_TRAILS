@@ -1,13 +1,14 @@
 import { useState, useEffect, useContext } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import { useToast } from "../../components/ui/Toast";
 import { AdminContext } from "./AdminContext";
 import { getCustomers, deleteCustomer } from "../../services/customerService";
 
 const AdminCustomers = () => {
   const navigate = useNavigate();
+  const { showToast } = useToast();
   const { isAuthenticated, logout } = useContext(AdminContext);
   const [searchTerm, setSearchTerm] = useState("");
-  const [shouldRedirect, setShouldRedirect] = useState(false);
   const [customers, setCustomers] = useState([
     { id: "C-001", name: "John Doe", email: "john@example.com", phone: "+91 98765 43210", package: "Tirupati Tour", travelDate: "2026-07-15", travelers: 2, status: "Active" },
     { id: "C-002", name: "Jane Smith", email: "jane@example.com", phone: "+91 87654 32109", package: "Coorg Coffee", travelDate: "2026-07-20", travelers: 4, status: "Active" },
@@ -19,6 +20,7 @@ const AdminCustomers = () => {
   // UI Interactive Hover States
   const [hoveredCard, setHoveredCard] = useState(null);
   const [hoveredBtn, setHoveredBtn] = useState(null);
+  const [pendingDeleteId, setPendingDeleteId] = useState(null);
 
   useEffect(() => {
     const loadCustomers = async () => {
@@ -32,15 +34,9 @@ const AdminCustomers = () => {
 
   useEffect(() => {
     if (!isAuthenticated) {
-      setShouldRedirect(true);
-    }
-  }, [isAuthenticated]);
-
-  useEffect(() => {
-    if (shouldRedirect) {
       navigate("/admin/login");
     }
-  }, [shouldRedirect, navigate]);
+  }, [isAuthenticated, navigate]);
 
   if (!isAuthenticated) {
     return null;
@@ -53,13 +49,20 @@ const AdminCustomers = () => {
   );
 
   const handleDeleteCustomer = async (id) => {
-    if (!confirm("Are you sure you want to delete this customer record?")) return;
+    setPendingDeleteId(id);
+  };
+
+  const confirmDeleteCustomer = async () => {
+    const id = pendingDeleteId;
+    if (!id) return;
+    setPendingDeleteId(null);
     const { error } = await deleteCustomer(id);
     if (error && error.message !== "Supabase not configured") {
-      alert(error.message || "Unable to delete customer");
+      showToast(error.message || "Unable to delete customer", "error");
       return;
     }
     setCustomers(customers.filter(c => c.id !== id));
+    showToast("Customer record deleted.", "success");
   };
 
   // Helper to extract customer initials for profile placeholders
@@ -114,6 +117,18 @@ const AdminCustomers = () => {
       <main style={{ marginLeft: "260px", flex: 1, padding: "40px 48px", minHeight: "100vh", boxSizing: "border-box" }}>
         
         {/* Module Title Matrix */}
+        {pendingDeleteId && (
+          <div style={{ position: "fixed", inset: 0, zIndex: 1000, display: "grid", placeItems: "center", backgroundColor: "rgba(15, 23, 42, 0.36)", padding: "1rem" }}>
+            <div style={{ width: "min(420px, 100%)", backgroundColor: "#ffffff", borderRadius: "12px", padding: "24px", boxShadow: "0 24px 80px rgba(15,23,42,0.24)" }}>
+              <h3 style={{ margin: "0 0 8px 0", fontSize: "18px", color: "#0f172a" }}>Delete customer?</h3>
+              <p style={{ margin: "0 0 20px 0", color: "#64748b", lineHeight: 1.5 }}>This removes the customer record from the admin workspace.</p>
+              <div style={{ display: "flex", justifyContent: "flex-end", gap: "10px" }}>
+                <button type="button" onClick={() => setPendingDeleteId(null)} style={{ padding: "10px 16px", borderRadius: "8px", border: "1px solid #cbd5e1", background: "#ffffff", color: "#334155", fontWeight: 600 }}>Cancel</button>
+                <button type="button" onClick={confirmDeleteCustomer} style={{ padding: "10px 16px", borderRadius: "8px", border: "none", background: "#dc2626", color: "#ffffff", fontWeight: 700 }}>Delete</button>
+              </div>
+            </div>
+          </div>
+        )}
         <div style={{ marginBottom: "32px" }}>
           <h1 style={{ fontSize: "28px", fontWeight: "700", color: "#0f172a", margin: 0, letterSpacing: "-0.025em" }}>Customer Management</h1>
           <p style={{ fontSize: "15px", color: "#64748b", margin: "6px 0 0 0" }}>Manage travelers, corporate files, bookings and premium customer relationship tracking.</p>
@@ -223,7 +238,7 @@ const AdminCustomers = () => {
                 {/* Secure Operational Controls Segment */}
                 <div style={{ display: "flex", gap: "10px" }}>
                   <button
-                    onClick={() => alert(`Accessing comprehensive ledger & historic log parameters for ${customer.name}`)}
+                    onClick={() => showToast(`Opening history for ${customer.name}.`, "info")}
                     onMouseEnter={() => setHoveredBtn(`history-${customer.id}`)}
                     onMouseLeave={() => setHoveredBtn(null)}
                     style={{ flex: 1, padding: "10px", borderRadius: "6px", border: "1px solid #cbd5e1", backgroundColor: hoveredBtn === `history-${customer.id}` ? "#f8fafc" : "#ffffff", color: "#334155", fontSize: "13px", fontWeight: "600", cursor: "pointer", transition: "all 0.15s" }}

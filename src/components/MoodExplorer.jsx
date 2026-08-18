@@ -1,8 +1,8 @@
 import { motion } from "framer-motion";
-import kerala from "../assets/images/peace/p2.jpg";
-import tamil from "../assets/images/hidden/pexels-stijn-dijkstra-1306815-29988882.jpg";
-import karnataka from "../assets/images/adventure/pexels-cottonbro-5803403.jpg";
-import andhra from "../assets/images/roadtrips/pexels-cottonbro-5329529.jpg";
+import kerala from "../pages/state/kerala/backwater/pexels-optically-challenged-21717677.webp";
+import tamil from "../pages/state/tamilnadu/madurai/pexels-animesh-paul-150064-35620983.webp";
+import karnataka from "../pages/state/karnataka/coorg/j.webp";
+import andhra from "../pages/state/andhra/rkbeach/image.webp";
 
 const moods = [
   {

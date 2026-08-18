@@ -1,17 +1,23 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { getPackages } from "../../services/packageService";
+import { Link, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import packagesData, { categories, budgetFilters, durationFilters } from "./packages";
-import tamilnaduImg from "../../assets/images/tamilnadu.png";
+import { categories, budgetFilters, durationFilters } from "./packages";
+import PackageCompareTray from "../../components/advanced/PackageCompareTray";
+import PackageSkeletonGrid from "../../components/advanced/PackageSkeletonGrid";
+import SmartFilterDrawer from "../../components/advanced/SmartFilterDrawer";
+import { useAuthContext } from "../../features/auth/AuthContext";
+import { useToast } from "../../components/ui/Toast";
+import { getWishlist, removeWishlistPackage, saveWishlistPackage } from "../../services/wishlistService";
+import tamilnaduImg from "../../assets/images/tamilnadu.webp";
 import "./PackagesBrowse.css";
-
-const imageModules = import.meta.glob("../state/tamilnadu/**/*.{png,jpg,jpeg}", { eager: true });
-
+//import { seedPackagesToSupabase } from "../../services/packageService";
+const imageModules = import.meta.glob("../state/**/*.{webp,avif}", { eager: true });
 const stateImageMap = Object.entries(imageModules)
   .sort(([a], [b]) => a.localeCompare(b))
   .reduce((map, [path, moduleValue]) => {
     const normalized = path.replace(/\\/g, "/");
-    const match = normalized.match(/tamilnadu\/([^/]+)\/[^/]+\.(png|jpe?g)$/i);
+    const match = normalized.match(/state\/[^/]+\/([^/]+)\/[^/]+\.(webp|avif)$/i);
     if (!match) return map;
 
     const folder = match[1];
@@ -20,22 +26,91 @@ const stateImageMap = Object.entries(imageModules)
     return map;
   }, {});
 
+const stateFallbackImages = {
+  "Tamil Nadu": tamilnaduImg,
+};
+
 const PackagesBrowse = () => {
   const navigate = useNavigate();
+  const { user, isAuthenticated } = useAuthContext();
+  const { showToast } = useToast();
+  const [packagesData, setPackagesData] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [selectedBudget, setSelectedBudget] = useState("All");
   const [selectedDuration, setSelectedDuration] = useState("All");
+  const [selectedState, setSelectedState] = useState("All");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [isFilterDrawerOpen, setIsFilterDrawerOpen] = useState(false);
   const [selectedPackages, setSelectedPackages] = useState([]);
+  const [savedPackageIds, setSavedPackageIds] = useState([]);
   const [minRating, setMinRating] = useState(0);
   const [sortBy, setSortBy] = useState("rating");
 
-  // Get first 10 packages
-  const firstTenPackages = packagesData.slice(0, 10);
+  useEffect(() => {
+    let active = true;
+
+    const loadPackages = async () => {
+    const data = await getPackages();
+
+    if (data && data.length > 0) {
+      // Mapping layer to ensure Supabase property names align safely with UI expectations
+      const mappedPackages = data.map((pkg) => ({
+        id: pkg.id,
+        title: pkg.title,
+        destination: pkg.destination,
+        category: pkg.category,
+        days: pkg.days,
+        nights: pkg.nights,
+        rating: Number(pkg.rating) || 0,
+        price: Number(pkg.price) || 0,
+        state: "Tamil Nadu",
+        image1: pkg.image1,
+        image2: pkg.image2,
+        image3: pkg.image3,
+        places: Array.isArray(pkg.places) ? pkg.places : typeof pkg.places === "string" ? pkg.places.split(",").map(p => p.trim()) : [],
+        imageFolder: pkg.imageFolder || pkg.image_folder || ""
+      }));
+      if (active) {
+        setPackagesData(mappedPackages);
+      }
+    }
+      if (active) {
+        setLoading(false);
+      }
+    };
+
+    loadPackages();
+
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  useEffect(() => {
+    const loadWishlist = async () => {
+      if (!isAuthenticated) {
+        setSavedPackageIds([]);
+        return;
+      }
+      const { data } = await getWishlist(user?.id);
+      setSavedPackageIds((data || []).map((item) => item.id));
+    };
+
+    loadWishlist();
+  }, [isAuthenticated, user?.id]);
 
   // Filter logic
-  const filteredPackages = firstTenPackages.filter((pkg) => {
+  const filteredPackages = packagesData.filter((pkg) => {
     const categoryMatch = selectedCategory === "All" || pkg.category === selectedCategory;
+    const stateMatch = selectedState === "All" || pkg.state === "Tamil Nadu";
     const ratingMatch = pkg.rating >= minRating;
+    const query = searchTerm.trim().toLowerCase();
+    const searchMatch =
+      !query ||
+      `${pkg.title} ${pkg.destination} ${pkg.category} ${pkg.state} ${pkg.places.join(" ")}`
+        .toLowerCase()
+        .includes(query);
 
     let budgetMatch = true;
     if (selectedBudget === "Under 8000") budgetMatch = pkg.price < 8000;
@@ -47,7 +122,7 @@ const PackagesBrowse = () => {
     else if (selectedDuration === "3-4 Days") durationMatch = pkg.days >= 3 && pkg.days <= 4;
     else if (selectedDuration === "5+ Days") durationMatch = pkg.days >= 5;
 
-    return categoryMatch && ratingMatch && budgetMatch && durationMatch;
+    return categoryMatch && stateMatch && searchMatch && ratingMatch && budgetMatch && durationMatch;
   });
 
   // Sort logic
@@ -58,10 +133,43 @@ const PackagesBrowse = () => {
     return 0;
   });
 
+  const selectedComparePackages = packagesData
+    .filter((pkg) => selectedPackages.includes(pkg.id))
+    .slice(0, 3);
+
+  const averageRating = packagesData.length
+    ? packagesData.reduce((sum, pkg) => sum + Number(pkg.rating || 0), 0) / packagesData.length
+    : 0;
+  const startingPrice = packagesData.length
+    ? Math.min(...packagesData.map((pkg) => Number(pkg.price || 0)).filter(Boolean))
+    : 0;
+
   const togglePackageSelection = (packageId) => {
     setSelectedPackages((prev) =>
       prev.includes(packageId) ? prev.filter((id) => id !== packageId) : [...prev, packageId]
     );
+  };
+
+  const toggleWishlist = async (pkg) => {
+    if (!isAuthenticated) {
+      navigate("/login", { state: { message: "Please login to save packages to your wishlist." } });
+      return;
+    }
+
+    const isSaved = savedPackageIds.includes(pkg.id);
+    const result = isSaved
+      ? await removeWishlistPackage({ customerId: user?.id, packageId: pkg.id })
+      : await saveWishlistPackage({ customerId: user?.id, packageId: pkg.id, packageItem: pkg });
+
+    if (result.error) {
+      showToast(result.error.message || "Unable to update wishlist.", "error");
+      return;
+    }
+
+    setSavedPackageIds((current) =>
+      isSaved ? current.filter((id) => id !== pkg.id) : [pkg.id, ...current]
+    );
+    showToast(isSaved ? "Removed from wishlist." : "Saved to wishlist.", "success");
   };
 
   const handleConfirm = () => {
@@ -74,22 +182,73 @@ const PackagesBrowse = () => {
     setSelectedCategory("All");
     setSelectedBudget("All");
     setSelectedDuration("All");
+    setSelectedState("All");
+    setSearchTerm("");
     setMinRating(0);
     setSortBy("rating");
+    setIsFilterDrawerOpen(false);
   };
 
   return (
-    <main className="packages-browse-page">
-      <section className="packages-hero">
-        <h1>Explore Curated Packages</h1>
-        <p>Find your perfect South India escape with our Airbnb-style filters</p>
+    <main className="packages-browse-page !w-full !max-w-none !p-0">
+      <section className="packages-royal-hero">
+        <img src={tamilnaduImg} alt="" className="packages-royal-hero__image" />
+        <div className="packages-royal-hero__shade" />
+        <div className="packages-royal-hero__content">
+          <div>
+            <p className="royal-eyebrow">Tamil Nadu private journeys</p>
+            <h1>Royal travel collections.</h1>
+            <p>
+              Curated temple circuits, hill retreats, coastal escapes, food trails,
+              and luxury weekends with handpicked stays, route planning, and smooth booking.
+            </p>
+            <div className="royal-hero-actions">
+              <a href="#package-collection" className="royal-primary-link">Explore packages</a>
+              <button className="royal-secondary-link" type="button" onClick={() => setIsFilterDrawerOpen(true)}>
+                Concierge filters
+              </button>
+            </div>
+          </div>
+
+          <div className="royal-stat-panel" aria-label="Package highlights">
+            <div>
+              <span>{packagesData.length || "--"}</span>
+              <p>Curated routes</p>
+            </div>
+            <div>
+              <span>{averageRating ? averageRating.toFixed(1) : "--"}</span>
+              <p>Average rating</p>
+            </div>
+            <div>
+              <span>{startingPrice ? `Rs. ${startingPrice.toLocaleString("en-IN")}` : "--"}</span>
+              <p>Starting price</p>
+            </div>
+          </div>
+        </div>
       </section>
 
-      <div className="packages-container">
+      <SmartFilterDrawer
+        open={isFilterDrawerOpen}
+        filters={{ searchTerm, selectedState, selectedBudget, selectedDuration, minRating }}
+        onChange={(field, value) => {
+          const setters = {
+            searchTerm: setSearchTerm,
+            selectedState: setSelectedState,
+            selectedBudget: setSelectedBudget,
+            selectedDuration: setSelectedDuration,
+            minRating: setMinRating,
+          };
+          setters[field]?.(value);
+        }}
+        onClose={() => setIsFilterDrawerOpen(false)}
+        onReset={resetFilters}
+      />
+
+      <div id="package-collection" className="packages-container packages-royal-shell px-4 py-10 sm:px-6 lg:px-8">
         {/* Sidebar Filters */}
         <aside className="filters-sidebar glass-card">
           <div className="filters-header">
-            <h2>Filters</h2>
+            <h2>Curate</h2>
             <button className="reset-filters-btn" onClick={resetFilters}>
               Reset
             </button>
@@ -193,7 +352,7 @@ const PackagesBrowse = () => {
               onClick={handleConfirm}
               disabled={selectedPackages.length === 0}
             >
-              Confirm & Go Home
+              Compare selected
             </button>
           </div>
         </aside>
@@ -203,49 +362,82 @@ const PackagesBrowse = () => {
           <div className="packages-header">
             <p className="results-count">
               Showing <strong>{sortedPackages.length}</strong> of{" "}
-              <strong>{firstTenPackages.length}</strong> packages
+              <strong>{packagesData.length}</strong> packages
             </p>
+            <div className="package-toolbar-controls">
+              <input
+                type="search"
+                value={searchTerm}
+                onChange={(event) => setSearchTerm(event.target.value)}
+                placeholder="Search packages, places, moods..."
+                className="package-search-input"
+              />
+              <select
+                value={selectedState}
+                onChange={(event) => setSelectedState(event.target.value)}
+                className="sort-select"
+                aria-label="Filter by state"
+              >
+                {["All", "Tamil Nadu"].map((state) => (
+                  <option key={state}>{state}</option>
+                ))}
+              </select>
+              <button className="smart-filter-toggle" type="button" onClick={() => setIsFilterDrawerOpen(true)}>
+                Concierge filters
+              </button>
+            </div>
           </div>
 
-          <AnimatePresence mode="wait">
-            {sortedPackages.length > 0 ? (
-              <motion.div
-                className="packages-grid"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.3 }}
-              >
-                {sortedPackages.map((pkg) => (
-                  <PackageCard
-                    key={pkg.id}
-                    pkg={pkg}
-                    isSelected={selectedPackages.includes(pkg.id)}
-                    onToggle={() => togglePackageSelection(pkg.id)}
-                    images={stateImageMap[pkg.imageFolder] || []}
-                  />
-                ))}
-              </motion.div>
-            ) : (
-              <motion.div
-                className="no-results glass-card"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-              >
-                <h2>No packages found</h2>
-                <p>Try adjusting your filters to find your perfect escape.</p>
-              </motion.div>
-            )}
-          </AnimatePresence>
+          {loading ? (
+            <PackageSkeletonGrid count={6} />
+          ) : (
+            <AnimatePresence mode="wait">
+              {sortedPackages.length > 0 ? (
+                <motion.div
+                  className="packages-grid"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  {sortedPackages.map((pkg) => (
+                    <PackageCard
+                      key={pkg.id}
+                      pkg={pkg}
+                      isSelected={selectedPackages.includes(pkg.id)}
+                      onToggle={() => togglePackageSelection(pkg.id)}
+                      isSaved={savedPackageIds.includes(pkg.id)}
+                      onWishlist={() => toggleWishlist(pkg)}
+                      images={stateImageMap[pkg.imageFolder] || []}
+                      fallbackImage={stateFallbackImages[pkg.state] || tamilnaduImg}
+                    />
+                  ))}
+                </motion.div>
+              ) : (
+                <motion.div
+                  className="no-results glass-card"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                >
+                  <h2>No packages found</h2>
+                  <p>Try adjusting your filters to find your perfect escape.</p>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          )}
+          <PackageCompareTray packages={selectedComparePackages} onClear={() => setSelectedPackages([])} />
         </section>
       </div>
     </main>
   );
 };
 
-const PackageCard = ({ pkg, isSelected, onToggle, images }) => {
-  const visibleImages = images.length ? images.slice(0, 3) : [tamilnaduImg, tamilnaduImg, tamilnaduImg];
+const PackageCard = ({ pkg, isSelected, isSaved, onToggle, onWishlist, images, fallbackImage }) => {
+  const uploadedImages = [pkg.image1, pkg.image2, pkg.image3].filter(Boolean);
+  const visibleImages = uploadedImages.length
+    ? uploadedImages
+    : images.length ? images.slice(0, 5) : [fallbackImage, fallbackImage, fallbackImage];
   const [activeIndex, setActiveIndex] = useState(0);
 
   return (
@@ -255,35 +447,39 @@ const PackageCard = ({ pkg, isSelected, onToggle, images }) => {
       whileHover={{ y: -8 }}
       transition={{ duration: 0.25 }}
     >
-      {/* Selection Checkbox */}
       <label className="selection-checkbox">
         <input type="checkbox" checked={isSelected} onChange={onToggle} />
         <span className="checkmark"></span>
       </label>
 
-      {/* Package Image */}
       <div className="package-image-container">
         <div className="image-carousel">
           {visibleImages.map((src, idx) => (
             <div
-              key={idx}
+              key={src || idx}
               className={`carousel-slide ${idx === activeIndex ? "active" : ""}`}
               style={{ backgroundImage: `url(${src})` }}
             />
           ))}
         </div>
+        <div className="package-image-overlay" />
+        <div className="package-card-badges">
+          <span>{pkg.category}</span>
+          <span>{pkg.days}D / {pkg.nights}N</span>
+        </div>
         <div className="image-indicators">
           {visibleImages.map((_, idx) => (
             <button
               key={idx}
+              type="button"
               className={`indicator ${idx === activeIndex ? "active" : ""}`}
               onClick={() => setActiveIndex(idx)}
+              aria-label={`Show image ${idx + 1}`}
             />
           ))}
         </div>
       </div>
 
-      {/* Package Info */}
       <div className="package-info">
         <p className="destination-label">{pkg.destination}</p>
         <h3>{pkg.title}</h3>
@@ -296,7 +492,7 @@ const PackageCard = ({ pkg, isSelected, onToggle, images }) => {
           <div className="meta-item">
             <span className="label">Rating</span>
             <span className="value">
-              {pkg.rating.toFixed(1)} <span className="star">★</span>
+              {Number(pkg.rating || 0).toFixed(1)} <span className="star">/ 5</span>
             </span>
           </div>
         </div>
@@ -305,18 +501,25 @@ const PackageCard = ({ pkg, isSelected, onToggle, images }) => {
           <strong>Places:</strong> {pkg.places.join(", ")}
         </p>
 
-        <div className="package-footer">
+        <div className="package-footer package-price-row">
           <div className="price">
             <span className="label">From</span>
-            <span className="amount">₹{pkg.price.toLocaleString()}</span>
+            <span className="amount">Rs. {pkg.price.toLocaleString("en-IN")}</span>
           </div>
-          <button className="select-btn" onClick={onToggle}>
-            {isSelected ? "✓ Selected" : "Select"}
+          <button className="select-btn" type="button" onClick={onToggle}>
+            {isSelected ? "Selected" : "Select"}
+          </button>
+        </div>
+        <div className="package-actions-row">
+          <Link className="details-btn" to={`/package/${pkg.id}`}>
+            View Details
+          </Link>
+          <button className="save-btn" type="button" onClick={onWishlist}>
+            {isSaved ? "Saved" : "Save"}
           </button>
         </div>
       </div>
     </motion.div>
   );
 };
-
 export default PackagesBrowse;

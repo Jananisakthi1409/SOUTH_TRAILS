@@ -2,18 +2,19 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import tamilNaduPackages, { tamilNaduCategories, tamilNaduBudgetFilters, tamilNaduDurationFilters } from "./tamilNaduPackageData";
+import { tamilNaduCategories, tamilNaduBudgetFilters, tamilNaduDurationFilters } from "./tamilNaduPackageData";
+import { getPackages } from "../../services/packageService";
 import "./TamilNaduPackages.css";
 
 // Import all destination images dynamically
-const imageModules = import.meta.glob("../state/tamilnadu/**/*.{png,jpg,jpeg}", { eager: true });
+const imageModules = import.meta.glob("../state/tamilnadu/**/*.{webp,avif}", { eager: true });
 
 // Map images by destination folder
 const destinationImages = Object.entries(imageModules)
   .sort(([a], [b]) => a.localeCompare(b))
   .reduce((map, [path, moduleValue]) => {
     const normalized = path.replace(/\\/g, "/");
-    const match = normalized.match(/tamilnadu\/([^/]+)\/[^/]+\.(png|jpe?g)$/i);
+    const match = normalized.match(/tamilnadu\/([^/]+)\/[^/]+\.(webp|avif)$/i);
     if (!match) return map;
 
     const folder = match[1];
@@ -23,10 +24,23 @@ const destinationImages = Object.entries(imageModules)
   }, {});
 
 const TamilNaduPackages = () => {
+  const [tamilNaduPackages, setTamilNaduPackages] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [selectedBudget, setSelectedBudget] = useState("All");
   const [selectedDuration, setSelectedDuration] = useState("All");
   const [heroImageIndex, setHeroImageIndex] = useState(0);
+
+  // Load packages from service
+  useEffect(() => {
+    const loadPackages = async () => {
+      setLoading(true);
+      const packages = await getPackages({ state: "Tamil Nadu" });
+      setTamilNaduPackages(packages);
+      setLoading(false);
+    };
+    loadPackages();
+  }, []);
 
   // Hero image slideshow
   const heroImages = Object.values(destinationImages).flat().slice(0, 5);
@@ -170,30 +184,34 @@ const TamilNaduPackages = () => {
       {/* Packages Section */}
       <section className="tnp-packages-section">
         <div className="tnp-container">
-          <AnimatePresence mode="wait">
-            {filteredPackages.length > 0 ? (
-              <div className="packages-list">
-                {filteredPackages.map((pkg, idx) => (
-                  <PackageCard
-                    key={pkg.id}
-                    pkg={pkg}
-                    images={destinationImages[pkg.imageFolder] || []}
-                    index={idx}
-                  />
-                ))}
-              </div>
-            ) : (
-              <motion.div
-                className="no-results"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-              >
-                <h2>No packages found</h2>
-                <p>Try adjusting your filters to find your perfect Tamil Nadu escape.</p>
-              </motion.div>
-            )}
-          </AnimatePresence>
+          {loading ? (
+            <div className="loading">Loading packages...</div>
+          ) : (
+            <AnimatePresence mode="wait">
+              {filteredPackages.length > 0 ? (
+                <div className="packages-list">
+                  {filteredPackages.map((pkg, idx) => (
+                    <PackageCard
+                      key={pkg.id}
+                      pkg={pkg}
+                      images={destinationImages[pkg.imageFolder] || []}
+                      index={idx}
+                    />
+                  ))}
+                </div>
+              ) : (
+                <motion.div
+                  className="no-results"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                >
+                  <h2>No packages found</h2>
+                  <p>Try adjusting your filters to find your perfect Tamil Nadu escape.</p>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          )}
         </div>
       </section>
     </div>
@@ -203,12 +221,12 @@ const TamilNaduPackages = () => {
 // Package Card Component
 const PackageCard = ({ pkg, images, index }) => {
   const [currentImageIdx, setCurrentImageIdx] = useState(0);
-  const displayImages = images.slice(0, 3);
+  const fallbackImages = Object.values(destinationImages).flat().slice(0, 3);
+  const displayImages = images && images.length ? images.slice(0, 3) : fallbackImages;
 
   useEffect(() => {
-    if (displayImages.length === 0) return;
     const timer = setInterval(() => {
-      setCurrentImageIdx((prev) => (prev + 1) % displayImages.length);
+      setCurrentImageIdx((prev) => (prev + 1) % Math.max(1, displayImages.length));
     }, 3000);
     return () => clearInterval(timer);
   }, [displayImages.length]);
@@ -224,7 +242,6 @@ const PackageCard = ({ pkg, images, index }) => {
       {/* Image Gallery - Left Side (40%) */}
       <div className="card-image-section">
         <div className="image-gallery">
-          {displayImages.length > 0 ? (
             <div className="gallery-container">
               {displayImages.map((img, idx) => (
                 <img
@@ -235,9 +252,6 @@ const PackageCard = ({ pkg, images, index }) => {
                 />
               ))}
             </div>
-          ) : (
-            <div className="no-image">No images available</div>
-          )}
 
           {displayImages.length > 1 && (
             <div className="gallery-indicators">

@@ -1,16 +1,64 @@
-# React + Vite
+# South Trails
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+South Trails is a full-stack South India travel booking project with a React/Vite frontend and a Spring Boot backend.
 
-Currently, two official plugins are available:
+## Quick Start
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+1. Copy `.env.example` to `.env`.
+2. Start the backend:
 
-## React Compiler
+```bash
+npm run dev:backend
+```
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+3. Seed or refresh backend packages:
 
-## Expanding the ESLint configuration
+```bash
+npm run seed:backend-packages
+```
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+4. Start the frontend:
+
+```bash
+npm run dev
+```
+
+Frontend: `http://127.0.0.1:5173`  
+Backend health: `http://127.0.0.1:8080/api/health`  
+Swagger UI: `http://127.0.0.1:8080/swaggerui.html`
+
+## Main Features
+
+- 68 seeded travel packages across Tamil Nadu, Kerala, Karnataka, and Andhra Pradesh.
+- Package browsing, filters, detail pages, booking flow, booking success page, profile, reviews, wishlist, and mock payment receipts.
+- Admin login, package management, real image uploads, bookings, customers, users, and live analytics.
+- Spring Boot API with H2 persistence, validation, Swagger UI, static upload serving, and real analytics endpoints.
+
+## Admin Login
+
+Email: `admin@southtrails.com`  
+Password: `admin123`
+
+## Useful Commands
+
+```bash
+npm run lint
+npm test
+npm run build
+npm run build:backend
+npm run test:e2e
+```
+
+## Backend Data
+
+Seed data lives in:
+
+`backend/src/main/resources/package-seed.psv`
+
+Uploaded admin package images are stored under:
+
+`backend/uploads/packages`
+
+## Notes
+
+Keep `VITE_API_BASE_URL=http://127.0.0.1:8080/api` when using Spring Boot as the production data source.

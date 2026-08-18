@@ -1,18 +1,24 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useToast } from "../../components/ui/Toast";
+import { deleteBooking, getBookings, updateBookingStatus } from "../../services/bookingService";
+
+const fallbackBookings = [
+  { id: "BK-8831", customerName: "Janani Iyer", package: "Kerala Explorer", travelDate: "2026-06-07", travelers: 2, amount: 59998, status: "Pending", registeredAt: "10 mins ago" },
+  { id: "BK-8829", customerName: "Rahul Sharma", package: "Ooty Family Escape", travelDate: "2026-06-12", travelers: 4, amount: 119992, status: "Confirmed", registeredAt: "2 hours ago" },
+  { id: "BK-8825", customerName: "Priya Nair", package: "Coorg Escape", travelDate: "2026-06-20", travelers: 3, amount: 74997, status: "Cancelled", registeredAt: "1 day ago" },
+  { id: "BK-8791", customerName: "Arun Venkat", package: "Tirupati Tour", travelDate: "2026-05-28", travelers: 2, amount: 30000, status: "Completed", registeredAt: "1 week ago" },
+  { id: "BK-8840", customerName: "Deepak Rao", package: "Backwater Experience", travelDate: "2026-07-01", travelers: 5, amount: 149995, status: "Pending", registeredAt: "Just now" },
+  { id: "BK-8812", customerName: "Meera Krishnan", package: "Mysore Palace Heritage", travelDate: "2026-06-08", travelers: 2, amount: 45000, status: "Confirmed", registeredAt: "4 hours ago" }
+];
 
 const AdminBookings = () => {
   const navigate = useNavigate();
+  const { showToast } = useToast();
 
   // Unified State Engine for Booking Workspace
-  const [bookings, setBookings] = useState([
-    { id: "BK-8831", customerName: "Janani Iyer", package: "Kerala Explorer", travelDate: "2026-06-07", travelers: 2, amount: 59998, status: "Pending", registeredAt: "10 mins ago" },
-    { id: "BK-8829", customerName: "Rahul Sharma", package: "Ooty Family Escape", travelDate: "2026-06-12", travelers: 4, amount: 119992, status: "Confirmed", registeredAt: "2 hours ago" },
-    { id: "BK-8825", customerName: "Priya Nair", package: "Coorg Escape", travelDate: "2026-06-20", travelers: 3, amount: 74997, status: "Cancelled", registeredAt: "1 day ago" },
-    { id: "BK-8791", customerName: "Arun Venkat", package: "Tirupati Tour", travelDate: "2026-05-28", travelers: 2, amount: 30000, status: "Completed", registeredAt: "1 week ago" },
-    { id: "BK-8840", customerName: "Deepak Rao", package: "Backwater Experience", travelDate: "2026-07-01", travelers: 5, amount: 149995, status: "Pending", registeredAt: "Just now" },
-    { id: "BK-8812", customerName: "Meera Krishnan", package: "Mysore Palace Heritage", travelDate: "2026-06-08", travelers: 2, amount: 45000, status: "Confirmed", registeredAt: "4 hours ago" }
-  ]);
+  const [bookings, setBookings] = useState([]);
+  const [loadingBookings, setLoadingBookings] = useState(true);
 
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
@@ -21,16 +27,73 @@ const AdminBookings = () => {
   const [hoveredCard, setHoveredCard] = useState(null);
   const [hoveredBtn, setHoveredBtn] = useState(null);
   const [hoveredPill, setHoveredPill] = useState(null);
+  const [pendingDeleteId, setPendingDeleteId] = useState(null);
+
+  useEffect(() => {
+    let active = true;
+
+    const loadBookings = async () => {
+      setLoadingBookings(true);
+      const data = await getBookings();
+      if (!active) return;
+      const mapped = data.map((booking) => {
+        const request = (() => {
+          try {
+            return booking.specialRequest ? JSON.parse(booking.specialRequest) : {};
+          } catch {
+            return {};
+          }
+        })();
+        return {
+          id: booking.id,
+          customerName: booking.customer?.name || booking.customers?.name || request.travelerName || booking.customerName || "Guest Traveler",
+          package: booking.packageName || booking.package_snapshot?.title || booking.packageSnapshot?.title || booking.package?.title || "Travel Package",
+          travelDate: booking.travelDate || booking.travel_date || "Flexible",
+          travelers: Number(booking.travelers || 1),
+          amount: Number(booking.totalAmount || booking.total_amount || 0),
+          status: booking.status || "Pending",
+          registeredAt: booking.createdAt ? new Date(booking.createdAt).toLocaleDateString("en-IN") : "Just now",
+        };
+      });
+      setBookings(mapped.length ? mapped : fallbackBookings);
+      setLoadingBookings(false);
+    };
+
+    loadBookings();
+    return () => {
+      active = false;
+    };
+  }, []);
 
   // Operational State Matrix Actions
-  const handleUpdateStatus = (id, nextStatus) => {
+  const handleUpdateStatus = async (id, nextStatus) => {
+    const previous = bookings;
     setBookings(prev => prev.map(b => b.id === id ? { ...b, status: nextStatus } : b));
+    const result = await updateBookingStatus(id, nextStatus);
+    if (result?.error) {
+      setBookings(previous);
+      showToast("Unable to update booking status.", "error");
+    }
   };
 
   const handleDeleteBooking = (id) => {
-    if (window.confirm(`Are you sure you want to purge booking register records for entry ${id}?`)) {
-      setBookings(prev => prev.filter(b => b.id !== id));
-    }
+    setPendingDeleteId(id);
+  };
+
+  const confirmDeleteBooking = () => {
+    const id = pendingDeleteId;
+    if (!id) return;
+    setPendingDeleteId(null);
+    const previous = bookings;
+    setBookings(prev => prev.filter(b => b.id !== id));
+    deleteBooking(id).then((result) => {
+      if (result?.error) {
+        setBookings(previous);
+        showToast("Unable to delete booking.", "error");
+        return;
+      }
+      showToast(`Booking ${id} deleted.`, "success");
+    });
   };
 
   // Metric Computations Engine
@@ -99,6 +162,18 @@ const AdminBookings = () => {
       <main style={{ marginLeft: "260px", flex: 1, padding: "40px 48px", boxSizing: "border-box", overflowX: "hidden" }}>
         
         {/* Module Title Deck */}
+        {pendingDeleteId && (
+          <div style={{ position: "fixed", inset: 0, zIndex: 1000, display: "grid", placeItems: "center", backgroundColor: "rgba(15, 23, 42, 0.36)", padding: "1rem" }}>
+            <div style={{ width: "min(420px, 100%)", backgroundColor: "#ffffff", borderRadius: "12px", padding: "24px", boxShadow: "0 24px 80px rgba(15,23,42,0.24)" }}>
+              <h3 style={{ margin: "0 0 8px 0", fontSize: "18px", color: "#0f172a" }}>Delete booking?</h3>
+              <p style={{ margin: "0 0 20px 0", color: "#64748b", lineHeight: 1.5 }}>This removes booking register entry {pendingDeleteId}.</p>
+              <div style={{ display: "flex", justifyContent: "flex-end", gap: "10px" }}>
+                <button type="button" onClick={() => setPendingDeleteId(null)} style={{ padding: "10px 16px", borderRadius: "8px", border: "1px solid #cbd5e1", background: "#ffffff", color: "#334155", fontWeight: 600 }}>Cancel</button>
+                <button type="button" onClick={confirmDeleteBooking} style={{ padding: "10px 16px", borderRadius: "8px", border: "none", background: "#dc2626", color: "#ffffff", fontWeight: 700 }}>Delete</button>
+              </div>
+            </div>
+          </div>
+        )}
         <div style={{ marginBottom: "32px" }}>
           <h1 style={{ fontSize: "28px", fontWeight: "800", color: "#0f172a", margin: 0, letterSpacing: "-0.025em" }}>Booking Control Center</h1>
           <p style={{ fontSize: "15px", color: "#64748b", margin: "6px 0 0 0" }}>Track, allocate, approve and audit operational passenger booking registers.</p>
@@ -210,8 +285,13 @@ const AdminBookings = () => {
           
           {/* Core Left Column Block: Reactive Dynamic Booking Registry Card Feed */}
           <div style={{ flex: "2 1 600px", display: "flex", flexDirection: "column", gap: "18px" }}>
+            {loadingBookings && (
+              <div style={{ textAlign: "center", padding: "32px 24px", backgroundColor: "#ffffff", borderRadius: "12px", border: "1px solid #e2e8f0", color: "#64748b", fontWeight: "600" }}>
+                Loading booking manifests...
+              </div>
+            )}
             
-            {filteredBookings.map((booking) => {
+            {!loadingBookings && filteredBookings.map((booking) => {
               const statusTheme = getStatusStyle(booking.status);
               return (
                 <div
@@ -318,7 +398,7 @@ const AdminBookings = () => {
                       )}
 
                       <button
-                        onClick={() => alert(`Accessing system ledger parameters for active sequence object matrix: ${booking.id}`)}
+                        onClick={() => showToast(`Opening booking details for ${booking.id}.`, "info")}
                         style={{ padding: "6px 10px", borderRadius: "6px", border: "1px solid #cbd5e1", backgroundColor: "#ffffff", color: "#475569", fontSize: "12px", fontWeight: "500", cursor: "pointer" }}
                       >
                         Details
@@ -332,7 +412,7 @@ const AdminBookings = () => {
             })}
 
             {/* Comprehensive Edge-Case Empty State Interface Matrix Fallback */}
-            {filteredBookings.length === 0 && (
+            {!loadingBookings && filteredBookings.length === 0 && (
               <div style={{ textAlign: "center", padding: "56px 24px", backgroundColor: "#ffffff", borderRadius: "12px", border: "1px dashed #cbd5e1" }}>
                 <p style={{ margin: 0, fontSize: "14px", color: "#64748b", fontWeight: "600" }}>No manifest allocations matched current criteria filter matrices.</p>
                 <p style={{ margin: "4px 0 0 0", fontSize: "12px", color: "#94a3b8" }}>Try adjusting filter segments or broadening structural search terms strings.</p>
